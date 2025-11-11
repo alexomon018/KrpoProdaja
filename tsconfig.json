@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -19,9 +23,40 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": [
+        "./*"
+      ],
+      "@atoms/*": [
+        "./components/atoms/*"
+      ],
+      "@atoms": [
+        "./components/atoms/index.ts"
+      ],
+      "@molecules/*": [
+        "./components/molecules/*"
+      ],
+      "@molecules": [
+        "./components/molecules/index.ts"
+      ],
+      "@organisms/*": [
+        "./components/organisms/*"
+      ],
+      "@organisms": [
+        "./components/organisms/index.ts"
+      ],
+      "@lib/*": [
+        "./lib/*"
+      ]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

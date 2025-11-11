@@ -1,32 +1,47 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer base {
-  :root {
-    --primary: #E63946;
-    --primary-dark: #C52839;
-    --primary-light: #FF6B75;
-    --background: #F8F9FA;
-    --surface: #FFFFFF;
-    --border: #E9ECEF;
-    --text-primary: #212529;
-    --text-secondary: #6C757D;
-    --text-tertiary: #ADB5BD;
-  }
+@theme {
+  /* Light Mode Colors */
+  --color-primary: #E63946;
+  --color-primary-dark: #C52839;
+  --color-primary-light: #FF6B75;
+  --color-surface: #FFFFFF;
+  --color-border: #E9ECEF;
+  --color-text-primary: #212529;
+  --color-text-secondary: #6C757D;
+  --color-text-tertiary: #ADB5BD;
+  --color-background: #F8F9FA;
 
-  * {
-    @apply border-border;
-  }
-
-  body {
-    @apply bg-background text-text-primary;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
-  }
+  /* Dark Mode Colors */
+  --color-dark-surface: #1E1E1E;
+  --color-dark-border: #2D2D2D;
+  --color-dark-text-primary: #E9ECEF;
+  --color-dark-text-secondary: #ADB5BD;
+  --color-dark-text-tertiary: #6C757D;
+  --color-dark-background: #121212;
 }
 
-@layer utilities {
-  .touch-target {
-    @apply min-h-touch min-w-touch;
-  }
+* {
+  border-color: var(--color-border);
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark Mode Styles */
+.dark {
+  --color-surface: var(--color-dark-surface);
+  --color-border: var(--color-dark-border);
+  --color-text-primary: var(--color-dark-text-primary);
+  --color-text-secondary: var(--color-dark-text-secondary);
+  --color-text-tertiary: var(--color-dark-text-tertiary);
+  --color-background: var(--color-dark-background);
+}
+
+.dark * {
+  border-color: var(--color-dark-border);
 }

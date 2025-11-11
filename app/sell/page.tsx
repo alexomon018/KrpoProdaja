@@ -2,9 +2,9 @@
 
 import * as React from "react";
 import { useForm, FormProvider } from "react-hook-form";
-import { Header, BottomNavigation } from "@/components/organisms";
-import { FormInput, Button, Typography, Badge } from "@/components/atoms";
-import type { SizeType, ConditionType } from "@/lib/types";
+import { Header, BottomNavigation } from "@organisms";
+import { FormInput, Button, Typography, Container } from "@atoms";
+import type { SizeType, ConditionType } from "@lib/types";
 
 interface ProductFormData {
   title: string;
@@ -46,20 +46,26 @@ export default function SellPage() {
     <div className="min-h-screen bg-background pb-20 md:pb-8">
       <Header showSearch={false} />
 
-      <main className="container mx-auto px-4 py-6 max-w-2xl">
-        <Typography variant="h1" className="mb-6">
-          Prodaj svoj proizvod
-        </Typography>
+      <main className="py-6 md:py-12">
+        <Container size="regular" className="max-w-5xl">
+          <div className="mb-8">
+            <Typography variant="h1" className="mb-2 text-center md:text-left">
+              Prodaj svoj proizvod
+            </Typography>
+            <Typography variant="body" className="text-text-secondary text-center md:text-left">
+              Popunite informacije o proizvodu koji želite da prodate
+            </Typography>
+          </div>
 
-        <FormProvider {...methods}>
-          <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6">
+          <FormProvider {...methods}>
+            <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6 md:space-y-8">
             {/* Step 1: Basic Information */}
-            <div className="bg-surface rounded-lg p-6 border border-border">
-              <Typography variant="h2" className="mb-4">
+            <div className="bg-surface rounded-xl p-6 md:p-8 border border-border shadow-sm">
+              <Typography variant="h2" className="mb-6">
                 Osnovne informacije
               </Typography>
 
-              <div className="space-y-4">
+              <div className="space-y-6">
                 <FormInput
                   name="title"
                   label="Naziv proizvoda *"
@@ -82,12 +88,12 @@ export default function SellPage() {
             </div>
 
             {/* Step 2: Price */}
-            <div className="bg-surface rounded-lg p-6 border border-border">
-              <Typography variant="h2" className="mb-4">
+            <div className="bg-surface rounded-xl p-6 md:p-8 border border-border shadow-sm">
+              <Typography variant="h2" className="mb-6">
                 Cena
               </Typography>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <FormInput
                   name="price"
                   label="Prodajna cena *"
@@ -110,12 +116,12 @@ export default function SellPage() {
             </div>
 
             {/* Step 3: Details */}
-            <div className="bg-surface rounded-lg p-6 border border-border">
-              <Typography variant="h2" className="mb-4">
+            <div className="bg-surface rounded-xl p-6 md:p-8 border border-border shadow-sm">
+              <Typography variant="h2" className="mb-6">
                 Detalji
               </Typography>
 
-              <div className="space-y-4">
+              <div className="space-y-6">
                 <FormInput
                   name="brand"
                   label="Brend"
@@ -189,8 +195,8 @@ export default function SellPage() {
             </div>
 
             {/* Step 4: Location */}
-            <div className="bg-surface rounded-lg p-6 border border-border">
-              <Typography variant="h2" className="mb-4">
+            <div className="bg-surface rounded-xl p-6 md:p-8 border border-border shadow-sm">
+              <Typography variant="h2" className="mb-6">
                 Lokacija
               </Typography>
 
@@ -203,12 +209,13 @@ export default function SellPage() {
             </div>
 
             {/* Submit */}
-            <div className="flex gap-3">
+            <div className="flex flex-col sm:flex-row gap-3 pt-4">
               <Button
                 type="submit"
                 variant="primary"
                 fullWidth
                 size="lg"
+                className="sm:flex-1"
               >
                 Objavi proizvod
               </Button>
@@ -217,12 +224,14 @@ export default function SellPage() {
                 variant="secondary"
                 size="lg"
                 onClick={() => methods.reset()}
+                className="sm:w-auto"
               >
                 Poništi
               </Button>
             </div>
           </form>
         </FormProvider>
+        </Container>
       </main>
 
       <BottomNavigation />

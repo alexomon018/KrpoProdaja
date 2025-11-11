@@ -50,6 +50,8 @@ export {
   LogOut,
   Bell,
   BellOff,
+  Moon,
+  Sun,
 } from "lucide-react";
 
 /**
