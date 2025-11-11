@@ -3,7 +3,7 @@
 import * as React from "react";
 import cn from "@/lib/utils";
 import { ProductImage } from "@/components/atoms";
-import { ChevronLeft, ChevronRight } from "@/components/atoms/Icon";
+import { ChevronLeft, ChevronRight } from "@/components/atoms/Icon/Icon";
 
 export interface ImageCarouselProps extends React.HTMLAttributes<HTMLDivElement> {
   images: string[];

@@ -1,7 +1,7 @@
 import * as React from "react";
 import cn, { formatRelativeTime } from "@/lib/utils";
 import { Typography } from "@/components/atoms";
-import { Check } from "@/components/atoms/Icon";
+import { Check } from "@/components/atoms/Icon/Icon";
 
 export interface ChatBubbleProps extends React.HTMLAttributes<HTMLDivElement> {
   message: string;

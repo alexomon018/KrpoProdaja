@@ -5,14 +5,14 @@
  * Form distinct sections of the interface
  */
 
-export { ProductGrid, ProductCardSkeleton } from "./ProductGrid";
-export type { ProductGridProps } from "./ProductGrid";
+export { ProductGrid, ProductCardSkeleton } from "./ProductGrid/ProductGrid";
+export type { ProductGridProps } from "./ProductGrid/ProductGrid";
 
-export { FilterPanel } from "./FilterPanel";
-export type { FilterPanelProps, FilterOptions } from "./FilterPanel";
+export { FilterPanel } from "./FilterPanel/FilterPanel";
+export type { FilterPanelProps, FilterOptions } from "./FilterPanel/FilterPanel";
 
-export { BottomNavigation } from "./BottomNavigation";
-export type { BottomNavigationProps, NavigationItem } from "./BottomNavigation";
+export { BottomNavigation } from "./BottomNavigation/BottomNavigation";
+export type { BottomNavigationProps, NavigationItem } from "./BottomNavigation/BottomNavigation";
 
-export { Header } from "./Header";
-export type { HeaderProps } from "./Header";
+export { Header } from "./Header/Header";
+export type { HeaderProps } from "./Header/Header";
