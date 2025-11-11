@@ -11,6 +11,9 @@ export type { ButtonProps } from "./Button";
 export { Input } from "./Input";
 export type { InputProps } from "./Input";
 
+export { FormInput } from "./FormInput";
+export type { FormInputProps } from "./FormInput";
+
 export { Badge, badgeVariants, ConditionBadge, SizeBadge } from "./Badge";
 export type { BadgeProps } from "./Badge";
 

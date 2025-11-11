@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cn, formatRelativeTime } from "@/lib/utils";
+import cn, { formatRelativeTime } from "@/lib/utils";
 import { Typography } from "@/components/atoms";
 import { Check } from "@/components/atoms/Icon";
 

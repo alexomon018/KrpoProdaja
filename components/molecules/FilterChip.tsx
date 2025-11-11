@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { cn } from "@/lib/utils";
+import cn from "@/lib/utils";
 import { X } from "@/components/atoms/Icon";
 
 export interface FilterChipProps extends React.HTMLAttributes<HTMLDivElement> {

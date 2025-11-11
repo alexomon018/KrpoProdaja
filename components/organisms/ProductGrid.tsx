@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { cn } from "@/lib/utils";
+import cn from "@/lib/utils";
 import { ProductCard } from "@/components/molecules";
 import { Typography } from "@/components/atoms";
 import type { ProductType } from "@/lib/types";

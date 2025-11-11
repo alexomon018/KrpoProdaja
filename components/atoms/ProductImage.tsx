@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cn } from "@/lib/utils";
+import cn from "@/lib/utils";
 import Image from "next/image";
 
 export interface ProductImageProps extends React.HTMLAttributes<HTMLDivElement> {

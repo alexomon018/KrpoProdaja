@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { cn } from "@/lib/utils";
+import cn from "@/lib/utils";
 import { ProductImage } from "@/components/atoms";
 import { ChevronLeft, ChevronRight } from "@/components/atoms/Icon";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { cn } from "@/lib/utils";
+import cn from "@/lib/utils";
 import { Home, Search, Plus, MessageCircle, User } from "@/components/atoms/Icon";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
