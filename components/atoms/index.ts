@@ -26,4 +26,7 @@ export type { ProductImageProps } from "./ProductImage";
 export { Typography, textVariants, Price } from "./Typography";
 export type { TypographyProps } from "./Typography";
 
+export { Container } from "./Container";
+export type { ContainerProps } from "./Container";
+
 export * from "./Icon";

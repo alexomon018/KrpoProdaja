@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { ThemeProvider } from "@lib/ThemeContext";
 
 export const metadata: Metadata = {
   title: "Krpo Prodaja - Serbian Fashion Resale Marketplace",
@@ -13,7 +14,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="sr">
-      <body>{children}</body>
+      <body>
+        <ThemeProvider>{children}</ThemeProvider>
+      </body>
     </html>
   );
 }

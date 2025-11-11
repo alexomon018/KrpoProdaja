@@ -1,11 +1,12 @@
 "use client";
 
 import * as React from "react";
-import cn from "@/lib/utils";
-import { SearchBar } from "@/components/molecules";
-import { Button, Avatar, Typography } from "@/components/atoms";
-import { SlidersHorizontal, Bell, Menu } from "@/components/atoms/Icon";
+import cn from "@lib/utils";
+import { SearchBar } from "@molecules";
+import { Button, Avatar, Typography } from "@atoms";
+import { SlidersHorizontal, Bell, Menu, Moon, Sun } from "@atoms/Icon";
 import Link from "next/link";
+import { useTheme } from "@lib/ThemeContext";
 
 export interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
   /**
@@ -65,6 +66,8 @@ const Header = React.forwardRef<HTMLElement, HeaderProps>(
     },
     ref
   ) => {
+    const { theme, toggleTheme } = useTheme();
+
     return (
       <header
         ref={ref}
@@ -110,6 +113,22 @@ const Header = React.forwardRef<HTMLElement, HeaderProps>(
 
             {/* User Actions */}
             <div className="flex items-center gap-2">
+              {/* Dark Mode Toggle */}
+              <button
+                onClick={toggleTheme}
+                className={cn(
+                  "p-2 hover:bg-background rounded-lg transition-colors",
+                  "hidden md:flex items-center justify-center touch-target"
+                )}
+                aria-label={theme === "light" ? "Prebaci na tamni režim" : "Prebaci na svetli režim"}
+              >
+                {theme === "light" ? (
+                  <Moon size={24} className="text-text-secondary" />
+                ) : (
+                  <Sun size={24} className="text-text-secondary" />
+                )}
+              </button>
+
               {/* Notifications */}
               <button
                 className={cn(
@@ -168,6 +187,14 @@ const Header = React.forwardRef<HTMLElement, HeaderProps>(
                     placeholder="Pretraži..."
                   />
                 </div>
+                <Button
+                  variant="secondary"
+                  size="icon"
+                  onClick={toggleTheme}
+                  aria-label={theme === "light" ? "Tamni režim" : "Svetli režim"}
+                >
+                  {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
+                </Button>
                 <Button
                   variant="secondary"
                   size="icon"
