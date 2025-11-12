@@ -91,7 +91,7 @@ const BottomNavigation = React.forwardRef<HTMLElement, BottomNavigationProps>(
                   "transition-colors",
                   isActive
                     ? "text-primary"
-                    : "text-text-tertiary hover:text-text-secondary"
+                    : "text-tertiary hover:text-secondary"
                 )}
               >
                 <div className="relative">

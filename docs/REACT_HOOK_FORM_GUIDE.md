@@ -137,7 +137,7 @@ import { Search } from "@/components/atoms/Icon";
   name="search"
   label="Pretraga"
   startIcon={<Search size={20} />}
-  endIcon={<span className="text-text-secondary">RSD</span>}
+  endIcon={<span className="text-secondary">RSD</span>}
 />
 ```
 

@@ -34,7 +34,7 @@ const FilterChip = React.forwardRef<HTMLDivElement, FilterChipProps>(
           "transition-colors",
           active
             ? "bg-primary/10 text-primary border border-primary/20"
-            : "bg-background text-text-secondary border border-border",
+            : "bg-background text-secondary border border-border",
           className
         )}
         {...props}

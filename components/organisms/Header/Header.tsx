@@ -123,9 +123,9 @@ const Header = React.forwardRef<HTMLElement, HeaderProps>(
                 aria-label={theme === "light" ? "Prebaci na tamni režim" : "Prebaci na svetli režim"}
               >
                 {theme === "light" ? (
-                  <Moon size={24} className="text-text-secondary" />
+                  <Moon size={24} className="text-secondary" />
                 ) : (
-                  <Sun size={24} className="text-text-secondary" />
+                  <Sun size={24} className="text-secondary" />
                 )}
               </button>
 
@@ -137,7 +137,7 @@ const Header = React.forwardRef<HTMLElement, HeaderProps>(
                 )}
                 aria-label="Obaveštenja"
               >
-                <Bell size={24} className="text-text-secondary" />
+                <Bell size={24} className="text-secondary" />
                 {notificationCount > 0 && (
                   <span className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full" />
                 )}

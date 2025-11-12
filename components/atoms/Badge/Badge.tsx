@@ -7,11 +7,11 @@ import type { ConditionType } from "@/lib/types";
  * Badge variants for different use cases
  */
 const badgeVariants = cva(
-  "inline-flex items-center justify-center rounded-md px-2.5 py-0.5 text-xs font-semibold transition-colors",
+  "inline-flex items-center justify-center rounded-2xs px-2.5 py-0.5 text-xs font-semibold transition-colors shadow-light",
   {
     variants: {
       variant: {
-        default: "bg-text-tertiary/20 text-text-primary",
+        default: "bg-tertiary/20 text-primary",
         primary: "bg-primary/10 text-primary",
         success: "bg-semantic-success/10 text-semantic-success",
         warning: "bg-semantic-warning/10 text-semantic-warning",
@@ -23,13 +23,13 @@ const badgeVariants = cva(
         good: "bg-condition-good/10 text-condition-good",
         satisfactory: "bg-condition-satisfactory/10 text-condition-satisfactory",
         // Status badges
-        sold: "bg-text-tertiary/80 text-white",
+        sold: "bg-tertiary/80 text-white",
         reserved: "bg-semantic-warning/80 text-white",
       },
       size: {
-        sm: "text-xs px-2 py-0.5",
-        md: "text-sm px-2.5 py-1",
-        lg: "text-base px-3 py-1.5",
+        sm: "text-2xs px-2 py-0.5 rounded-2xs",
+        md: "text-xs px-2.5 py-1 rounded-xs",
+        lg: "text-sm px-3 py-1.5 rounded-xs",
       },
     },
     defaultVariants: {

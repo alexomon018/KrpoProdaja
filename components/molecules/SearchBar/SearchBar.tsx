@@ -118,7 +118,7 @@ const SearchBar = React.forwardRef<HTMLInputElement, SearchBarProps>(
           suggestions.length > 0 && (
             <div className="absolute top-full left-0 right-0 mt-1 bg-surface border border-border rounded-lg shadow-lg z-50 max-h-80 overflow-y-auto">
               <div className="py-2">
-                <div className="px-3 py-1.5 text-xs text-text-tertiary uppercase font-semibold">
+                <div className="px-3 py-1.5 text-xs text-tertiary uppercase font-semibold">
                   Nedavne pretrage
                 </div>
                 {suggestions.map((suggestion, index) => (
@@ -127,8 +127,8 @@ const SearchBar = React.forwardRef<HTMLInputElement, SearchBarProps>(
                     onClick={() => handleSuggestionClick(suggestion)}
                     className="w-full text-left px-3 py-2 hover:bg-background transition-colors flex items-center gap-2"
                   >
-                    <Search size={16} className="text-text-tertiary" />
-                    <span className="text-sm text-text-primary">{suggestion}</span>
+                    <Search size={16} className="text-tertiary" />
+                    <span className="text-sm text-primary">{suggestion}</span>
                   </button>
                 ))}
               </div>

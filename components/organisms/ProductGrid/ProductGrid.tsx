@@ -88,7 +88,7 @@ const ProductGrid = React.forwardRef<HTMLDivElement, ProductGridProps>(
           <div className="text-center max-w-md">
             <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-background flex items-center justify-center">
               <svg
-                className="w-12 h-12 text-text-tertiary"
+                className="w-12 h-12 text-tertiary"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -104,7 +104,7 @@ const ProductGrid = React.forwardRef<HTMLDivElement, ProductGridProps>(
             <Typography variant="h2" className="mb-2">
               {emptyMessage}
             </Typography>
-            <Typography variant="bodySmall" className="text-text-secondary">
+            <Typography variant="bodySmall" className="text-secondary">
               Pokušajte da promenite filter ili se vratite kasnije
             </Typography>
           </div>

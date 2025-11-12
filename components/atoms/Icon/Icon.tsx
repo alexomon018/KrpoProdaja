@@ -5,6 +5,9 @@
  * All icons from the popular lucide icon library
  */
 
+import * as React from "react";
+import * as LucideIcons from "lucide-react";
+
 export {
   Heart,
   Search,
@@ -66,3 +69,55 @@ export const iconSizes = {
 } as const;
 
 export type IconSize = keyof typeof iconSizes;
+
+/**
+ * Icon names that can be used
+ */
+export type IconName = keyof typeof LucideIcons;
+
+export interface IconProps extends Omit<React.SVGProps<SVGSVGElement>, "name"> {
+  /**
+   * Name of the icon from lucide-react
+   */
+  name: IconName;
+  /**
+   * Size of the icon in pixels or using design system sizes
+   */
+  size?: number | IconSize;
+  /**
+   * Additional CSS classes
+   */
+  className?: string;
+}
+
+/**
+ * Icon Component
+ *
+ * A unified icon component that wraps lucide-react icons
+ *
+ * @example
+ * ```tsx
+ * <Icon name="Heart" size={24} />
+ * <Icon name="User" size="md" />
+ * ```
+ */
+export function Icon({ name, size = 20, className, ...props }: Readonly<IconProps>) {
+  const IconComponent = LucideIcons[name] as React.ComponentType<
+    LucideIcons.LucideProps
+  >;
+
+  if (!IconComponent) {
+    console.warn(`Icon "${name}" not found in lucide-react`);
+    return null;
+  }
+
+  const iconSize = typeof size === "string" ? iconSizes[size] : size;
+
+  return (
+    <IconComponent
+      size={iconSize}
+      className={className}
+      {...(props as LucideIcons.LucideProps)}
+    />
+  );
+}

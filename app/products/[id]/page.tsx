@@ -6,7 +6,7 @@ import { ProductDescription, type ItemDetail } from '@/components/molecules/Prod
 import { ProductActions } from '@/components/molecules/ProductActions';
 import { ProductMeta } from '@/components/molecules/ProductMeta';
 import { ShippingOptions, type ShippingOption } from '@/components/molecules/ShippingOptions';
-import { SellerInfo } from '@/components/molecules/SellerInfo/SellerInfo';
+import { ClickableSellerInfo } from '@/components/molecules/SellerInfo/ClickableSellerInfo';
 import { SimilarItems } from '@/components/organisms/SimilarItems';
 
 interface ProductPageProps {
@@ -135,7 +135,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               />
 
               {/* Seller Info Card */}
-              <SellerInfo seller={product.seller} />
+              <ClickableSellerInfo seller={product.seller} />
             </div>
           </div>
         </div>

@@ -8,12 +8,15 @@ import { cva, type VariantProps } from "class-variance-authority";
 const textVariants = cva("", {
   variants: {
     variant: {
-      h1: "text-2xl font-bold text-text-primary",
-      h2: "text-xl font-bold text-text-primary",
-      h3: "text-lg font-semibold text-text-primary",
-      body: "text-base text-text-primary",
-      bodySmall: "text-sm text-text-secondary",
-      caption: "text-xs text-text-tertiary",
+      h1: "text-3xl font-bold text-primary",
+      h2: "text-2xl font-bold text-primary",
+      h3: "text-xl font-semibold text-primary",
+      h4: "text-lg font-semibold text-primary",
+      body: "text-base text-primary",
+      bodyMedium: "text-md text-primary",
+      bodySmall: "text-sm text-secondary",
+      caption: "text-xs text-tertiary",
+      captionSmall: "text-2xs text-tertiary",
       price: "text-xl font-bold text-primary",
       priceLarge: "text-2xl font-bold text-primary",
     },
@@ -91,7 +94,7 @@ const Price = React.forwardRef<HTMLElement, PriceProps>(
           <Typography
             variant="bodySmall"
             as="span"
-            className="line-through text-text-tertiary"
+            className="line-through text-tertiary"
           >
             {formatPrice(originalPrice)} {currency}
           </Typography>

@@ -9,15 +9,15 @@ import Image from "next/image";
  * Avatar size variants
  */
 const avatarVariants = cva(
-  "relative flex shrink-0 overflow-hidden rounded-full bg-text-tertiary/20",
+  "relative flex shrink-0 overflow-hidden rounded-full bg-text-tertiary/20 shadow-light",
   {
     variants: {
       size: {
-        sm: "h-8 w-8",
-        md: "h-10 w-10",
-        lg: "h-12 w-12",
-        xl: "h-16 w-16",
-        "2xl": "h-24 w-24",
+        sm: "h-8 w-8 text-2xs",
+        md: "h-10 w-10 text-xs",
+        lg: "h-12 w-12 text-sm",
+        xl: "h-16 w-16 text-base",
+        "2xl": "h-24 w-24 text-lg",
       },
     },
     defaultVariants: {
@@ -79,7 +79,7 @@ const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-primary/10 text-primary font-semibold text-sm">
+          <div className="flex h-full w-full items-center justify-center bg-primary/10 text-primary font-semibold">
             {displayFallback}
           </div>
         )}
