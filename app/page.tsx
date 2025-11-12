@@ -1,27 +1,16 @@
 "use client";
 
 import * as React from "react";
-import { Header, BottomNavigation, ProductGrid, FilterPanel } from "@/components/organisms";
+import { BottomNavigation, ProductGrid, FilterPanel } from "@/components/organisms";
 import { FilterChip, FilterChipGroup } from "@/components/molecules";
 import type { FilterOptions } from "@/components/organisms";
-import { mockProducts, mockUsers } from "@/lib/mockData";
+import { mockProducts } from "@/lib/mockData";
 import type { ProductType } from "@/lib/types";
 
 export default function HomePage() {
   const [filters, setFilters] = React.useState<FilterOptions>({});
   const [isFilterPanelOpen, setIsFilterPanelOpen] = React.useState(false);
   const [products, setProducts] = React.useState<ProductType[]>(mockProducts);
-
-  // Mock user (logged in)
-  const currentUser = {
-    username: mockUsers[0].username,
-    avatar: mockUsers[0].avatar,
-  };
-
-  const handleSearch = (query: string) => {
-    console.log("Searching for:", query);
-    // TODO: Implement search logic
-  };
 
   const handleFavoriteClick = (productId: string) => {
     setProducts((prev) =>
@@ -56,15 +45,6 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-8">
-      {/* Header */}
-      <Header
-        showSearch
-        onFilterClick={() => setIsFilterPanelOpen(true)}
-        onSearch={handleSearch}
-        user={currentUser}
-        notificationCount={3}
-      />
-
       {/* Main Content */}
       <main className="container mx-auto px-4 py-6">
         <div className="flex gap-6">

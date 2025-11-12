@@ -33,11 +33,11 @@ const ProductDetailsHeader = React.forwardRef<HTMLDivElement, ProductDetailsHead
       <>
         <div
           ref={ref}
-          className={cn('grid grid-cols-1 lg:grid-cols-2 gap-8', className)}
+          className={cn('grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 lg:gap-12', className)}
           {...props}
         >
           {/* Left Column - Image Carousel */}
-          <div className="relative">
+          <div className="relative max-w-2xl">
             <div className="relative">
               <ImageCarousel
                 images={images}
@@ -51,7 +51,7 @@ const ProductDetailsHeader = React.forwardRef<HTMLDivElement, ProductDetailsHead
                   setCurrentImageIndex(0);
                   setIsFullScreenOpen(true);
                 }}
-                className="absolute top-4 right-4 z-10 bg-black/50 hover:bg-black/70 text-white p-2 rounded-lg transition-colors"
+                className="absolute top-4 left-4 z-10 bg-black/50 hover:bg-black/70 text-white p-2 rounded-lg transition-colors"
                 aria-label="View full screen"
               >
                 <Expand className="h-5 w-5" />
@@ -60,7 +60,7 @@ const ProductDetailsHeader = React.forwardRef<HTMLDivElement, ProductDetailsHead
           </div>
 
           {/* Right Column - Product Info */}
-          <div className="space-y-6">
+          <div className="space-y-6 lg:min-w-[400px] lg:max-w-[500px]">
             {/* Category */}
             {category && (
               <div className="text-sm text-gray-600 dark:text-gray-400">

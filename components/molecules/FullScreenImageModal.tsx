@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
+import useEmblaCarousel from 'embla-carousel-react';
 import { X, ChevronLeft, ChevronRight, ZoomIn, ZoomOut } from 'lucide-react';
 import Image from 'next/image';
 import cn from '@/lib/utils';
@@ -21,12 +22,60 @@ const FullScreenImageModal: React.FC<FullScreenImageModalProps> = ({
   onClose,
   alt = 'Product image',
 }) => {
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false, startIndex: initialIndex });
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
+  const [canScrollPrev, setCanScrollPrev] = useState(false);
+  const [canScrollNext, setCanScrollNext] = useState(false);
   const [zoom, setZoom] = useState(1);
 
+  const scrollPrev = useCallback(() => {
+    if (emblaApi) {
+      emblaApi.scrollPrev();
+      setZoom(1);
+    }
+  }, [emblaApi]);
+
+  const scrollNext = useCallback(() => {
+    if (emblaApi) {
+      emblaApi.scrollNext();
+      setZoom(1);
+    }
+  }, [emblaApi]);
+
+  const scrollTo = useCallback(
+    (index: number) => {
+      if (emblaApi) {
+        emblaApi.scrollTo(index);
+        setZoom(1);
+      }
+    },
+    [emblaApi]
+  );
+
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setCurrentIndex(emblaApi.selectedScrollSnap());
+    setCanScrollPrev(emblaApi.canScrollPrev());
+    setCanScrollNext(emblaApi.canScrollNext());
+  }, [emblaApi]);
+
   useEffect(() => {
-    setCurrentIndex(initialIndex);
-  }, [initialIndex]);
+    if (!emblaApi) return;
+    onSelect();
+    emblaApi.on('select', onSelect);
+    emblaApi.on('reInit', onSelect);
+
+    return () => {
+      emblaApi.off('select', onSelect);
+      emblaApi.off('reInit', onSelect);
+    };
+  }, [emblaApi, onSelect]);
+
+  useEffect(() => {
+    if (emblaApi && isOpen) {
+      emblaApi.scrollTo(initialIndex, true);
+    }
+  }, [emblaApi, initialIndex, isOpen]);
 
   useEffect(() => {
     if (isOpen) {
@@ -44,23 +93,13 @@ const FullScreenImageModal: React.FC<FullScreenImageModalProps> = ({
       if (!isOpen) return;
 
       if (e.key === 'Escape') onClose();
-      if (e.key === 'ArrowLeft') handlePrevious();
-      if (e.key === 'ArrowRight') handleNext();
+      if (e.key === 'ArrowLeft') scrollPrev();
+      if (e.key === 'ArrowRight') scrollNext();
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, currentIndex]);
-
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % images.length);
-    setZoom(1);
-  };
-
-  const handlePrevious = () => {
-    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
-    setZoom(1);
-  };
+  }, [isOpen, scrollPrev, scrollNext, onClose]);
 
   const handleZoomIn = () => {
     setZoom((prev) => Math.min(prev + 0.5, 3));
@@ -131,9 +170,15 @@ const FullScreenImageModal: React.FC<FullScreenImageModalProps> = ({
             size="icon"
             onClick={(e) => {
               e.stopPropagation();
-              handlePrevious();
+              scrollPrev();
             }}
-            className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10 text-white hover:bg-white/10"
+            disabled={!canScrollPrev}
+            className={cn(
+              "absolute left-4 top-1/2 transform -translate-y-1/2 z-10",
+              canScrollPrev
+                ? "text-white hover:bg-white/10"
+                : "text-gray-500 cursor-not-allowed"
+            )}
           >
             <ChevronLeft className="h-8 w-8" />
           </Button>
@@ -142,33 +187,50 @@ const FullScreenImageModal: React.FC<FullScreenImageModalProps> = ({
             size="icon"
             onClick={(e) => {
               e.stopPropagation();
-              handleNext();
+              scrollNext();
             }}
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 z-10 text-white hover:bg-white/10"
+            disabled={!canScrollNext}
+            className={cn(
+              "absolute right-4 top-1/2 transform -translate-y-1/2 z-10",
+              canScrollNext
+                ? "text-white hover:bg-white/10"
+                : "text-gray-500 cursor-not-allowed"
+            )}
           >
             <ChevronRight className="h-8 w-8" />
           </Button>
         </>
       )}
 
-      {/* Image */}
+      {/* Embla Carousel Container */}
       <div
-        className="relative w-full h-full flex items-center justify-center p-16 overflow-auto"
+        className="relative w-full h-full flex items-center justify-center p-16"
         onClick={(e) => e.stopPropagation()}
       >
-        <div
-          className="relative transition-transform duration-200"
-          style={{ transform: `scale(${zoom})` }}
-        >
-          <Image
-            src={images[currentIndex]}
-            alt={`${alt} ${currentIndex + 1}`}
-            width={1200}
-            height={1200}
-            className="max-w-full max-h-full object-contain"
-            quality={100}
-            priority
-          />
+        <div className="overflow-hidden w-full h-full" ref={emblaRef}>
+          <div className="flex h-full">
+            {images.map((image, index) => (
+              <div
+                key={index}
+                className="flex-[0_0_100%] min-w-0 flex items-center justify-center"
+              >
+                <div
+                  className="relative transition-transform duration-200"
+                  style={{ transform: `scale(${zoom})` }}
+                >
+                  <Image
+                    src={image}
+                    alt={`${alt} ${index + 1}`}
+                    width={1200}
+                    height={1200}
+                    className="max-w-full max-h-full object-contain"
+                    quality={100}
+                    priority={index === initialIndex}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -180,8 +242,7 @@ const FullScreenImageModal: React.FC<FullScreenImageModalProps> = ({
               key={index}
               onClick={(e) => {
                 e.stopPropagation();
-                setCurrentIndex(index);
-                setZoom(1);
+                scrollTo(index);
               }}
               className={cn(
                 'relative flex-shrink-0 w-16 h-16 rounded-md overflow-hidden border-2 transition-all',

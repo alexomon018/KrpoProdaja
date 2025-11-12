@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import useEmblaCarousel from "embla-carousel-react";
 import cn from "@/lib/utils";
 import { ProductImage } from "@/components/atoms";
 import { ChevronLeft, ChevronRight } from "@/components/atoms/Icon/Icon";
@@ -50,43 +51,45 @@ const ImageCarousel = React.forwardRef<HTMLDivElement, ImageCarouselProps>(
     },
     ref
   ) => {
+    const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false });
     const [currentIndex, setCurrentIndex] = React.useState(0);
+    const [canScrollPrev, setCanScrollPrev] = React.useState(false);
+    const [canScrollNext, setCanScrollNext] = React.useState(false);
     const [isZoomed, setIsZoomed] = React.useState(false);
-    const touchStartX = React.useRef(0);
-    const touchEndX = React.useRef(0);
 
-    const goToNext = () => {
-      setCurrentIndex((prev) => (prev + 1) % images.length);
-    };
+    const scrollPrev = React.useCallback(() => {
+      if (emblaApi) emblaApi.scrollPrev();
+    }, [emblaApi]);
 
-    const goToPrevious = () => {
-      setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
-    };
+    const scrollNext = React.useCallback(() => {
+      if (emblaApi) emblaApi.scrollNext();
+    }, [emblaApi]);
 
-    const goToSlide = (index: number) => {
-      setCurrentIndex(index);
-    };
+    const scrollTo = React.useCallback(
+      (index: number) => {
+        if (emblaApi) emblaApi.scrollTo(index);
+      },
+      [emblaApi]
+    );
 
-    const handleTouchStart = (e: React.TouchEvent) => {
-      touchStartX.current = e.touches[0].clientX;
-    };
+    const onSelect = React.useCallback(() => {
+      if (!emblaApi) return;
+      setCurrentIndex(emblaApi.selectedScrollSnap());
+      setCanScrollPrev(emblaApi.canScrollPrev());
+      setCanScrollNext(emblaApi.canScrollNext());
+    }, [emblaApi]);
 
-    const handleTouchMove = (e: React.TouchEvent) => {
-      touchEndX.current = e.touches[0].clientX;
-    };
+    React.useEffect(() => {
+      if (!emblaApi) return;
+      onSelect();
+      emblaApi.on("select", onSelect);
+      emblaApi.on("reInit", onSelect);
 
-    const handleTouchEnd = () => {
-      const swipeThreshold = 50;
-      const diff = touchStartX.current - touchEndX.current;
-
-      if (Math.abs(diff) > swipeThreshold) {
-        if (diff > 0) {
-          goToNext();
-        } else {
-          goToPrevious();
-        }
-      }
-    };
+      return () => {
+        emblaApi.off("select", onSelect);
+        emblaApi.off("reInit", onSelect);
+      };
+    }, [emblaApi, onSelect]);
 
     const handleImageClick = () => {
       if (zoomable) {
@@ -101,56 +104,68 @@ const ImageCarousel = React.forwardRef<HTMLDivElement, ImageCarouselProps>(
           className={cn("relative w-full", className)}
           {...props}
         >
-          {/* Main Image */}
-          <div
-            className="relative overflow-hidden rounded-lg"
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
-          >
-            <button
-              onClick={handleImageClick}
-              className="w-full focus:outline-none focus:ring-2 focus:ring-primary"
-              aria-label="Uvećaj sliku"
-            >
-              <ProductImage
-                src={images[currentIndex]}
-                alt={`${alt} - ${currentIndex + 1}`}
-                aspectRatio="square"
-                priority={currentIndex === 0}
-              />
-            </button>
-
-            {/* Counter */}
-            {showCounter && images.length > 1 && (
-              <div className="absolute top-3 right-3 px-2.5 py-1 bg-black/60 backdrop-blur-sm rounded-full text-white text-sm font-medium">
-                {currentIndex + 1}/{images.length}
-              </div>
-            )}
+          {/* Embla Carousel Container */}
+          <div className="overflow-hidden rounded-lg" ref={emblaRef}>
+            <div className="flex">
+              {images.map((image, index) => (
+                <div
+                  key={index}
+                  className="flex-[0_0_100%] min-w-0"
+                >
+                  <button
+                    onClick={handleImageClick}
+                    className="w-full focus:outline-none focus:ring-2 focus:ring-primary"
+                    aria-label="Uvećaj sliku"
+                  >
+                    <ProductImage
+                      src={image}
+                      alt={`${alt} - ${index + 1}`}
+                      aspectRatio="square"
+                      priority={index === 0}
+                    />
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
+
+          {/* Counter */}
+          {showCounter && images.length > 1 && (
+            <div className="absolute top-3 right-3 px-2.5 py-1 bg-black/60 backdrop-blur-sm rounded-full text-white text-sm font-medium z-10">
+              {currentIndex + 1}/{images.length}
+            </div>
+          )}
 
           {/* Navigation Arrows */}
           {images.length > 1 && (
             <>
               <button
-                onClick={goToPrevious}
+                onClick={scrollPrev}
+                disabled={!canScrollPrev}
                 className={cn(
-                  "absolute left-2 top-1/2 -translate-y-1/2",
-                  "p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md",
-                  "hover:bg-white transition-colors touch-target",
-                  "focus:outline-none focus:ring-2 focus:ring-primary"
+                  "absolute left-2 top-1/2 -translate-y-1/2 z-10",
+                  "p-2 rounded-full backdrop-blur-sm shadow-md",
+                  "transition-all touch-target",
+                  "focus:outline-none focus:ring-2 focus:ring-primary",
+                  canScrollPrev
+                    ? "bg-gray-800/80 hover:bg-gray-800 text-white cursor-pointer"
+                    : "bg-gray-300/50 text-gray-400 cursor-not-allowed"
                 )}
                 aria-label="Prethodna slika"
               >
                 <ChevronLeft size={24} />
               </button>
               <button
-                onClick={goToNext}
+                onClick={scrollNext}
+                disabled={!canScrollNext}
                 className={cn(
-                  "absolute right-2 top-1/2 -translate-y-1/2",
-                  "p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md",
-                  "hover:bg-white transition-colors touch-target",
-                  "focus:outline-none focus:ring-2 focus:ring-primary"
+                  "absolute right-2 top-1/2 -translate-y-1/2 z-10",
+                  "p-2 rounded-full backdrop-blur-sm shadow-md",
+                  "transition-all touch-target",
+                  "focus:outline-none focus:ring-2 focus:ring-primary",
+                  canScrollNext
+                    ? "bg-gray-800/80 hover:bg-gray-800 text-white cursor-pointer"
+                    : "bg-gray-300/50 text-gray-400 cursor-not-allowed"
                 )}
                 aria-label="Sledeća slika"
               >
@@ -165,7 +180,7 @@ const ImageCarousel = React.forwardRef<HTMLDivElement, ImageCarouselProps>(
               {images.map((_, index) => (
                 <button
                   key={index}
-                  onClick={() => goToSlide(index)}
+                  onClick={() => scrollTo(index)}
                   className={cn(
                     "w-2 h-2 rounded-full transition-all",
                     "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
