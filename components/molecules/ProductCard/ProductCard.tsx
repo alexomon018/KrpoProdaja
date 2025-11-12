@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useRouter } from "next/navigation";
 import cn from "@/lib/utils";
 import { ProductImage, Avatar, Badge, Price, Typography } from "@/components/atoms";
 import { Heart } from "@/components/atoms/Icon/Icon";
@@ -33,6 +34,7 @@ export interface ProductCardProps extends React.HTMLAttributes<HTMLDivElement> {
  */
 const ProductCard = React.forwardRef<HTMLDivElement, ProductCardProps>(
   ({ className, product, onFavoriteClick, ...props }, ref) => {
+    const router = useRouter();
     const [isFavorited, setIsFavorited] = React.useState(product.isFavorite || false);
 
     const handleFavoriteClick = (e: React.MouseEvent) => {
@@ -40,6 +42,12 @@ const ProductCard = React.forwardRef<HTMLDivElement, ProductCardProps>(
       e.stopPropagation();
       setIsFavorited(!isFavorited);
       onFavoriteClick?.(product.id);
+    };
+
+    const handleSellerClick = (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      router.push(`/profile/${product.seller.id}`);
     };
 
     return (
@@ -93,14 +101,18 @@ const ProductCard = React.forwardRef<HTMLDivElement, ProductCardProps>(
             </button>
 
             {/* Seller Avatar Overlay */}
-            <div className="absolute bottom-2 left-2">
+            <button
+              onClick={handleSellerClick}
+              className="absolute bottom-2 left-2 hover:opacity-80 transition-opacity focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-full"
+              aria-label={`Vidi profil prodavca ${product.seller.username}`}
+            >
               <Avatar
                 src={product.seller.avatar}
                 alt={product.seller.username}
                 fallback={product.seller.username}
                 size="sm"
               />
-            </div>
+            </button>
           </div>
 
           {/* Product Information */}
