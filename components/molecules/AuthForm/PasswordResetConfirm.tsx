@@ -86,7 +86,7 @@ export function PasswordResetConfirm({
           </p>
         </div>
 
-        <Link href="/auth/login">
+        <Link href="/login">
           <Button variant="primary" fullWidth>
             Prijavi se
           </Button>

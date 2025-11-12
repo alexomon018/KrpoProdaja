@@ -196,7 +196,7 @@ export function RegisterForm({
           <p className="text-center text-sm text-text-secondary">
             Već imaš nalog?{" "}
             <Link
-              href="/auth/login"
+              href="/login"
               className="text-primary hover:text-primary-dark font-medium"
             >
               Prijavi se

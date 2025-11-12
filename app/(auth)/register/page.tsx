@@ -27,7 +27,7 @@ export default function RegisterPage() {
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // On success, redirect to email verification
-      router.push(`/auth/verify-email?email=${encodeURIComponent(data.email)}`);
+      router.push(`/verify-email?email=${encodeURIComponent(data.email)}`);
     } catch (err) {
       setError("Greška pri registraciji. Molimo pokušajte ponovo.");
     } finally {

@@ -79,7 +79,7 @@ export function PasswordResetRequest({
           </ol>
         </div>
 
-        <Link href="/auth/login">
+        <Link href="/login">
           <Button variant="secondary" fullWidth>
             Nazad na prijavu
           </Button>
@@ -133,7 +133,7 @@ export function PasswordResetRequest({
             Pošalji link
           </Button>
 
-          <Link href="/auth/login">
+          <Link href="/login">
             <Button variant="ghost" fullWidth>
               Nazad na prijavu
             </Button>

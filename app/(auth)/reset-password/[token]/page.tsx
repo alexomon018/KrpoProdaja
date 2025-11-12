@@ -34,7 +34,7 @@ export default function ResetPasswordConfirmPage() {
 
       // Redirect to login after success
       setTimeout(() => {
-        router.push("/auth/login");
+        router.push("/login");
       }, 2000);
     } catch (err) {
       setError("Greška pri promeni lozinke. Link možda nije važeći ili je istekao.");

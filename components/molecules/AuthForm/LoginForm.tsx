@@ -116,7 +116,7 @@ export function LoginForm({
             </label>
 
             <Link
-              href="/auth/reset-password"
+              href="/reset-password"
               className="text-sm text-primary hover:text-primary-dark font-medium"
             >
               Zaboravio si lozinku?
@@ -142,7 +142,7 @@ export function LoginForm({
           <p className="text-center text-sm text-text-secondary">
             Nemaš nalog?{" "}
             <Link
-              href="/auth/register"
+              href="/register"
               className="text-primary hover:text-primary-dark font-medium"
             >
               Registruj se
