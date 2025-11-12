@@ -95,7 +95,7 @@ const ProductCard = React.forwardRef<HTMLDivElement, ProductCardProps>(
                 size={20}
                 className={cn(
                   "transition-colors",
-                  isFavorited ? "fill-primary text-primary" : "text-text-secondary"
+                  isFavorited ? "fill-primary text-primary" : "text-secondary"
                 )}
               />
             </button>
@@ -134,7 +134,7 @@ const ProductCard = React.forwardRef<HTMLDivElement, ProductCardProps>(
               {product.brand && (
                 <Badge variant="default">{product.brand}</Badge>
               )}
-              <Badge variant="default" className="text-text-tertiary">
+              <Badge variant="default" className="text-tertiary">
                 {product.condition === "new"
                   ? "Novo"
                   : product.condition === "very-good"
@@ -147,7 +147,7 @@ const ProductCard = React.forwardRef<HTMLDivElement, ProductCardProps>(
 
             {/* Location */}
             <Typography variant="caption" className="flex items-center gap-1">
-              <span className="text-text-tertiary">{product.location}</span>
+              <span className="text-tertiary">{product.location}</span>
             </Typography>
           </div>
         </Link>

@@ -74,7 +74,7 @@ export function ProfileView({
             <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
               <div>
                 <div className="flex items-center gap-2">
-                  <h1 className="text-2xl font-bold text-text-primary">
+                  <h1 className="text-2xl font-bold text-primary">
                     {profile.name}
                   </h1>
                   {profile.verified && (
@@ -85,7 +85,7 @@ export function ProfileView({
                   )}
                 </div>
                 {profile.location && (
-                  <p className="text-text-secondary flex items-center gap-1 mt-1">
+                  <p className="text-secondary flex items-center gap-1 mt-1">
                     <Icon name="MapPin" size={16} />
                     {profile.location}
                   </p>
@@ -108,20 +108,20 @@ export function ProfileView({
             </div>
 
             {profile.bio && (
-              <p className="text-text-secondary">{profile.bio}</p>
+              <p className="text-secondary">{profile.bio}</p>
             )}
 
             <div className="flex flex-wrap gap-4 text-sm">
               <div className="flex items-center gap-2">
-                <Icon name="Calendar" size={16} className="text-text-tertiary" />
-                <span className="text-text-secondary">
+                <Icon name="Calendar" size={16} className="text-tertiary" />
+                <span className="text-secondary">
                   Član od {new Date(profile.memberSince).toLocaleDateString("sr-RS")}
                 </span>
               </div>
               {profile.rating !== undefined && (
                 <div className="flex items-center gap-2">
                   <Icon name="Star" size={16} className="text-yellow-500" />
-                  <span className="text-text-primary font-medium">
+                  <span className="text-primary font-medium">
                     {profile.rating.toFixed(1)}
                   </span>
                 </div>
@@ -137,42 +137,42 @@ export function ProfileView({
           <div className="text-3xl font-bold text-primary">
             {profile.activeListing ?? 0}
           </div>
-          <div className="text-sm text-text-secondary mt-1">Aktivni oglasi</div>
+          <div className="text-sm text-secondary mt-1">Aktivni oglasi</div>
         </div>
         <div className="bg-surface border border-border rounded-lg p-4 text-center">
           <div className="text-3xl font-bold text-primary">
             {profile.totalSales ?? 0}
           </div>
-          <div className="text-sm text-text-secondary mt-1">Prodato</div>
+          <div className="text-sm text-secondary mt-1">Prodato</div>
         </div>
         <div className="bg-surface border border-border rounded-lg p-4 text-center">
           <div className="text-3xl font-bold text-primary">
             {profile.rating?.toFixed(1) ?? "N/A"}
           </div>
-          <div className="text-sm text-text-secondary mt-1">Ocena</div>
+          <div className="text-sm text-secondary mt-1">Ocena</div>
         </div>
       </div>
 
       {/* Contact Info (only for own profile) */}
       {isOwnProfile && (
         <div className="bg-surface border border-border rounded-lg p-6 space-y-4">
-          <h2 className="text-xl font-bold text-text-primary">Kontakt informacije</h2>
+          <h2 className="text-xl font-bold text-primary">Kontakt informacije</h2>
 
           <div className="space-y-3">
             <div className="flex items-center gap-3">
-              <Icon name="Mail" size={20} className="text-text-tertiary" />
+              <Icon name="Mail" size={20} className="text-tertiary" />
               <div>
-                <p className="text-sm text-text-secondary">Email</p>
-                <p className="text-text-primary">{profile.email}</p>
+                <p className="text-sm text-secondary">Email</p>
+                <p className="text-primary">{profile.email}</p>
               </div>
             </div>
 
             {profile.phone && (
               <div className="flex items-center gap-3">
-                <Icon name="Phone" size={20} className="text-text-tertiary" />
+                <Icon name="Phone" size={20} className="text-tertiary" />
                 <div>
-                  <p className="text-sm text-text-secondary">Telefon</p>
-                  <p className="text-text-primary">{profile.phone}</p>
+                  <p className="text-sm text-secondary">Telefon</p>
+                  <p className="text-primary">{profile.phone}</p>
                 </div>
               </div>
             )}

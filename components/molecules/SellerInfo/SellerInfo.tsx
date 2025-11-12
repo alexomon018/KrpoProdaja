@@ -100,7 +100,7 @@ const SellerInfo = React.forwardRef<HTMLDivElement, SellerInfoProps>(
             {/* Response Time */}
             {seller.responseTime && (
               <div className="flex items-center gap-1.5 mt-2">
-                <Clock size={14} className="text-text-tertiary" />
+                <Clock size={14} className="text-tertiary" />
                 <Typography variant="caption">
                   Obično odgovara za {seller.responseTime}
                 </Typography>

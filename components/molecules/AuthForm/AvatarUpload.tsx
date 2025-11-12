@@ -190,7 +190,7 @@ export function AvatarUpload({
         )}
       </div>
 
-      <p className="text-xs text-text-tertiary text-center">
+      <p className="text-xs text-tertiary text-center">
         PNG, JPG ili GIF. Maksimalno {maxSizeMB}MB.
       </p>
     </div>

@@ -65,7 +65,7 @@ const ProductImage = React.forwardRef<HTMLDivElement, ProductImageProps>(
       <div
         ref={ref}
         className={cn(
-          "relative overflow-hidden rounded-lg bg-background",
+          "relative overflow-hidden rounded-sm bg-background shadow-light hover:shadow-medium transition-shadow",
           !fill && aspectRatioClasses[aspectRatio],
           fill && "w-full h-full",
           className
@@ -83,7 +83,7 @@ const ProductImage = React.forwardRef<HTMLDivElement, ProductImageProps>(
             onError={() => setImageError(true)}
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-background text-text-tertiary">
+          <div className="flex h-full w-full items-center justify-center bg-background text-tertiary">
             <svg
               className="w-12 h-12"
               fill="none"

@@ -64,13 +64,13 @@ export function PasswordResetRequest({
         </div>
 
         <div className="space-y-2">
-          <h1 className="text-3xl font-bold text-text-primary">Proveri email</h1>
-          <p className="text-text-secondary">
+          <h1 className="text-3xl font-bold text-primary">Proveri email</h1>
+          <p className="text-secondary">
             Poslali smo ti link za resetovanje lozinke. Proveri svoju email sandučicu.
           </p>
         </div>
 
-        <div className="bg-background border border-border rounded-lg p-4 text-sm text-text-secondary text-left">
+        <div className="bg-background border border-border rounded-lg p-4 text-sm text-secondary text-left">
           <p className="font-medium mb-2">Sledeći koraci:</p>
           <ol className="space-y-1 list-decimal list-inside">
             <li>Otvori email koji smo ti poslali</li>
@@ -85,7 +85,7 @@ export function PasswordResetRequest({
           </Button>
         </Link>
 
-        <p className="text-xs text-text-tertiary">
+        <p className="text-xs text-tertiary">
           Nisi dobio email? Proveri spam folder ili pokušaj ponovo
         </p>
       </div>
@@ -100,8 +100,8 @@ export function PasswordResetRequest({
             <Icon name="Key" size={48} className="text-primary" />
           </div>
         </div>
-        <h1 className="text-3xl font-bold text-text-primary">Zaboravio si lozinku?</h1>
-        <p className="text-text-secondary">
+        <h1 className="text-3xl font-bold text-primary">Zaboravio si lozinku?</h1>
+        <p className="text-secondary">
           Nema problema! Unesi svoj email i poslaćemo ti link za resetovanje.
         </p>
       </div>

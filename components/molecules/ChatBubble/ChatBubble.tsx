@@ -104,7 +104,7 @@ const ChatBubble = React.forwardRef<HTMLDivElement, ChatBubbleProps>(
           {/* Message Text */}
           <Typography
             variant="bodySmall"
-            className={cn(isOwn ? "text-white" : "text-text-primary")}
+            className={cn(isOwn ? "text-white" : "text-primary")}
           >
             {message}
           </Typography>
@@ -118,7 +118,7 @@ const ChatBubble = React.forwardRef<HTMLDivElement, ChatBubbleProps>(
           >
             <Typography
               variant="caption"
-              className={cn(isOwn ? "text-white/70" : "text-text-tertiary")}
+              className={cn(isOwn ? "text-white/70" : "text-tertiary")}
             >
               {formatRelativeTime(timestamp)}
             </Typography>

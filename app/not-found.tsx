@@ -39,20 +39,20 @@ export default function NotFound() {
             </button>
             <span className="text-9xl font-bold text-primary">4</span>
           </div>
-          <div className="absolute -top-2 left-1/2 -translate-x-1/2 text-xs text-text-tertiary opacity-0 hover:opacity-100 transition-opacity">
+          <div className="absolute -top-2 left-1/2 -translate-x-1/2 text-xs text-tertiary opacity-0 hover:opacity-100 transition-opacity">
             (klikni na majicu!)
           </div>
         </div>
 
         {/* Error Message */}
         <div className="space-y-4">
-          <h1 className="text-4xl font-bold text-text-primary">
+          <h1 className="text-4xl font-bold text-primary">
             Opa! Stranica nije pronađena
           </h1>
-          <p className="text-lg text-text-secondary max-w-lg mx-auto">
+          <p className="text-lg text-secondary max-w-lg mx-auto">
             Izgleda da je ova stranica otišla na kupovinu... ili možda je već prodata! 🛍️
           </p>
-          <p className="text-sm text-text-tertiary">
+          <p className="text-sm text-tertiary">
             Možda je link pogrešan, ili smo malo preuredio sajt. Ne brini, imaš još mnogo toga da istražiš!
           </p>
         </div>
@@ -61,15 +61,15 @@ export default function NotFound() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 py-6">
           <div className="bg-surface border border-border rounded-lg p-4">
             <div className="text-3xl font-bold text-primary">404</div>
-            <div className="text-sm text-text-secondary">Izgubljenih majica</div>
+            <div className="text-sm text-secondary">Izgubljenih majica</div>
           </div>
           <div className="bg-surface border border-border rounded-lg p-4">
             <div className="text-3xl font-bold text-primary">∞</div>
-            <div className="text-sm text-text-secondary">Novih proizvoda</div>
+            <div className="text-sm text-secondary">Novih proizvoda</div>
           </div>
           <div className="bg-surface border border-border rounded-lg p-4">
             <div className="text-3xl font-bold text-primary">100%</div>
-            <div className="text-sm text-text-secondary">Šanse za povratak</div>
+            <div className="text-sm text-secondary">Šanse za povratak</div>
           </div>
         </div>
 
@@ -95,20 +95,20 @@ export default function NotFound() {
 
           {/* Quick Links */}
           <div className="pt-4">
-            <p className="text-sm text-text-secondary mb-3">Možda tražiš nešto od ovoga?</p>
+            <p className="text-sm text-secondary mb-3">Možda tražiš nešto od ovoga?</p>
             <div className="flex flex-wrap gap-2 justify-center">
               <Link href="/products" className="text-sm text-primary hover:underline">
                 Prodavnica
               </Link>
-              <span className="text-text-tertiary">•</span>
+              <span className="text-tertiary">•</span>
               <Link href="/sell" className="text-sm text-primary hover:underline">
                 Prodaj
               </Link>
-              <span className="text-text-tertiary">•</span>
+              <span className="text-tertiary">•</span>
               <Link href="/profile" className="text-sm text-primary hover:underline">
                 Profil
               </Link>
-              <span className="text-text-tertiary">•</span>
+              <span className="text-tertiary">•</span>
               <Link href="/login" className="text-sm text-primary hover:underline">
                 Prijava
               </Link>
@@ -121,9 +121,9 @@ export default function NotFound() {
           <div className="bg-primary/5 border-2 border-primary/20 rounded-lg p-6 max-w-md mx-auto">
             <div className="flex items-center gap-3 mb-2">
               <span className="text-2xl">💡</span>
-              <span className="font-semibold text-text-primary">Pro tip!</span>
+              <span className="font-semibold text-primary">Pro tip!</span>
             </div>
-            <p className="text-sm text-text-secondary">
+            <p className="text-sm text-secondary">
               Dok si ovde, možda ti treba nova majica? Baš kao ona na 404! 👕
             </p>
           </div>

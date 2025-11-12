@@ -1,22 +1,26 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { Expand } from 'lucide-react';
-import cn, { formatPrice } from '@/lib/utils';
-import { ImageCarousel } from '@/components/molecules/ImageCarousel/ImageCarousel';
-import { ConditionBadge } from '@/components/atoms/ConditionBadge';
-import { FullScreenImageModal } from '@/components/molecules/FullScreenImageModal';
+import React, { useState } from "react";
+import { Expand } from "lucide-react";
+import cn, { formatPrice } from "@/lib/utils";
+import { ImageCarousel } from "@/components/molecules/ImageCarousel/ImageCarousel";
+import { ConditionBadge } from "@/components/atoms/ConditionBadge";
+import { FullScreenImageModal } from "@/components/molecules/FullScreenImageModal";
 
-export interface ProductDetailsHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface ProductDetailsHeaderProps
+  extends React.HTMLAttributes<HTMLDivElement> {
   title: string;
   price: number;
   images: string[];
-  condition: 'new' | 'very-good' | 'good' | 'satisfactory';
+  condition: "new" | "very-good" | "good" | "satisfactory";
   size?: string;
   category?: string;
 }
 
-const ProductDetailsHeader = React.forwardRef<HTMLDivElement, ProductDetailsHeaderProps>(
+const ProductDetailsHeader = React.forwardRef<
+  HTMLDivElement,
+  ProductDetailsHeaderProps
+>(
   (
     { className, title, price, images, condition, size, category, ...props },
     ref
@@ -33,17 +37,16 @@ const ProductDetailsHeader = React.forwardRef<HTMLDivElement, ProductDetailsHead
       <>
         <div
           ref={ref}
-          className={cn('grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 lg:gap-12', className)}
+          className={cn(
+            "grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 lg:gap-12",
+            className
+          )}
           {...props}
         >
           {/* Left Column - Image Carousel */}
           <div className="relative max-w-2xl">
             <div className="relative">
-              <ImageCarousel
-                images={images}
-                alt={title}
-                zoomable={false}
-              />
+              <ImageCarousel images={images} alt={title} zoomable={false} />
 
               {/* Full Screen Button Overlay */}
               <button
@@ -93,15 +96,21 @@ const ProductDetailsHeader = React.forwardRef<HTMLDivElement, ProductDetailsHead
             {/* Quick Info Grid */}
             <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
               <div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Condition</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Condition
+                </p>
                 <p className="font-medium text-gray-900 dark:text-white capitalize">
-                  {condition.replace('-', ' ')}
+                  {condition.replace("-", " ")}
                 </p>
               </div>
               {size && (
                 <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Size</p>
-                  <p className="font-medium text-gray-900 dark:text-white">{size}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Size
+                  </p>
+                  <p className="font-medium text-gray-900 dark:text-white">
+                    {size}
+                  </p>
                 </div>
               )}
             </div>
@@ -121,6 +130,6 @@ const ProductDetailsHeader = React.forwardRef<HTMLDivElement, ProductDetailsHead
   }
 );
 
-ProductDetailsHeader.displayName = 'ProductDetailsHeader';
+ProductDetailsHeader.displayName = "ProductDetailsHeader";
 
 export { ProductDetailsHeader };

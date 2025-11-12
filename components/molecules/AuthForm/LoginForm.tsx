@@ -62,8 +62,8 @@ export function LoginForm({
   return (
     <div className="w-full max-w-md mx-auto space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-text-primary">Prijavi se</h1>
-        <p className="text-text-secondary">
+        <h1 className="text-3xl font-bold text-primary">Prijavi se</h1>
+        <p className="text-secondary">
           Dobrodošli nazad! Prijavite se na svoj nalog
         </p>
       </div>
@@ -97,7 +97,7 @@ export function LoginForm({
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-[38px] text-text-tertiary hover:text-text-secondary"
+              className="absolute right-3 top-[38px] text-tertiary hover:text-secondary"
               disabled={loading}
             >
               <Icon name={showPassword ? "EyeOff" : "Eye"} size={20} />
@@ -112,7 +112,7 @@ export function LoginForm({
                 className="h-4 w-4 rounded border-border text-primary focus:ring-primary"
                 disabled={loading}
               />
-              <span className="text-sm text-text-secondary">Zapamti me</span>
+              <span className="text-sm text-secondary">Zapamti me</span>
             </label>
 
             <Link
@@ -139,7 +139,7 @@ export function LoginForm({
             loading={loading}
           />
 
-          <p className="text-center text-sm text-text-secondary">
+          <p className="text-center text-sm text-secondary">
             Nemaš nalog?{" "}
             <Link
               href="/register"

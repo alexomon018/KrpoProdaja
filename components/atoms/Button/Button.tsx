@@ -7,7 +7,7 @@ import cn from "@/lib/utils";
  * Follows the design system with primary, secondary, and ghost variants
  */
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 touch-target",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 touch-target shadow-low hover:shadow-medium",
   {
     variants: {
       variant: {
@@ -16,7 +16,7 @@ const buttonVariants = cva(
         secondary:
           "border-2 border-primary text-primary bg-transparent hover:bg-primary/10 active:bg-primary/20",
         ghost:
-          "text-primary hover:bg-primary/10 active:bg-primary/20",
+          "text-primary hover:bg-primary/10 active:bg-primary/20 shadow-none hover:shadow-none",
         danger:
           "bg-semantic-error text-white hover:bg-semantic-error/90 active:bg-semantic-error/80",
         success:

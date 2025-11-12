@@ -77,8 +77,8 @@ export function EmailVerification({
         </div>
 
         <div className="space-y-2">
-          <h1 className="text-3xl font-bold text-text-primary">Email potvrđen!</h1>
-          <p className="text-text-secondary">
+          <h1 className="text-3xl font-bold text-primary">Email potvrđen!</h1>
+          <p className="text-secondary">
             Tvoj email je uspešno verifikovan. Sada možeš koristiti sve funkcije.
           </p>
         </div>
@@ -99,11 +99,11 @@ export function EmailVerification({
       </div>
 
       <div className="space-y-2">
-        <h1 className="text-3xl font-bold text-text-primary">Potvrdi email</h1>
-        <p className="text-text-secondary">
+        <h1 className="text-3xl font-bold text-primary">Potvrdi email</h1>
+        <p className="text-secondary">
           Poslali smo verifikacioni link na
         </p>
-        <p className="font-semibold text-text-primary">{email}</p>
+        <p className="font-semibold text-primary">{email}</p>
       </div>
 
       {error && (
@@ -113,7 +113,7 @@ export function EmailVerification({
       )}
 
       <div className="space-y-4">
-        <div className="bg-background border border-border rounded-lg p-4 text-sm text-text-secondary text-left space-y-2">
+        <div className="bg-background border border-border rounded-lg p-4 text-sm text-secondary text-left space-y-2">
           <p className="font-medium">Proveri svoj email</p>
           <ul className="space-y-1 list-disc list-inside">
             <li>Otvori email koji smo ti poslali</li>
@@ -122,7 +122,7 @@ export function EmailVerification({
           </ul>
         </div>
 
-        <p className="text-sm text-text-secondary">
+        <p className="text-sm text-secondary">
           Nisi dobio email?
         </p>
 
@@ -138,7 +138,7 @@ export function EmailVerification({
             : "Pošalji ponovo"}
         </Button>
 
-        <p className="text-xs text-text-tertiary">
+        <p className="text-xs text-tertiary">
           Proveri i spam folder ako ne vidiš email
         </p>
       </div>

@@ -34,7 +34,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="block text-sm font-medium text-text-primary mb-1.5"
+            className="block text-sm font-medium text-primary mb-1.5"
           >
             {label}
           </label>
@@ -42,7 +42,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
         <div className="relative">
           {startIcon && (
-            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary">
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary">
               {startIcon}
             </div>
           )}
@@ -51,11 +51,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             type={type}
             id={inputId}
             className={cn(
-              "flex h-11 w-full rounded-lg border border-border bg-surface px-3 py-2 text-base",
-              "text-text-primary placeholder:text-text-tertiary",
-              "focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent",
+              "flex h-11 w-full rounded-sm border border-border bg-surface px-3 py-2 text-base shadow-light",
+              "text-primary placeholder:text-tertiary",
+              "focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent focus:shadow-medium",
               "disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-background",
-              "transition-colors",
+              "transition-all",
               error && "border-semantic-error focus:ring-semantic-error",
               startIcon && "pl-10",
               endIcon && "pr-10",
@@ -66,7 +66,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           />
 
           {endIcon && (
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary">
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary">
               {endIcon}
             </div>
           )}
@@ -77,7 +77,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
 
         {helperText && !error && (
-          <p className="mt-1.5 text-sm text-text-secondary">{helperText}</p>
+          <p className="mt-1.5 text-sm text-secondary">{helperText}</p>
         )}
       </div>
     );

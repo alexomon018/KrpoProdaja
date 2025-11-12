@@ -56,18 +56,18 @@ const ReviewCard = React.forwardRef<HTMLDivElement, ReviewCardProps>(
                 className={cn(
                   index < review.rating
                     ? "fill-semantic-warning text-semantic-warning"
-                    : "text-text-tertiary"
+                    : "text-tertiary"
                 )}
               />
             ))}
-            <span className="ml-1 text-sm text-text-secondary">
+            <span className="ml-1 text-sm text-secondary">
               {review.rating.toFixed(1)}
             </span>
           </div>
 
           {/* Review Comment */}
           {review.comment && (
-            <Typography variant="bodySmall" className="text-text-primary">
+            <Typography variant="bodySmall" className="text-primary">
               {review.comment}
             </Typography>
           )}
@@ -107,11 +107,11 @@ const RatingDisplay = React.forwardRef<HTMLDivElement, RatingDisplayProps>(
           size={starSize}
           className="fill-semantic-warning text-semantic-warning"
         />
-        <span className={cn("font-semibold text-text-primary", textSize)}>
+        <span className={cn("font-semibold text-primary", textSize)}>
           {rating.toFixed(1)}
         </span>
         {showCount && reviewCount !== undefined && (
-          <span className={cn("text-text-tertiary", textSize)}>
+          <span className={cn("text-tertiary", textSize)}>
             ({reviewCount})
           </span>
         )}

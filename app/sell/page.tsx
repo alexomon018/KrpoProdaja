@@ -52,7 +52,7 @@ export default function SellPage() {
             </Typography>
             <Typography
               variant="body"
-              className="text-text-secondary text-center md:text-left"
+              className="text-secondary text-center md:text-left"
             >
               Popunite informacije o proizvodu koji želite da prodate
             </Typography>
@@ -78,13 +78,13 @@ export default function SellPage() {
                   />
 
                   <div className="space-y-2">
-                    <label className="block text-sm font-medium text-text-primary">
+                    <label className="block text-sm font-medium text-primary">
                       Opis
                     </label>
                     <textarea
                       {...methods.register("description")}
                       placeholder="Opišite proizvod, stanje, veličinu..."
-                      className="flex min-h-[120px] w-full rounded-lg border border-border bg-surface px-3 py-2 text-base text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+                      className="flex min-h-[120px] w-full rounded-lg border border-border bg-surface px-3 py-2 text-base text-primary placeholder:text-tertiary focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
                       rows={5}
                     />
                   </div>
@@ -105,7 +105,7 @@ export default function SellPage() {
                     placeholder="0"
                     helperText="Cena u dinarima (RSD)"
                     required
-                    endIcon={<span className="text-text-secondary">RSD</span>}
+                    endIcon={<span className="text-secondary">RSD</span>}
                   />
 
                   <FormInput
@@ -114,7 +114,7 @@ export default function SellPage() {
                     type="number"
                     placeholder="0"
                     helperText="Koliko je koštalo novo"
-                    endIcon={<span className="text-text-secondary">RSD</span>}
+                    endIcon={<span className="text-secondary">RSD</span>}
                   />
                 </div>
               </div>
@@ -134,7 +134,7 @@ export default function SellPage() {
 
                   {/* Size Selection */}
                   <div className="space-y-2">
-                    <label className="block text-sm font-medium text-text-primary">
+                    <label className="block text-sm font-medium text-primary">
                       Veličina *
                     </label>
                     <div className="flex flex-wrap gap-2">
@@ -146,7 +146,7 @@ export default function SellPage() {
                             value={size}
                             className="peer sr-only"
                           />
-                          <div className="px-4 py-2 rounded-lg border-2 border-border peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-primary font-semibold transition-colors hover:border-text-tertiary min-w-touch">
+                          <div className="px-4 py-2 rounded-lg border-2 border-border peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-primary font-semibold transition-colors hover:border-tertiary min-w-touch">
                             {size}
                           </div>
                         </label>
@@ -156,7 +156,7 @@ export default function SellPage() {
 
                   {/* Condition Selection */}
                   <div className="space-y-2">
-                    <label className="block text-sm font-medium text-text-primary">
+                    <label className="block text-sm font-medium text-primary">
                       Stanje *
                     </label>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -170,7 +170,7 @@ export default function SellPage() {
                             value={condition.value}
                             className="peer sr-only"
                           />
-                          <div className="p-3 rounded-lg border-2 border-border peer-checked:border-primary peer-checked:bg-primary/10 transition-colors hover:border-text-tertiary">
+                          <div className="p-3 rounded-lg border-2 border-border peer-checked:border-primary peer-checked:bg-primary/10 transition-colors hover:border-tertiary">
                             <Typography
                               variant="bodySmall"
                               className="font-medium"

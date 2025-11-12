@@ -88,7 +88,7 @@ export default function ProfileEditPage() {
         <Typography variant="h1" className="text-center">
           Izmeni profil
         </Typography>
-        <Typography variant="body" className="text-center text-text-secondary mt-2">
+        <Typography variant="body" className="text-center text-secondary mt-2">
           Ažuriraj svoje informacije i podešavanja
         </Typography>
       </div>

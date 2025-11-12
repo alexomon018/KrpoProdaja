@@ -106,7 +106,7 @@ export default function UserProfilePage() {
     return (
       <Container className="py-8">
         <div className="text-center">
-          <p className="text-text-secondary">Profil nije pronađen</p>
+          <p className="text-secondary">Profil nije pronađen</p>
         </div>
       </Container>
     );
