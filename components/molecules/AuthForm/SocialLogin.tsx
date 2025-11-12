@@ -41,10 +41,10 @@ export function SocialLogin({
     <div className="space-y-3">
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-neutral-200" />
+          <div className="w-full border-t border-border" />
         </div>
         <div className="relative flex justify-center text-sm">
-          <span className="bg-white px-4 text-neutral-500">ili nastavi sa</span>
+          <span className="bg-surface px-4 text-text-tertiary">ili nastavi sa</span>
         </div>
       </div>
 

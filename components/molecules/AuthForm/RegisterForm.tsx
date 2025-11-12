@@ -73,8 +73,8 @@ export function RegisterForm({
   return (
     <div className="w-full max-w-md mx-auto space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-neutral-900">Registruj se</h1>
-        <p className="text-neutral-600">
+        <h1 className="text-3xl font-bold text-text-primary">Registruj se</h1>
+        <p className="text-text-secondary">
           Kreiraj nalog i počni da kupuješ ili prodaješ
         </p>
       </div>
@@ -125,7 +125,7 @@ export function RegisterForm({
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-[38px] text-neutral-500 hover:text-neutral-700"
+              className="absolute right-3 top-[38px] text-text-tertiary hover:text-text-secondary"
               disabled={loading}
             >
               <Icon name={showPassword ? "EyeOff" : "Eye"} size={20} />
@@ -144,7 +144,7 @@ export function RegisterForm({
             <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-3 top-[38px] text-neutral-500 hover:text-neutral-700"
+              className="absolute right-3 top-[38px] text-text-tertiary hover:text-text-secondary"
               disabled={loading}
             >
               <Icon name={showConfirmPassword ? "EyeOff" : "Eye"} size={20} />
@@ -156,10 +156,10 @@ export function RegisterForm({
               <input
                 type="checkbox"
                 {...methods.register("agreeToTerms", { required: true })}
-                className="h-4 w-4 mt-0.5 rounded border-neutral-300 text-primary focus:ring-primary"
+                className="h-4 w-4 mt-0.5 rounded border-border text-primary focus:ring-primary"
                 disabled={loading}
               />
-              <span className="text-sm text-neutral-700">
+              <span className="text-sm text-text-secondary">
                 Slažem se sa{" "}
                 <Link href="/terms" className="text-primary hover:underline">
                   uslovima korišćenja
@@ -193,7 +193,7 @@ export function RegisterForm({
             loading={loading}
           />
 
-          <p className="text-center text-sm text-neutral-600">
+          <p className="text-center text-sm text-text-secondary">
             Već imaš nalog?{" "}
             <Link
               href="/auth/login"

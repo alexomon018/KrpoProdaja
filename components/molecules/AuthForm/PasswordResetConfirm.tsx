@@ -80,8 +80,8 @@ export function PasswordResetConfirm({
         </div>
 
         <div className="space-y-2">
-          <h1 className="text-3xl font-bold text-neutral-900">Lozinka promenjena!</h1>
-          <p className="text-neutral-600">
+          <h1 className="text-3xl font-bold text-text-primary">Lozinka promenjena!</h1>
+          <p className="text-text-secondary">
             Tvoja lozinka je uspešno promenjena. Sada se možeš prijaviti sa novom lozinkom.
           </p>
         </div>
@@ -103,8 +103,8 @@ export function PasswordResetConfirm({
             <Icon name="Lock" size={48} className="text-primary" />
           </div>
         </div>
-        <h1 className="text-3xl font-bold text-neutral-900">Nova lozinka</h1>
-        <p className="text-neutral-600">
+        <h1 className="text-3xl font-bold text-text-primary">Nova lozinka</h1>
+        <p className="text-text-secondary">
           Unesi svoju novu lozinku i potvrdi je
         </p>
       </div>
@@ -129,7 +129,7 @@ export function PasswordResetConfirm({
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-[38px] text-neutral-500 hover:text-neutral-700"
+              className="absolute right-3 top-[38px] text-text-tertiary hover:text-text-secondary"
               disabled={loading}
             >
               <Icon name={showPassword ? "EyeOff" : "Eye"} size={20} />
@@ -148,14 +148,14 @@ export function PasswordResetConfirm({
             <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-3 top-[38px] text-neutral-500 hover:text-neutral-700"
+              className="absolute right-3 top-[38px] text-text-tertiary hover:text-text-secondary"
               disabled={loading}
             >
               <Icon name={showConfirmPassword ? "EyeOff" : "Eye"} size={20} />
             </button>
           </div>
 
-          <div className="bg-neutral-50 border border-neutral-200 rounded-lg p-3 text-xs text-neutral-700">
+          <div className="bg-background border border-border rounded-lg p-3 text-xs text-text-secondary">
             <p className="font-medium mb-1">Lozinka mora sadržati:</p>
             <ul className="space-y-1 list-disc list-inside">
               <li>Najmanje 8 karaktera</li>

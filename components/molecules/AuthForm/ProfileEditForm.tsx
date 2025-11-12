@@ -97,8 +97,8 @@ export function ProfileEditForm({
         </div>
       )}
 
-      <div className="bg-white border border-neutral-200 rounded-lg p-6">
-        <h2 className="text-xl font-bold text-neutral-900 mb-6">Profilna slika</h2>
+      <div className="bg-surface border border-border rounded-lg p-6">
+        <h2 className="text-xl font-bold text-text-primary mb-6">Profilna slika</h2>
         <AvatarUpload
           currentAvatar={currentAvatar}
           userName={initialData?.name}
@@ -113,8 +113,8 @@ export function ProfileEditForm({
 
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="bg-white border border-neutral-200 rounded-lg p-6 space-y-4">
-            <h2 className="text-xl font-bold text-neutral-900">Osnovne informacije</h2>
+          <div className="bg-surface border border-border rounded-lg p-6 space-y-4">
+            <h2 className="text-xl font-bold text-text-primary">Osnovne informacije</h2>
 
             <FormInput
               name="name"
@@ -143,11 +143,11 @@ export function ProfileEditForm({
             />
           </div>
 
-          <div className="bg-white border border-neutral-200 rounded-lg p-6 space-y-4">
-            <h2 className="text-xl font-bold text-neutral-900">Dodatne informacije</h2>
+          <div className="bg-surface border border-border rounded-lg p-6 space-y-4">
+            <h2 className="text-xl font-bold text-text-primary">Dodatne informacije</h2>
 
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-2">
+              <label className="block text-sm font-medium text-text-secondary mb-2">
                 Biografija
               </label>
               <textarea
@@ -155,7 +155,7 @@ export function ProfileEditForm({
                 placeholder="Reci nam nešto o sebi..."
                 rows={4}
                 disabled={loading}
-                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
+                className="w-full px-3 py-2 bg-surface text-text-primary border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none placeholder:text-text-tertiary disabled:opacity-50 disabled:cursor-not-allowed"
               />
             </div>
 
