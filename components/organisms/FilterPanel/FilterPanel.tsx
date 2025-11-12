@@ -3,7 +3,7 @@
 import * as React from "react";
 import cn from "@/lib/utils";
 import { Button, Input, Badge, Typography } from "@/components/atoms";
-import { X, SlidersHorizontal } from "@/components/atoms/Icon";
+import { X, SlidersHorizontal } from "@/components/atoms/Icon/Icon";
 import type { SizeType } from "@/lib/types";
 
 export interface FilterOptions {

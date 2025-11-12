@@ -3,7 +3,7 @@
 import * as React from "react";
 import cn from "@/lib/utils";
 import { ProductImage, Avatar, Badge, Price, Typography } from "@/components/atoms";
-import { Heart } from "@/components/atoms/Icon";
+import { Heart } from "@/components/atoms/Icon/Icon";
 import type { ProductType } from "@/lib/types";
 import Link from "next/link";
 

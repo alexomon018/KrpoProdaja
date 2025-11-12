@@ -3,7 +3,7 @@
 import * as React from "react";
 import cn from "@/lib/utils";
 import { Input } from "@/components/atoms";
-import { Search, X } from "@/components/atoms/Icon";
+import { Search, X } from "@/components/atoms/Icon/Icon";
 
 export interface SearchBarProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "type"> {
   onSearch?: (query: string) => void;

@@ -4,7 +4,7 @@ import * as React from "react";
 import cn from "@lib/utils";
 import { SearchBar } from "@molecules";
 import { Button, Avatar, Typography } from "@atoms";
-import { SlidersHorizontal, Bell, Menu, Moon, Sun } from "@atoms/Icon";
+import { SlidersHorizontal, Bell, Menu, Moon, Sun } from "@/components/atoms/Icon/Icon";
 import Link from "next/link";
 import { useTheme } from "@lib/ThemeContext";
 

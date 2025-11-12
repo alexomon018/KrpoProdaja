@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import cn from "@/lib/utils";
-import { X } from "@/components/atoms/Icon";
+import { X } from "@/components/atoms/Icon/Icon";
 
 export interface FilterChipProps extends React.HTMLAttributes<HTMLDivElement> {
   label: string;

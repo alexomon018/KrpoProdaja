@@ -5,23 +5,23 @@
  * First level of complexity in component hierarchy
  */
 
-export { ProductCard } from "./ProductCard";
-export type { ProductCardProps } from "./ProductCard";
+export { ProductCard } from "./ProductCard/ProductCard";
+export type { ProductCardProps } from "./ProductCard/ProductCard";
 
-export { SearchBar } from "./SearchBar";
-export type { SearchBarProps } from "./SearchBar";
+export { SearchBar } from "./SearchBar/SearchBar";
+export type { SearchBarProps } from "./SearchBar/SearchBar";
 
-export { FilterChip, FilterChipGroup } from "./FilterChip";
-export type { FilterChipProps } from "./FilterChip";
+export { FilterChip, FilterChipGroup } from "./FilterChip/FilterChip";
+export type { FilterChipProps } from "./FilterChip/FilterChip";
 
-export { ReviewCard, RatingDisplay } from "./ReviewCard";
-export type { ReviewCardProps } from "./ReviewCard";
+export { ReviewCard, RatingDisplay } from "./ReviewCard/ReviewCard";
+export type { ReviewCardProps } from "./ReviewCard/ReviewCard";
 
-export { ImageCarousel } from "./ImageCarousel";
-export type { ImageCarouselProps } from "./ImageCarousel";
+export { ImageCarousel } from "./ImageCarousel/ImageCarousel";
+export type { ImageCarouselProps } from "./ImageCarousel/ImageCarousel";
 
-export { ChatBubble } from "./ChatBubble";
-export type { ChatBubbleProps } from "./ChatBubble";
+export { ChatBubble } from "./ChatBubble/ChatBubble";
+export type { ChatBubbleProps } from "./ChatBubble/ChatBubble";
 
-export { SellerInfo } from "./SellerInfo";
-export type { SellerInfoProps } from "./SellerInfo";
+export { SellerInfo } from "./SellerInfo/SellerInfo";
+export type { SellerInfoProps } from "./SellerInfo/SellerInfo";

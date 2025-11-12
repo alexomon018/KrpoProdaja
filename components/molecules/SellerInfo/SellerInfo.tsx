@@ -1,9 +1,9 @@
 import * as React from "react";
 import cn from "@/lib/utils";
 import { Avatar, Button, Typography } from "@/components/atoms";
-import { RatingDisplay } from "./ReviewCard";
+import { RatingDisplay } from "../ReviewCard/ReviewCard";
 import type { UserType } from "@/lib/types";
-import { MessageCircle, Clock } from "@/components/atoms/Icon";
+import { MessageCircle, Clock } from "@/components/atoms/Icon/Icon";
 
 export interface SellerInfoProps extends React.HTMLAttributes<HTMLDivElement> {
   seller: UserType;

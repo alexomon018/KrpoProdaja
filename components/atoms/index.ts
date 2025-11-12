@@ -5,28 +5,28 @@
  * Cannot be broken down further without losing meaning
  */
 
-export { Button, buttonVariants } from "./Button";
-export type { ButtonProps } from "./Button";
+export { Button, buttonVariants } from "./Button/Button";
+export type { ButtonProps } from "./Button/Button";
 
-export { Input } from "./Input";
-export type { InputProps } from "./Input";
+export { Input } from "./Input/Input";
+export type { InputProps } from "./Input/Input";
 
-export { FormInput } from "./FormInput";
-export type { FormInputProps } from "./FormInput";
+export { FormInput } from "./FormInput/FormInput";
+export type { FormInputProps } from "./FormInput/FormInput";
 
-export { Badge, badgeVariants, ConditionBadge, SizeBadge } from "./Badge";
-export type { BadgeProps } from "./Badge";
+export { Badge, badgeVariants, ConditionBadge, SizeBadge } from "./Badge/Badge";
+export type { BadgeProps } from "./Badge/Badge";
 
-export { Avatar, avatarVariants } from "./Avatar";
-export type { AvatarProps } from "./Avatar";
+export { Avatar, avatarVariants } from "./Avatar/Avatar";
+export type { AvatarProps } from "./Avatar/Avatar";
 
-export { ProductImage } from "./ProductImage";
-export type { ProductImageProps } from "./ProductImage";
+export { ProductImage } from "./ProductImage/ProductImage";
+export type { ProductImageProps } from "./ProductImage/ProductImage";
 
-export { Typography, textVariants, Price } from "./Typography";
-export type { TypographyProps } from "./Typography";
+export { Typography, textVariants, Price } from "./Typography/Typography";
+export type { TypographyProps } from "./Typography/Typography";
 
-export { Container } from "./Container";
-export type { ContainerProps } from "./Container";
+export { Container } from "./Container/Container";
+export type { ContainerProps } from "./Container/Container";
 
-export * from "./Icon";
+export * from "./Icon/Icon";
