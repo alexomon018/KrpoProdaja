@@ -2,6 +2,13 @@
 
 This directory contains all authentication-related pages for the KrpoProdaja marketplace.
 
+## Route Group Structure
+
+This directory uses Next.js route groups `(auth)` to provide a custom layout without the header/navigation. The parentheses in the folder name mean:
+- Routes are still accessible at `/auth/*` (the parentheses don't appear in the URL)
+- Uses its own `layout.tsx` that excludes the header for a focused authentication experience
+- Provides a clean, distraction-free interface for login, registration, and password reset flows
+
 ## Pages Overview
 
 ### Login (`/auth/login`)
