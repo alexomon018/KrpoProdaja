@@ -1,4 +1,4 @@
-import React from 'react';
+import { forwardRef } from 'react';
 import { Truck, Package, MapPin } from 'lucide-react';
 import cn, { formatPrice } from '@/lib/utils';
 
@@ -15,7 +15,7 @@ export interface ShippingOptionsProps extends React.HTMLAttributes<HTMLDivElemen
   location?: string;
 }
 
-const ShippingOptions = React.forwardRef<HTMLDivElement, ShippingOptionsProps>(
+const ShippingOptions = forwardRef<HTMLDivElement, ShippingOptionsProps>(
   ({ className, options, location, ...props }, ref) => {
     const getIcon = (iconType?: string) => {
       switch (iconType) {

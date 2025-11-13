@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 import { PasswordResetRequest, PasswordResetRequestData } from "@/components/molecules/AuthForm/PasswordResetRequest";
 import { Container } from "@/components/atoms/Container/Container";
 
@@ -10,9 +10,9 @@ import { Container } from "@/components/atoms/Container/Container";
  * Request password reset via email
  */
 export default function ResetPasswordPage() {
-  const [loading, setLoading] = React.useState(false);
-  const [success, setSuccess] = React.useState(false);
-  const [error, setError] = React.useState<string>();
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState<string>();
 
   const handleSubmit = async (data: PasswordResetRequestData) => {
     setLoading(true);

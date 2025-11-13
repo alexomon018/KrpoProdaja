@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Source_Sans_3, Lato } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@lib/ThemeContext";
+import { QueryProvider } from "@lib/QueryProvider";
 import { LayoutHeaderWrapper } from "@/components/organisms/LayoutHeaderWrapper";
 
 const sourceSans = Source_Sans_3({
@@ -30,10 +31,12 @@ export default function RootLayout({
   return (
     <html lang="sr" className={`${sourceSans.variable} ${lato.variable}`}>
       <body>
-        <ThemeProvider>
-          <LayoutHeaderWrapper />
-          {children}
-        </ThemeProvider>
+        <QueryProvider>
+          <ThemeProvider>
+            <LayoutHeaderWrapper />
+            {children}
+          </ThemeProvider>
+        </QueryProvider>
       </body>
     </html>
   );

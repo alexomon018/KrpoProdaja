@@ -1,4 +1,4 @@
-import * as React from "react";
+import { forwardRef } from "react";
 import cn from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 
@@ -45,7 +45,7 @@ export interface TypographyProps
  * <Typography variant="bodySmall">Opis proizvoda</Typography>
  * ```
  */
-const Typography = React.forwardRef<HTMLElement, TypographyProps>(
+const Typography = forwardRef<HTMLElement, TypographyProps>(
   ({ className, variant, as, ...props }, ref) => {
     const Component = as || "p";
 
@@ -71,7 +71,7 @@ interface PriceProps extends Omit<TypographyProps, "variant" | "children"> {
   currency?: string;
 }
 
-const Price = React.forwardRef<HTMLElement, PriceProps>(
+const Price = forwardRef<HTMLElement, PriceProps>(
   ({ amount, large, originalPrice, currency = "RSD", className, ...props }, ref) => {
     const formatPrice = (price: number) => {
       return new Intl.NumberFormat("sr-RS", {

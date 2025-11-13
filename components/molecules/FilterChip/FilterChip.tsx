@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { forwardRef, Children } from "react";
 import cn from "@/lib/utils";
 import { X } from "@/components/atoms/Icon/Icon";
 
@@ -24,7 +24,7 @@ export interface FilterChipProps extends React.HTMLAttributes<HTMLDivElement> {
  * />
  * ```
  */
-const FilterChip = React.forwardRef<HTMLDivElement, FilterChipProps>(
+const FilterChip = forwardRef<HTMLDivElement, FilterChipProps>(
   ({ className, label, onRemove, active = true, ...props }, ref) => {
     return (
       <div
@@ -66,9 +66,9 @@ interface FilterChipGroupProps extends React.HTMLAttributes<HTMLDivElement> {
   onClearAll?: () => void;
 }
 
-const FilterChipGroup = React.forwardRef<HTMLDivElement, FilterChipGroupProps>(
+const FilterChipGroup = forwardRef<HTMLDivElement, FilterChipGroupProps>(
   ({ className, children, onClearAll, ...props }, ref) => {
-    const hasChildren = React.Children.count(children) > 0;
+    const hasChildren = Children.count(children) > 0;
 
     if (!hasChildren) return null;
 

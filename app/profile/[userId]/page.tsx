@@ -1,9 +1,34 @@
 "use client";
 
-import * as React from "react";
 import { useRouter, useParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 import { ProfileView, ProfileData } from "@/components/organisms/ProfileView/ProfileView";
 import { Container } from "@/components/atoms/Container/Container";
+
+// TODO: Replace with actual API call
+const fetchUserProfile = async (userId: string): Promise<ProfileData> => {
+  // Simulate API call
+  await new Promise((resolve) => setTimeout(resolve, 500));
+
+  // TODO: Get current user ID and compare with userId
+  const currentUserId = "current-user-id"; // This should come from auth context
+
+  // Mock data - replace with actual API call
+  return {
+    id: userId,
+    name: userId === "current-user-id" ? "Marko Marković" : "Ana Petrović",
+    email: userId === "current-user-id" ? "marko@example.com" : "ana@example.com",
+    phone: userId === "current-user-id" ? "+381 60 123 4567" : undefined,
+    avatar: undefined,
+    bio: "Ljubitelj tehnologije i dobrih kupovina. Prodajem kvalitetne polovne stvari.",
+    location: "Beograd, Srbija",
+    memberSince: "2024-01-15T00:00:00.000Z",
+    verified: true,
+    rating: 4.8,
+    totalSales: 23,
+    activeListing: 5,
+  };
+};
 
 /**
  * User Profile Page (Dynamic)
@@ -16,47 +41,14 @@ export default function UserProfilePage() {
   const params = useParams();
   const userId = params.userId as string;
 
-  const [loading, setLoading] = React.useState(true);
-  const [profile, setProfile] = React.useState<ProfileData | null>(null);
-  const [isOwnProfile, setIsOwnProfile] = React.useState(false);
+  const { data: profile, isLoading: loading } = useQuery({
+    queryKey: ['profile', userId],
+    queryFn: () => fetchUserProfile(userId),
+  });
 
-  React.useEffect(() => {
-    // TODO: Fetch profile data from backend
-    const fetchProfile = async () => {
-      try {
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 500));
-
-        // TODO: Get current user ID and compare with userId
-        const currentUserId = "current-user-id"; // This should come from auth context
-        setIsOwnProfile(userId === currentUserId);
-
-        // Mock data - replace with actual API call
-        const mockProfile: ProfileData = {
-          id: userId,
-          name: userId === "current-user-id" ? "Marko Marković" : "Ana Petrović",
-          email: userId === "current-user-id" ? "marko@example.com" : "ana@example.com",
-          phone: userId === "current-user-id" ? "+381 60 123 4567" : undefined,
-          avatar: undefined,
-          bio: "Ljubitelj tehnologije i dobrih kupovina. Prodajem kvalitetne polovne stvari.",
-          location: "Beograd, Srbija",
-          memberSince: "2024-01-15T00:00:00.000Z",
-          verified: true,
-          rating: 4.8,
-          totalSales: 23,
-          activeListing: 5,
-        };
-
-        setProfile(mockProfile);
-      } catch (err) {
-        console.error("Error fetching profile:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProfile();
-  }, [userId]);
+  // TODO: Get current user ID from auth context
+  const currentUserId = "current-user-id";
+  const isOwnProfile = userId === currentUserId;
 
   const handleLogout = async () => {
     try {

@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { forwardRef } from "react";
 import { useFormContext } from "react-hook-form";
 import { Input, InputProps } from "../Input/Input";
 
@@ -38,7 +38,7 @@ export interface FormInputProps extends Omit<InputProps, "error"> {
  * </FormProvider>
  * ```
  */
-const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
+const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
   ({ name, required = false, ...props }, ref) => {
     const {
       register,

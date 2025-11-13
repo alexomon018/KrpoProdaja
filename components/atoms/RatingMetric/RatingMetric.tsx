@@ -1,4 +1,4 @@
-import * as React from "react";
+import { forwardRef } from "react";
 import cn from "@/lib/utils";
 import { Typography } from "@/components/atoms";
 
@@ -20,7 +20,7 @@ export interface RatingMetricProps extends React.HTMLAttributes<HTMLDivElement> 
  * <RatingMetric label="Delivery" rating={4.8} size="sm" />
  * ```
  */
-export const RatingMetric = React.forwardRef<HTMLDivElement, RatingMetricProps>(
+export const RatingMetric = forwardRef<HTMLDivElement, RatingMetricProps>(
   ({ className, label, rating, size = "md", ...props }, ref) => {
     const badgeSize = size === "sm" ? "w-6 h-6" : size === "md" ? "w-8 h-8" : "w-10 h-10";
     const textSize = size === "sm" ? "text-xs" : size === "md" ? "text-sm" : "text-base";

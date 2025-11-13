@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { forwardRef } from "react";
 import cn from "@lib/utils";
 import { SearchBar } from "@molecules";
 import { Button, Avatar, Typography } from "@atoms";
@@ -59,7 +59,7 @@ export interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
  * />
  * ```
  */
-const Header = React.forwardRef<HTMLElement, HeaderProps>(
+const Header = forwardRef<HTMLElement, HeaderProps>(
   (
     {
       className,

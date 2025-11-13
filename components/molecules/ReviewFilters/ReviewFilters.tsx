@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { forwardRef } from "react";
 import cn from "@/lib/utils";
 import { ChevronDown } from "@/components/atoms/Icon/Icon";
 
@@ -33,7 +33,7 @@ export interface ReviewFiltersProps extends React.HTMLAttributes<HTMLDivElement>
  * />
  * ```
  */
-export const ReviewFilters = React.forwardRef<HTMLDivElement, ReviewFiltersProps>(
+export const ReviewFilters = forwardRef<HTMLDivElement, ReviewFiltersProps>(
   (
     {
       className,

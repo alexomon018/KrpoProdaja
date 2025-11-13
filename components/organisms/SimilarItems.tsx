@@ -1,4 +1,4 @@
-import React from 'react';
+import { forwardRef } from 'react';
 import cn from '@/lib/utils';
 import { ProductCard } from '@/components/molecules/ProductCard/ProductCard';
 import type { ProductType } from '@/lib/types';
@@ -9,7 +9,7 @@ export interface SimilarItemsProps extends React.HTMLAttributes<HTMLDivElement> 
   onFavoriteClick?: (productId: string) => void;
 }
 
-const SimilarItems = React.forwardRef<HTMLDivElement, SimilarItemsProps>(
+const SimilarItems = forwardRef<HTMLDivElement, SimilarItemsProps>(
   ({ className, products, currentProductId, onFavoriteClick, ...props }, ref) => {
     // Filter out current product from similar items
     const filteredProducts = products.filter(

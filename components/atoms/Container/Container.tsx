@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { forwardRef } from "react";
 import cn from "@lib/utils";
 
 export interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -36,7 +36,7 @@ export interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
  * </Container>
  * ```
  */
-const Container = React.forwardRef<HTMLDivElement, ContainerProps>(
+const Container = forwardRef<HTMLDivElement, ContainerProps>(
   (
     {
       size = "regular",

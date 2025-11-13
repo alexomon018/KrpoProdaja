@@ -1,4 +1,4 @@
-import * as React from "react";
+import { forwardRef } from "react";
 import cn from "@/lib/utils";
 import { Typography, RatingMetric } from "@/components/atoms";
 import { Star } from "@/components/atoms/Icon/Icon";
@@ -23,7 +23,7 @@ export interface ReviewSummaryProps extends React.HTMLAttributes<HTMLDivElement>
  * <ReviewSummary summary={summaryData} />
  * ```
  */
-export const ReviewSummary = React.forwardRef<HTMLDivElement, ReviewSummaryProps>(
+export const ReviewSummary = forwardRef<HTMLDivElement, ReviewSummaryProps>(
   ({ className, summary, ...props }, ref) => {
     return (
       <div

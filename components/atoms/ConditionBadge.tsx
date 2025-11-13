@@ -1,4 +1,4 @@
-import React from 'react';
+import { forwardRef } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import cn from '@/lib/utils';
 
@@ -25,7 +25,7 @@ export interface ConditionBadgeProps
   condition: 'new' | 'very-good' | 'good' | 'satisfactory';
 }
 
-const ConditionBadge = React.forwardRef<HTMLSpanElement, ConditionBadgeProps>(
+const ConditionBadge = forwardRef<HTMLSpanElement, ConditionBadgeProps>(
   ({ className, condition, ...props }, ref) => {
     const conditionLabels = {
       new: 'New',

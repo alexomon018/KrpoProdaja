@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { forwardRef, useState } from "react";
 import { Expand } from "lucide-react";
 import cn, { formatPrice } from "@/lib/utils";
 import { ImageCarousel } from "@/components/molecules/ImageCarousel/ImageCarousel";
@@ -17,7 +17,7 @@ export interface ProductDetailsHeaderProps
   category?: string;
 }
 
-const ProductDetailsHeader = React.forwardRef<
+const ProductDetailsHeader = forwardRef<
   HTMLDivElement,
   ProductDetailsHeaderProps
 >(

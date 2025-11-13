@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { forwardRef } from "react";
 import cn from "@/lib/utils";
 import { Home, Search, Plus, MessageCircle, User } from "@/components/atoms/Icon/Icon";
 import Link from "next/link";
@@ -33,7 +33,7 @@ export interface BottomNavigationProps extends React.HTMLAttributes<HTMLElement>
  * <BottomNavigation messageCount={3} />
  * ```
  */
-const BottomNavigation = React.forwardRef<HTMLElement, BottomNavigationProps>(
+const BottomNavigation = forwardRef<HTMLElement, BottomNavigationProps>(
   ({ className, messageCount = 0, ...props }, ref) => {
     const pathname = usePathname();
 

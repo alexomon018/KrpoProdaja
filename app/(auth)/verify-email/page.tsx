@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { EmailVerification } from "@/components/molecules/AuthForm/EmailVerification";
 import { Container } from "@/components/atoms/Container/Container";
@@ -15,9 +15,9 @@ export default function VerifyEmailPage() {
   const searchParams = useSearchParams();
   const email = searchParams.get("email") || "";
 
-  const [loading, setLoading] = React.useState(false);
-  const [success, setSuccess] = React.useState(false);
-  const [error, setError] = React.useState<string>();
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState<string>();
 
   const handleResend = async () => {
     setLoading(true);
@@ -44,7 +44,7 @@ export default function VerifyEmailPage() {
   };
 
   // Check for verification token in URL (when user clicks email link)
-  React.useEffect(() => {
+  useEffect(() => {
     const token = searchParams.get("token");
     if (token) {
       // TODO: Verify the token with backend

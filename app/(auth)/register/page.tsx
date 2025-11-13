@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { RegisterForm, RegisterFormData } from "@/components/molecules/AuthForm/RegisterForm";
 import { Container } from "@/components/atoms/Container/Container";
@@ -12,8 +12,8 @@ import { Container } from "@/components/atoms/Container/Container";
  */
 export default function RegisterPage() {
   const router = useRouter();
-  const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState<string>();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string>();
 
   const handleRegister = async (data: RegisterFormData) => {
     setLoading(true);

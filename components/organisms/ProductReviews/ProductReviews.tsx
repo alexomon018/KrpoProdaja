@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { forwardRef, useState, useMemo } from "react";
 import cn from "@/lib/utils";
 import { Typography, Button } from "@/components/atoms";
 import { ReviewCard } from "@/components/molecules/ReviewCard/ReviewCard";
@@ -30,18 +30,18 @@ export interface ProductReviewsProps
  * <ProductReviews reviews={reviewsData} summary={summaryData} />
  * ```
  */
-export const ProductReviews = React.forwardRef<
+export const ProductReviews = forwardRef<
   HTMLDivElement,
   ProductReviewsProps
 >(({ className, reviews, summary, ...props }, ref) => {
-  const [selectedFilter, setSelectedFilter] = React.useState<string>("all");
-  const [sortBy, setSortBy] = React.useState<"suggested" | "newest" | "oldest">(
+  const [selectedFilter, setSelectedFilter] = useState<string>("all");
+  const [sortBy, setSortBy] = useState<"suggested" | "newest" | "oldest">(
     "suggested"
   );
-  const [showAllReviews, setShowAllReviews] = React.useState(false);
+  const [showAllReviews, setShowAllReviews] = useState(false);
 
   // Count reviews by type
-  const reviewCounts = React.useMemo(() => {
+  const reviewCounts = useMemo(() => {
     const counts: Record<string, number> = {
       all: reviews.length,
       appearance: 0,
@@ -58,7 +58,7 @@ export const ProductReviews = React.forwardRef<
   }, [reviews]);
 
   // Build filter options
-  const filterOptions = React.useMemo(() => {
+  const filterOptions = useMemo(() => {
     const options = [{ id: "all", label: "All", count: reviewCounts.all }];
 
     if (reviewCounts.appearance > 0) {
@@ -94,13 +94,13 @@ export const ProductReviews = React.forwardRef<
   }, [reviewCounts]);
 
   // Filter reviews based on selected tab
-  const filteredReviews = React.useMemo(() => {
+  const filteredReviews = useMemo(() => {
     if (selectedFilter === "all") return reviews;
     return reviews.filter((review) => review.reviewType === selectedFilter);
   }, [reviews, selectedFilter]);
 
   // Sort reviews
-  const sortedReviews = React.useMemo(() => {
+  const sortedReviews = useMemo(() => {
     const sorted = [...filteredReviews];
     if (sortBy === "newest") {
       sorted.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());

@@ -1,4 +1,4 @@
-import * as React from "react";
+import { forwardRef } from "react";
 import cn from "@/lib/utils";
 import { Avatar, Button, Typography } from "@/components/atoms";
 import { RatingDisplay } from "../ReviewCard/ReviewCard";
@@ -29,7 +29,7 @@ export interface SellerInfoProps extends React.HTMLAttributes<HTMLDivElement> {
  * />
  * ```
  */
-const SellerInfo = React.forwardRef<HTMLDivElement, SellerInfoProps>(
+const SellerInfo = forwardRef<HTMLDivElement, SellerInfoProps>(
   (
     {
       className,

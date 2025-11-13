@@ -1,4 +1,4 @@
-import * as React from "react";
+import { forwardRef, useState } from "react";
 import cn from "@/lib/utils";
 import Image from "next/image";
 
@@ -39,7 +39,7 @@ export interface ProductImageProps extends React.HTMLAttributes<HTMLDivElement> 
  * />
  * ```
  */
-const ProductImage = React.forwardRef<HTMLDivElement, ProductImageProps>(
+const ProductImage = forwardRef<HTMLDivElement, ProductImageProps>(
   (
     {
       className,
@@ -53,7 +53,7 @@ const ProductImage = React.forwardRef<HTMLDivElement, ProductImageProps>(
     },
     ref
   ) => {
-    const [imageError, setImageError] = React.useState(false);
+    const [imageError, setImageError] = useState(false);
 
     const aspectRatioClasses = {
       square: "aspect-square",

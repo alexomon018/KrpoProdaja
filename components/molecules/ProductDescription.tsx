@@ -1,4 +1,4 @@
-import React from 'react';
+import { forwardRef } from 'react';
 import cn from '@/lib/utils';
 
 export interface ItemDetail {
@@ -11,7 +11,7 @@ export interface ProductDescriptionProps extends React.HTMLAttributes<HTMLDivEle
   details?: ItemDetail[];
 }
 
-const ProductDescription = React.forwardRef<HTMLDivElement, ProductDescriptionProps>(
+const ProductDescription = forwardRef<HTMLDivElement, ProductDescriptionProps>(
   ({ className, description, details = [], ...props }, ref) => {
     return (
       <div ref={ref} className={cn('space-y-6', className)} {...props}>

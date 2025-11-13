@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 import { LoginForm, LoginFormData } from "@/components/molecules/AuthForm/LoginForm";
 import { Container } from "@/components/atoms/Container/Container";
 
@@ -10,8 +10,8 @@ import { Container } from "@/components/atoms/Container/Container";
  * Email/password and social login authentication page
  */
 export default function LoginPage() {
-  const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState<string>();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string>();
 
   const handleLogin = async (data: LoginFormData) => {
     setLoading(true);

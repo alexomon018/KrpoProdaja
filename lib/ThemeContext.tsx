@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { createContext, useState, useEffect, useContext } from "react";
 
 type Theme = "light" | "dark";
 
@@ -10,15 +10,15 @@ interface ThemeContextType {
   setTheme: (theme: Theme) => void;
 }
 
-const ThemeContext = React.createContext<ThemeContextType | undefined>(
+const ThemeContext = createContext<ThemeContextType | undefined>(
   undefined
 );
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = React.useState<Theme>("light");
+  const [theme, setThemeState] = useState<Theme>("light");
 
   // Load theme from localStorage on mount
-  React.useEffect(() => {
+  useEffect(() => {
     const savedTheme = localStorage.getItem("theme") as Theme | null;
 
     // Default to light mode, only use saved theme from localStorage
@@ -55,7 +55,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 }
 
 export function useTheme() {
-  const context = React.useContext(ThemeContext);
+  const context = useContext(ThemeContext);
   if (context === undefined) {
     throw new Error("useTheme must be used within a ThemeProvider");
   }

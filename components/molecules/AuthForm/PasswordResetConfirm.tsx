@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import Link from "next/link";
 import { Button } from "@/components/atoms/Button/Button";
@@ -56,8 +56,8 @@ export function PasswordResetConfirm({
   error,
 }: PasswordResetConfirmProps) {
   const methods = useForm<PasswordResetConfirmData>();
-  const [showPassword, setShowPassword] = React.useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleSubmit = methods.handleSubmit((data) => {
     if (data.password !== data.confirmPassword) {

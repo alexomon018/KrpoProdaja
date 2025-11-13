@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { forwardRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import cn from "@/lib/utils";
 import { ProductImage, Avatar, Badge, Price, Typography } from "@/components/atoms";
@@ -32,10 +32,10 @@ export interface ProductCardProps extends React.HTMLAttributes<HTMLDivElement> {
  * />
  * ```
  */
-const ProductCard = React.forwardRef<HTMLDivElement, ProductCardProps>(
+const ProductCard = forwardRef<HTMLDivElement, ProductCardProps>(
   ({ className, product, onFavoriteClick, ...props }, ref) => {
     const router = useRouter();
-    const [isFavorited, setIsFavorited] = React.useState(product.isFavorite || false);
+    const [isFavorited, setIsFavorited] = useState(product.isFavorite || false);
 
     const handleFavoriteClick = (e: React.MouseEvent) => {
       e.preventDefault();
