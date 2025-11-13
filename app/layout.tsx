@@ -1,7 +1,21 @@
 import type { Metadata } from "next";
+import { Source_Sans_3, Lato } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@lib/ThemeContext";
 import { LayoutHeaderWrapper } from "@/components/organisms/LayoutHeaderWrapper";
+
+const sourceSans = Source_Sans_3({
+  subsets: ["latin"],
+  variable: "--font-source-sans",
+  display: "swap",
+});
+
+const lato = Lato({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-lato",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Krpo Prodaja - Serbian Fashion Resale Marketplace",
@@ -14,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="sr">
+    <html lang="sr" className={`${sourceSans.variable} ${lato.variable}`}>
       <body>
         <ThemeProvider>
           <LayoutHeaderWrapper />

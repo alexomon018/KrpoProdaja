@@ -4,7 +4,13 @@ import * as React from "react";
 import cn from "@lib/utils";
 import { SearchBar } from "@molecules";
 import { Button, Avatar, Typography } from "@atoms";
-import { SlidersHorizontal, Bell, Menu, Moon, Sun } from "@/components/atoms/Icon/Icon";
+import {
+  SlidersHorizontal,
+  Bell,
+  Menu,
+  Moon,
+  Sun,
+} from "@/components/atoms/Icon/Icon";
 import Link from "next/link";
 import { useTheme } from "@lib/ThemeContext";
 
@@ -81,22 +87,13 @@ const Header = React.forwardRef<HTMLElement, HeaderProps>(
           {/* Top Row: Logo & User Actions */}
           <div className="flex items-center justify-between h-16 gap-4">
             {/* Logo */}
-            <Link
-              href="/"
-              className="flex items-center gap-2 shrink-0"
-            >
+            <Link href="/" className="flex items-center gap-2 shrink-0">
               <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
-                <Typography
-                  variant="h3"
-                  className="text-white font-bold"
-                >
+                <Typography variant="h3" className="text-white font-bold">
                   KP
                 </Typography>
               </div>
-              <Typography
-                variant="h3"
-                className="hidden sm:block text-primary"
-              >
+              <Typography variant="h3" className="hidden sm:block text-primary">
                 Krpo Prodaja
               </Typography>
             </Link>
@@ -120,7 +117,11 @@ const Header = React.forwardRef<HTMLElement, HeaderProps>(
                   "p-2 hover:bg-background rounded-lg transition-colors",
                   "hidden md:flex items-center justify-center touch-target"
                 )}
-                aria-label={theme === "light" ? "Prebaci na tamni režim" : "Prebaci na svetli režim"}
+                aria-label={
+                  theme === "light"
+                    ? "Prebaci na tamni režim"
+                    : "Prebaci na svetli režim"
+                }
               >
                 {theme === "light" ? (
                   <Moon size={24} className="text-secondary" />
@@ -144,11 +145,13 @@ const Header = React.forwardRef<HTMLElement, HeaderProps>(
               </button>
 
               {/* Desktop: Sell Button */}
-              <Link href="/sell" className="hidden md:block">
-                <Button variant="primary">Prodaj</Button>
+              <Link href={"/sell"} className="hidden md:block">
+                <Button variant="primary" size="sm">
+                  Prodaj
+                </Button>
               </Link>
 
-              {/* User Avatar or Login */}
+              {/* User Avatar or Login/Register */}
               {user ? (
                 <Link href="/profile">
                   <Avatar
@@ -159,9 +162,18 @@ const Header = React.forwardRef<HTMLElement, HeaderProps>(
                   />
                 </Link>
               ) : (
-                <Link href="/login" className="hidden md:block">
-                  <Button variant="secondary">Prijavi se</Button>
-                </Link>
+                <div className="hidden md:flex items-center gap-2">
+                  <Link href="/login">
+                    <Button variant="ghost" size="sm">
+                      Prijavi se
+                    </Button>
+                  </Link>
+                  <Link href="/register">
+                    <Button variant="primary" size="sm">
+                      Registruj se
+                    </Button>
+                  </Link>
+                </div>
               )}
 
               {/* Mobile: Menu */}
@@ -182,16 +194,15 @@ const Header = React.forwardRef<HTMLElement, HeaderProps>(
             <div className="md:hidden pb-3">
               <div className="flex gap-2">
                 <div className="flex-1">
-                  <SearchBar
-                    onSearch={onSearch}
-                    placeholder="Pretraži..."
-                  />
+                  <SearchBar onSearch={onSearch} placeholder="Pretraži..." />
                 </div>
                 <Button
                   variant="secondary"
                   size="icon"
                   onClick={toggleTheme}
-                  aria-label={theme === "light" ? "Tamni režim" : "Svetli režim"}
+                  aria-label={
+                    theme === "light" ? "Tamni režim" : "Svetli režim"
+                  }
                 >
                   {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
                 </Button>

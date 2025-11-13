@@ -52,4 +52,22 @@ export type ReviewType = {
   comment: string;
   reviewer: UserType;
   createdAt: Date;
+  reviewType?: 'this-item' | 'appearance' | 'delivery-packaging' | 'seller-service' | 'condition';
+  images?: string[];
+  sellerResponse?: {
+    comment: string;
+    createdAt: Date;
+  };
+};
+
+export type ReviewSummaryType = {
+  averageRating: number;
+  totalReviews: number;
+  ratingBreakdown: {
+    itemQuality: number;
+    delivery: number;
+    customerService: number;
+  };
+  recommendationPercentage: number;
+  highlights: string[];
 };

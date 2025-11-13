@@ -64,11 +64,15 @@ const SellerInfo = React.forwardRef<HTMLDivElement, SellerInfoProps>(
     return (
       <div
         ref={ref}
-        className={cn("bg-surface rounded-lg p-4 border border-border", className)}
+        className={cn(
+          "bg-surface rounded-lg p-4 sm:p-6 border border-border",
+          "shadow-lg hover:shadow-xl transition-shadow duration-200",
+          className
+        )}
         {...props}
       >
         {/* Seller Header */}
-        <div className="flex items-start gap-3 mb-4">
+        <div className="flex items-start gap-3 sm:gap-4 mb-4 sm:mb-6">
           <button onClick={onProfileClick} className="shrink-0">
             <Avatar
               src={seller.avatar}
@@ -81,7 +85,7 @@ const SellerInfo = React.forwardRef<HTMLDivElement, SellerInfoProps>(
           <div className="flex-1 min-w-0">
             <button
               onClick={onProfileClick}
-              className="hover:underline focus:outline-none focus:underline"
+              className="hover:underline focus:outline-none focus:underline text-left"
             >
               <Typography variant="h3" className="mb-1">
                 {seller.username}
@@ -110,36 +114,36 @@ const SellerInfo = React.forwardRef<HTMLDivElement, SellerInfoProps>(
         </div>
 
         {/* Seller Stats */}
-        <div className="grid grid-cols-3 gap-4 mb-4 py-3 border-y border-border">
+        <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-4 sm:mb-6 py-3 sm:py-4 border-y border-border">
           <div className="text-center">
-            <Typography variant="h3">
+            <Typography variant="h3" className="text-lg sm:text-xl">
               {seller.itemsForSale || 0}
             </Typography>
-            <Typography variant="caption">Na prodaju</Typography>
+            <Typography variant="caption" className="text-xs sm:text-sm">Na prodaju</Typography>
           </div>
           <div className="text-center">
-            <Typography variant="h3">
+            <Typography variant="h3" className="text-lg sm:text-xl">
               {seller.itemsSold || 0}
             </Typography>
-            <Typography variant="caption">Prodato</Typography>
+            <Typography variant="caption" className="text-xs sm:text-sm">Prodato</Typography>
           </div>
           <div className="text-center">
-            <Typography variant="h3">
+            <Typography variant="h3" className="text-lg sm:text-xl">
               {new Date().getFullYear() -
                 seller.memberSince.getFullYear()}
               god
             </Typography>
-            <Typography variant="caption">Član</Typography>
+            <Typography variant="caption" className="text-xs sm:text-sm">Član</Typography>
           </div>
         </div>
 
         {/* Actions */}
-        <div className="flex gap-2">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
           <Button
             variant="primary"
             fullWidth
             onClick={onMessageClick}
-            className="gap-2"
+            className="gap-2 text-sm sm:text-base"
           >
             <MessageCircle size={20} />
             Pošalji poruku
@@ -147,6 +151,7 @@ const SellerInfo = React.forwardRef<HTMLDivElement, SellerInfoProps>(
           <Button
             variant="secondary"
             onClick={onProfileClick}
+            className="w-full sm:w-auto text-sm sm:text-base"
           >
             Profil
           </Button>

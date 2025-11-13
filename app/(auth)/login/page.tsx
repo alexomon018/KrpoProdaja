@@ -54,7 +54,7 @@ export default function LoginPage() {
   };
 
   return (
-    <Container className="py-8">
+    <Container className="min-h-[calc(100vh-4rem)] flex items-center justify-center py-8">
       <LoginForm
         onSubmit={handleLogin}
         onSocialLogin={handleSocialLogin}

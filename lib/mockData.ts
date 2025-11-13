@@ -1,4 +1,4 @@
-import type { ProductType, UserType } from "./types";
+import type { ProductType, UserType, ReviewType, ReviewSummaryType } from "./types";
 
 /**
  * Mock data for development and demonstration
@@ -193,3 +193,159 @@ export const mockProducts: ProductType[] = [
     isReserved: true,
   },
 ];
+
+/**
+ * Mock Review Data
+ */
+export const mockReviews: Record<string, ReviewType[]> = {
+  "1": [
+    {
+      id: "r1",
+      rating: 5,
+      comment: "The Zara dress's unique design is a warm addition to my wardrobe. I can hardly wait to wear it again next season!",
+      reviewer: {
+        id: "5",
+        username: "arthur purzycki",
+        memberSince: new Date("2023-05-10"),
+      },
+      createdAt: new Date("2025-01-14"),
+      reviewType: "appearance",
+    },
+    {
+      id: "r2",
+      rating: 5,
+      comment: "Beautiful and with an original design. Arrived on time and very happy with it",
+      reviewer: {
+        id: "6",
+        username: "Max Ein",
+        memberSince: new Date("2022-08-20"),
+      },
+      createdAt: new Date("2025-01-01"),
+      reviewType: "this-item",
+      sellerResponse: {
+        comment: "Thank you for your kind words!",
+        createdAt: new Date("2025-01-02"),
+      },
+    },
+    {
+      id: "r3",
+      rating: 5,
+      comment: "Fast shipping and excellent packaging. Item exactly as described.",
+      reviewer: {
+        id: "7",
+        username: "Jelena S.",
+        memberSince: new Date("2023-02-14"),
+      },
+      createdAt: new Date("2024-12-28"),
+      reviewType: "delivery-packaging",
+    },
+    {
+      id: "r4",
+      rating: 5,
+      comment: "Great seller, very responsive to messages!",
+      reviewer: {
+        id: "8",
+        username: "Miloš T.",
+        memberSince: new Date("2021-11-05"),
+      },
+      createdAt: new Date("2024-12-25"),
+      reviewType: "seller-service",
+    },
+    {
+      id: "r5",
+      rating: 5,
+      comment: "Perfect condition, exactly as shown in photos.",
+      reviewer: {
+        id: "9",
+        username: "Tamara V.",
+        memberSince: new Date("2022-07-19"),
+      },
+      createdAt: new Date("2024-12-20"),
+      reviewType: "condition",
+    },
+  ],
+  "3": [
+    {
+      id: "r6",
+      rating: 5,
+      comment: "Amazing Nike shoes! Very comfortable and look brand new. Fast delivery too!",
+      reviewer: {
+        id: "10",
+        username: "Petar K.",
+        memberSince: new Date("2022-03-10"),
+      },
+      createdAt: new Date("2025-01-12"),
+      reviewType: "this-item",
+    },
+    {
+      id: "r7",
+      rating: 4,
+      comment: "Good quality shoes, minor wear but overall great value for money.",
+      reviewer: {
+        id: "11",
+        username: "Milica R.",
+        memberSince: new Date("2023-06-15"),
+      },
+      createdAt: new Date("2025-01-08"),
+      reviewType: "condition",
+    },
+    {
+      id: "r8",
+      rating: 5,
+      comment: "Perfect size and fit. Seller was very helpful with sizing questions.",
+      reviewer: {
+        id: "12",
+        username: "Dušan M.",
+        memberSince: new Date("2021-09-22"),
+      },
+      createdAt: new Date("2025-01-05"),
+      reviewType: "seller-service",
+      sellerResponse: {
+        comment: "Thank you! Glad I could help with the sizing!",
+        createdAt: new Date("2025-01-06"),
+      },
+    },
+  ],
+};
+
+/**
+ * Mock Review Summaries
+ */
+export const mockReviewSummaries: Record<string, ReviewSummaryType> = {
+  "1": {
+    averageRating: 5.0,
+    totalReviews: 5,
+    ratingBreakdown: {
+      itemQuality: 5.0,
+      delivery: 5.0,
+      customerService: 5.0,
+    },
+    recommendationPercentage: 100,
+    highlights: [
+      "Fast delivery",
+      "Beautiful",
+      "Unique",
+      "Great design",
+      "Happy customer",
+      "Responsive seller",
+      "Excellent customer service",
+    ],
+  },
+  "3": {
+    averageRating: 4.7,
+    totalReviews: 3,
+    ratingBreakdown: {
+      itemQuality: 4.7,
+      delivery: 5.0,
+      customerService: 5.0,
+    },
+    recommendationPercentage: 100,
+    highlights: [
+      "Comfortable",
+      "Brand new look",
+      "Fast delivery",
+      "Great value",
+      "Helpful seller",
+    ],
+  },
+};
