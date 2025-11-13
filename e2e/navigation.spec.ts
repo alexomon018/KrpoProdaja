@@ -36,11 +36,11 @@ test.describe('Navigation', () => {
   test('should navigate to sell page', async ({ page }) => {
     await page.goto('/');
 
-    // Look for sell/prodaj button
-    const sellLink = page.getByRole('link', { name: /prodaj|sell/i });
+    // Look for sell/prodaj button - use more specific selector to avoid logo match
+    const sellLink = page.getByRole('link', { name: /^prodaj$|^sell$/i });
 
-    if (await sellLink.isVisible()) {
-      await sellLink.click();
+    if (await sellLink.count() > 0) {
+      await sellLink.first().click();
       await expect(page).toHaveURL(/\/sell/);
     } else {
       // Navigate directly
@@ -52,7 +52,7 @@ test.describe('Navigation', () => {
   test('should handle 404 page', async ({ page }) => {
     await page.goto('/non-existent-page');
 
-    // Should show 404 or not found content
-    await expect(page.getByText(/404|not found|nije pronađeno/i)).toBeVisible();
+    // Should show 404 or not found content - use heading for unique match
+    await expect(page.getByRole('heading', { name: /stranica nije pronađena/i })).toBeVisible();
   });
 });

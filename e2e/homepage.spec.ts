@@ -5,7 +5,7 @@ test.describe('Homepage', () => {
     await page.goto('/');
 
     // Verify page title or heading
-    await expect(page).toHaveTitle(/KrpoProdaja/i);
+    await expect(page).toHaveTitle(/Krpo Prodaja/i);
   });
 
   test('should display product grid', async ({ page }) => {
@@ -15,8 +15,8 @@ test.describe('Homepage', () => {
     const productGrid = page.locator('[class*="grid"]').first();
     await expect(productGrid).toBeVisible();
 
-    // Check if at least one product card is displayed
-    const productCards = page.locator('article, [data-testid*="product"]').first();
+    // Check if at least one product card is displayed (ProductCard renders as div with a link inside)
+    const productCards = page.locator('a[href*="/products/"]').first();
     await expect(productCards).toBeVisible();
   });
 
