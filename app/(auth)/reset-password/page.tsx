@@ -1,8 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { PasswordResetRequest, PasswordResetRequestData } from "@/components/molecules/AuthForm/PasswordResetRequest";
 import { Container } from "@/components/atoms/Container/Container";
+
+// TODO: Replace with actual API call
+const requestPasswordReset = async (data: PasswordResetRequestData): Promise<void> => {
+  console.log("Password reset request for:", data.email);
+  // Simulate API call
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+};
 
 /**
  * Password Reset Request Page
@@ -10,28 +17,17 @@ import { Container } from "@/components/atoms/Container/Container";
  * Request password reset via email
  */
 export default function ResetPasswordPage() {
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState<string>();
+  const resetMutation = useMutation({
+    mutationFn: requestPasswordReset,
+  });
 
-  const handleSubmit = async (data: PasswordResetRequestData) => {
-    setLoading(true);
-    setError(undefined);
-
-    try {
-      // TODO: Implement password reset request
-      console.log("Password reset request for:", data.email);
-
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      setSuccess(true);
-    } catch (err) {
-      setError("Greška pri slanju email-a. Molimo pokušajte ponovo.");
-    } finally {
-      setLoading(false);
-    }
+  const handleSubmit = (data: PasswordResetRequestData) => {
+    resetMutation.mutate(data);
   };
+
+  const loading = resetMutation.isPending;
+  const success = resetMutation.isSuccess;
+  const error = resetMutation.error ? "Greška pri slanju email-a. Molimo pokušajte ponovo." : undefined;
 
   return (
     <Container className="py-8">

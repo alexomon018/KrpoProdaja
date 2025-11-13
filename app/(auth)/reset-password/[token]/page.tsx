@@ -1,9 +1,16 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter, useParams } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
 import { PasswordResetConfirm, PasswordResetConfirmData } from "@/components/molecules/AuthForm/PasswordResetConfirm";
 import { Container } from "@/components/atoms/Container/Container";
+
+// TODO: Replace with actual API call
+const confirmPasswordReset = async (data: PasswordResetConfirmData & { token: string }): Promise<void> => {
+  console.log("Password reset data:", data);
+  // Simulate API call
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+};
 
 /**
  * Password Reset Confirm Page
@@ -15,33 +22,23 @@ export default function ResetPasswordConfirmPage() {
   const params = useParams();
   const token = params.token as string;
 
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState<string>();
-
-  const handleSubmit = async (data: PasswordResetConfirmData & { token: string }) => {
-    setLoading(true);
-    setError(undefined);
-
-    try {
-      // TODO: Implement password reset confirmation
-      console.log("Password reset data:", data);
-
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      setSuccess(true);
-
+  const resetConfirmMutation = useMutation({
+    mutationFn: confirmPasswordReset,
+    onSuccess: () => {
       // Redirect to login after success
       setTimeout(() => {
         router.push("/login");
       }, 2000);
-    } catch (err) {
-      setError("Greška pri promeni lozinke. Link možda nije važeći ili je istekao.");
-    } finally {
-      setLoading(false);
-    }
+    },
+  });
+
+  const handleSubmit = (data: PasswordResetConfirmData & { token: string }) => {
+    resetConfirmMutation.mutate(data);
   };
+
+  const loading = resetConfirmMutation.isPending;
+  const success = resetConfirmMutation.isSuccess;
+  const error = resetConfirmMutation.error ? "Greška pri promeni lozinke. Link možda nije važeći ili je istekao." : undefined;
 
   return (
     <Container className="py-8">
