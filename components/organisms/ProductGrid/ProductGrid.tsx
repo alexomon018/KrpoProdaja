@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { forwardRef } from "react";
 import cn from "@/lib/utils";
 import { ProductCard } from "@/components/molecules";
 import { Typography } from "@/components/atoms";
@@ -45,7 +45,7 @@ export interface ProductGridProps extends React.HTMLAttributes<HTMLDivElement> {
  * />
  * ```
  */
-const ProductGrid = React.forwardRef<HTMLDivElement, ProductGridProps>(
+const ProductGrid = forwardRef<HTMLDivElement, ProductGridProps>(
   (
     {
       className,

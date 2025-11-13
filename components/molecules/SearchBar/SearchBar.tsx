@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { forwardRef, useState } from "react";
 import cn from "@/lib/utils";
 import { Input } from "@/components/atoms";
 import { Search, X } from "@/components/atoms/Icon/Icon";
@@ -27,7 +27,7 @@ export interface SearchBarProps extends Omit<React.InputHTMLAttributes<HTMLInput
  * />
  * ```
  */
-const SearchBar = React.forwardRef<HTMLInputElement, SearchBarProps>(
+const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
   (
     {
       className,
@@ -42,9 +42,9 @@ const SearchBar = React.forwardRef<HTMLInputElement, SearchBarProps>(
     },
     ref
   ) => {
-    const [value, setValue] = React.useState("");
-    const [isFocused, setIsFocused] = React.useState(false);
-    const [showSuggestionsList, setShowSuggestionsList] = React.useState(false);
+    const [value, setValue] = useState("");
+    const [isFocused, setIsFocused] = useState(false);
+    const [showSuggestionsList, setShowSuggestionsList] = useState(false);
 
     const inputValue = controlledValue !== undefined ? controlledValue : value;
 

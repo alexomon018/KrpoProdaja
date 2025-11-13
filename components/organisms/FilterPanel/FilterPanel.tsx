@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { forwardRef } from "react";
 import cn from "@/lib/utils";
 import { Button, Input, Badge, Typography } from "@/components/atoms";
 import { X, SlidersHorizontal } from "@/components/atoms/Icon/Icon";
@@ -58,7 +58,7 @@ export interface FilterPanelProps extends React.HTMLAttributes<HTMLDivElement> {
  * />
  * ```
  */
-const FilterPanel = React.forwardRef<HTMLDivElement, FilterPanelProps>(
+const FilterPanel = forwardRef<HTMLDivElement, FilterPanelProps>(
   (
     {
       className,

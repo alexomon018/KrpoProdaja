@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useRef, useState, useEffect } from "react";
 import { Avatar } from "@/components/atoms/Avatar/Avatar";
 import { Button } from "@/components/atoms/Button/Button";
 import { Icon } from "@/components/atoms/Icon/Icon";
@@ -60,15 +60,15 @@ export function AvatarUpload({
   error,
   maxSizeMB = 5,
 }: AvatarUploadProps) {
-  const fileInputRef = React.useRef<HTMLInputElement>(null);
-  const [preview, setPreview] = React.useState<string | undefined>(currentAvatar);
-  const [localError, setLocalError] = React.useState<string | undefined>(error);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [preview, setPreview] = useState<string | undefined>(currentAvatar);
+  const [localError, setLocalError] = useState<string | undefined>(error);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setPreview(currentAvatar);
   }, [currentAvatar]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setLocalError(error);
   }, [error]);
 

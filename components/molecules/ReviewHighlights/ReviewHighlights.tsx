@@ -1,4 +1,4 @@
-import * as React from "react";
+import { forwardRef } from "react";
 import cn from "@/lib/utils";
 import { Typography } from "@/components/atoms";
 import { Star } from "@/components/atoms/Icon/Icon";
@@ -18,7 +18,7 @@ export interface ReviewHighlightsProps extends React.HTMLAttributes<HTMLDivEleme
  * <ReviewHighlights highlights={["Fast delivery", "Beautiful", "Great design"]} />
  * ```
  */
-export const ReviewHighlights = React.forwardRef<HTMLDivElement, ReviewHighlightsProps>(
+export const ReviewHighlights = forwardRef<HTMLDivElement, ReviewHighlightsProps>(
   ({ className, highlights, ...props }, ref) => {
     if (highlights.length === 0) return null;
 

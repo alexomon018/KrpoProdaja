@@ -1,4 +1,4 @@
-import * as React from "react";
+import { forwardRef } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import cn from "@/lib/utils";
 
@@ -59,7 +59,7 @@ export interface ButtonProps
  * <Button variant="ghost" size="sm">Sačuvaj</Button>
  * ```
  */
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, fullWidth, loading, children, disabled, ...props }, ref) => {
     return (
       <button

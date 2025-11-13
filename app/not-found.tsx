@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/atoms/Button/Button";
@@ -14,7 +14,7 @@ import { Icon } from "@/components/atoms/Icon/Icon";
  */
 export default function NotFound() {
   const router = useRouter();
-  const [shakeShirt, setShakeShirt] = React.useState(false);
+  const [shakeShirt, setShakeShirt] = useState(false);
 
   const handleShirtClick = () => {
     setShakeShirt(true);

@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 import { BottomNavigation, ProductGrid, FilterPanel } from "@/components/organisms";
 import { FilterChip, FilterChipGroup } from "@/components/molecules";
 import type { FilterOptions } from "@/components/organisms";
@@ -8,9 +8,9 @@ import { mockProducts } from "@/lib/mockData";
 import type { ProductType } from "@/lib/types";
 
 export default function HomePage() {
-  const [filters, setFilters] = React.useState<FilterOptions>({});
-  const [isFilterPanelOpen, setIsFilterPanelOpen] = React.useState(false);
-  const [products, setProducts] = React.useState<ProductType[]>(mockProducts);
+  const [filters, setFilters] = useState<FilterOptions>({});
+  const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
+  const [products, setProducts] = useState<ProductType[]>(mockProducts);
 
   const handleFavoriteClick = (productId: string) => {
     setProducts((prev) =>

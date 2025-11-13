@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import { forwardRef } from 'react';
 import { Share2, Flag, Eye } from 'lucide-react';
 import cn from '@/lib/utils';
 import { Button } from '@/components/atoms/Button/Button';
@@ -12,7 +12,7 @@ export interface ProductMetaProps extends React.HTMLAttributes<HTMLDivElement> {
   productId: string;
 }
 
-const ProductMeta = React.forwardRef<HTMLDivElement, ProductMetaProps>(
+const ProductMeta = forwardRef<HTMLDivElement, ProductMetaProps>(
   ({ className, viewCount = 0, onShare, onReport, productId, ...props }, ref) => {
     const handleShare = async () => {
       if (onShare) {

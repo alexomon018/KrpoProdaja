@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { forwardRef, useState, useCallback, useEffect } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import cn from "@/lib/utils";
 import { ProductImage } from "@/components/atoms";
@@ -39,7 +39,7 @@ export interface ImageCarouselProps extends React.HTMLAttributes<HTMLDivElement>
  * />
  * ```
  */
-const ImageCarousel = React.forwardRef<HTMLDivElement, ImageCarouselProps>(
+const ImageCarousel = forwardRef<HTMLDivElement, ImageCarouselProps>(
   (
     {
       className,
@@ -52,34 +52,34 @@ const ImageCarousel = React.forwardRef<HTMLDivElement, ImageCarouselProps>(
     ref
   ) => {
     const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false });
-    const [currentIndex, setCurrentIndex] = React.useState(0);
-    const [canScrollPrev, setCanScrollPrev] = React.useState(false);
-    const [canScrollNext, setCanScrollNext] = React.useState(false);
-    const [isZoomed, setIsZoomed] = React.useState(false);
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [canScrollPrev, setCanScrollPrev] = useState(false);
+    const [canScrollNext, setCanScrollNext] = useState(false);
+    const [isZoomed, setIsZoomed] = useState(false);
 
-    const scrollPrev = React.useCallback(() => {
+    const scrollPrev = useCallback(() => {
       if (emblaApi) emblaApi.scrollPrev();
     }, [emblaApi]);
 
-    const scrollNext = React.useCallback(() => {
+    const scrollNext = useCallback(() => {
       if (emblaApi) emblaApi.scrollNext();
     }, [emblaApi]);
 
-    const scrollTo = React.useCallback(
+    const scrollTo = useCallback(
       (index: number) => {
         if (emblaApi) emblaApi.scrollTo(index);
       },
       [emblaApi]
     );
 
-    const onSelect = React.useCallback(() => {
+    const onSelect = useCallback(() => {
       if (!emblaApi) return;
       setCurrentIndex(emblaApi.selectedScrollSnap());
       setCanScrollPrev(emblaApi.canScrollPrev());
       setCanScrollNext(emblaApi.canScrollNext());
     }, [emblaApi]);
 
-    React.useEffect(() => {
+    useEffect(() => {
       if (!emblaApi) return;
       onSelect();
       emblaApi.on("select", onSelect);

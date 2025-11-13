@@ -1,9 +1,31 @@
 "use client";
 
-import * as React from "react";
 import { useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 import { ProfileView, ProfileData } from "@/components/organisms/ProfileView/ProfileView";
 import { Container } from "@/components/atoms/Container/Container";
+
+// TODO: Replace with actual API call
+const fetchProfile = async (): Promise<ProfileData> => {
+  // Simulate API call
+  await new Promise((resolve) => setTimeout(resolve, 500));
+
+  // Mock data
+  return {
+    id: "1",
+    name: "Marko Marković",
+    email: "marko@example.com",
+    phone: "+381 60 123 4567",
+    avatar: undefined,
+    bio: "Ljubitelj tehnologije i dobrih kupovina. Prodajem kvalitetne polovne stvari.",
+    location: "Beograd, Srbija",
+    memberSince: "2024-01-15T00:00:00.000Z",
+    verified: true,
+    rating: 4.8,
+    totalSales: 23,
+    activeListing: 5,
+  };
+};
 
 /**
  * Profile Page
@@ -12,42 +34,10 @@ import { Container } from "@/components/atoms/Container/Container";
  */
 export default function ProfilePage() {
   const router = useRouter();
-  const [loading, setLoading] = React.useState(true);
-  const [profile, setProfile] = React.useState<ProfileData | null>(null);
-
-  React.useEffect(() => {
-    // TODO: Fetch profile data from backend
-    const fetchProfile = async () => {
-      try {
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 500));
-
-        // Mock data
-        const mockProfile: ProfileData = {
-          id: "1",
-          name: "Marko Marković",
-          email: "marko@example.com",
-          phone: "+381 60 123 4567",
-          avatar: undefined,
-          bio: "Ljubitelj tehnologije i dobrih kupovina. Prodajem kvalitetne polovne stvari.",
-          location: "Beograd, Srbija",
-          memberSince: "2024-01-15T00:00:00.000Z",
-          verified: true,
-          rating: 4.8,
-          totalSales: 23,
-          activeListing: 5,
-        };
-
-        setProfile(mockProfile);
-      } catch (err) {
-        console.error("Error fetching profile:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProfile();
-  }, []);
+  const { data: profile, isLoading: loading } = useQuery({
+    queryKey: ['profile'],
+    queryFn: fetchProfile,
+  });
 
   const handleLogout = async () => {
     try {

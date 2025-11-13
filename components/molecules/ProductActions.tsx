@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import { forwardRef } from 'react';
 import { MessageCircle, ShoppingCart, HandCoins } from 'lucide-react';
 import cn from '@/lib/utils';
 import { Button } from '@/components/atoms/Button/Button';
@@ -13,7 +13,7 @@ export interface ProductActionsProps extends React.HTMLAttributes<HTMLDivElement
   productId: string;
 }
 
-const ProductActions = React.forwardRef<HTMLDivElement, ProductActionsProps>(
+const ProductActions = forwardRef<HTMLDivElement, ProductActionsProps>(
   (
     {
       className,

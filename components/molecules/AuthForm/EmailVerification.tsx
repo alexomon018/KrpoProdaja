@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/atoms/Button/Button";
 import { Icon } from "@/components/atoms/Icon/Icon";
 
@@ -53,9 +53,9 @@ export function EmailVerification({
   success = false,
   error,
 }: EmailVerificationProps) {
-  const [countdown, setCountdown] = React.useState(0);
+  const [countdown, setCountdown] = useState(0);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (countdown > 0) {
       const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
       return () => clearTimeout(timer);

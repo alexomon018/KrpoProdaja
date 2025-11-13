@@ -1,4 +1,4 @@
-import * as React from "react";
+import { forwardRef } from "react";
 import cn, { formatRelativeTime } from "@/lib/utils";
 import { Avatar, Typography } from "@/components/atoms";
 import { Star } from "@/components/atoms/Icon/Icon";
@@ -19,7 +19,7 @@ export interface ReviewCardProps extends React.HTMLAttributes<HTMLDivElement> {
  * <ReviewCard review={reviewData} />
  * ```
  */
-const ReviewCard = React.forwardRef<HTMLDivElement, ReviewCardProps>(
+const ReviewCard = forwardRef<HTMLDivElement, ReviewCardProps>(
   ({ className, review, ...props }, ref) => {
     return (
       <div
@@ -88,7 +88,7 @@ interface RatingDisplayProps extends React.HTMLAttributes<HTMLDivElement> {
   size?: "sm" | "md" | "lg";
 }
 
-const RatingDisplay = React.forwardRef<HTMLDivElement, RatingDisplayProps>(
+const RatingDisplay = forwardRef<HTMLDivElement, RatingDisplayProps>(
   (
     { className, rating, reviewCount, showCount = true, size = "md", ...props },
     ref

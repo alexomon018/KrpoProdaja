@@ -1,4 +1,4 @@
-import * as React from "react";
+import { forwardRef, useId } from "react";
 import cn from "@/lib/utils";
 
 export interface InputProps
@@ -26,7 +26,7 @@ export interface InputProps
  * />
  * ```
  */
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
+const Input = forwardRef<HTMLInputElement, InputProps>(
   (
     {
       className,
@@ -41,7 +41,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     },
     ref
   ) => {
-    const inputId = id || `input-${React.useId()}`;
+    const inputId = id || `input-${useId()}`;
 
     return (
       <div className="w-full">

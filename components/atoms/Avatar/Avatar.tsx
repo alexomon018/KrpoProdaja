@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { forwardRef, useState } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import cn from "@/lib/utils";
 import Image from "next/image";
@@ -46,9 +46,9 @@ export interface AvatarProps
  * <Avatar fallback="MK" size="lg" />
  * ```
  */
-const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
+const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
   ({ className, size, src, alt, fallback, ...props }, ref) => {
-    const [imageError, setImageError] = React.useState(false);
+    const [imageError, setImageError] = useState(false);
 
     // Generate initials from alt text if no fallback provided
     const getInitials = (name?: string) => {

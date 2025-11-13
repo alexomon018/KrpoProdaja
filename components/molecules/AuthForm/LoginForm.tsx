@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import Link from "next/link";
 import { Button } from "@/components/atoms/Button/Button";
@@ -53,7 +53,7 @@ export function LoginForm({
   error,
 }: LoginFormProps) {
   const methods = useForm<LoginFormData>();
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = methods.handleSubmit((data) => {
     onSubmit(data);
