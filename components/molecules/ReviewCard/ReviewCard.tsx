@@ -31,7 +31,6 @@ const ReviewCard = React.forwardRef<HTMLDivElement, ReviewCardProps>(
         <Avatar
           src={review.reviewer.avatar}
           alt={review.reviewer.username}
-          fallback={review.reviewer.username}
           size="md"
         />
 
@@ -67,7 +66,7 @@ const ReviewCard = React.forwardRef<HTMLDivElement, ReviewCardProps>(
 
           {/* Review Comment */}
           {review.comment && (
-            <Typography variant="bodySmall" className="text-primary">
+            <Typography variant="bodySmall">
               {review.comment}
             </Typography>
           )}

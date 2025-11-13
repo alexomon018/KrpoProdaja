@@ -29,4 +29,7 @@ export type { TypographyProps } from "./Typography/Typography";
 export { Container } from "./Container/Container";
 export type { ContainerProps } from "./Container/Container";
 
+export { RatingMetric } from "./RatingMetric/RatingMetric";
+export type { RatingMetricProps } from "./RatingMetric/RatingMetric";
+
 export * from "./Icon/Icon";

@@ -59,18 +59,18 @@ const ProductActions = React.forwardRef<HTMLDivElement, ProductActionsProps>(
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <Button
             variant="primary"
-            size="lg"
+            size="default"
             onClick={handleBuyNow}
-            className="w-full"
+            className="w-full text-base py-3"
           >
             <ShoppingCart className="mr-2 h-5 w-5" />
             Buy Now
           </Button>
           <Button
             variant="secondary"
-            size="lg"
+            size="default"
             onClick={handleMakeOffer}
-            className="w-full"
+            className="w-full text-base py-3"
           >
             <HandCoins className="mr-2 h-5 w-5" />
             Make Offer
@@ -80,9 +80,9 @@ const ProductActions = React.forwardRef<HTMLDivElement, ProductActionsProps>(
         {/* Message Seller Button */}
         <Button
           variant="secondary"
-          size="lg"
+          size="default"
           onClick={handleMessageSeller}
-          className="w-full"
+          className="w-full text-base py-3"
         >
           <MessageCircle className="mr-2 h-5 w-5" />
           Message Seller

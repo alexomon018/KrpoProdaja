@@ -2,24 +2,23 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  /* Light Mode Colors */
-  --color-primary: #E63946;
-  --color-primary-dark: #C52839;
-  --color-primary-light: #FF6B75;
-  --color-surface: #FFFFFF;
-  --color-border: #E9ECEF;
-  --color-text-primary: #212529;
-  --color-text-secondary: #6C757D;
-  --color-text-tertiary: #ADB5BD;
-  --color-background: #F8F9FA;
+  /* Light Mode Tokens */
+  --color-primary: #CE492C;
+  --color-primary-dark: #DA7761;
+  --color-primary-light: #E7A495;
 
-  /* Dark Mode Colors */
-  --color-dark-surface: #1E1E1E;
-  --color-dark-border: #2D2D2D;
-  --color-dark-text-primary: #E9ECEF;
-  --color-dark-text-secondary: #ADB5BD;
-  --color-dark-text-tertiary: #6C757D;
-  --color-dark-background: #121212;
+  --color-background: #FAFAFB;
+  --color-surface: #FFFFFF;
+  --color-border: #E2E3E5;
+
+  --color-foreground: #2F2F2F;
+  --color-foreground-muted: #6D6D6D;
+  --color-foreground-subtle: #989898;
+
+  --color-success: #5ABC27;
+  --color-warning: #F7A71B;
+  --color-info: #62BAB7;
+  --color-error: #C51315;
 }
 
 * {
@@ -28,21 +27,21 @@
 
 body {
   background-color: var(--color-background);
-  color: var(--color-text-primary);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  color: var(--color-foreground);
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Dark Mode Styles */
 .dark {
-  --color-surface: var(--color-dark-surface);
-  --color-border: var(--color-dark-border);
-  --color-text-primary: var(--color-dark-text-primary);
-  --color-text-secondary: var(--color-dark-text-secondary);
-  --color-text-tertiary: var(--color-dark-text-tertiary);
-  --color-background: var(--color-dark-background);
+  --color-background: #181818;
+  --color-surface: #2F2F2F;
+  --color-border: #585858;
+
+  --color-foreground: #EAEAEA;
+  --color-foreground-muted: #C1C1C1;
+  --color-foreground-subtle: #828282;
 }
 
 .dark * {
-  border-color: var(--color-dark-border);
+  border-color: var(--color-border);
 }

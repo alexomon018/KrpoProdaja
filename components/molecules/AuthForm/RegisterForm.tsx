@@ -72,6 +72,14 @@ export function RegisterForm({
 
   return (
     <div className="w-full max-w-md mx-auto space-y-6">
+      <Link
+        href="/"
+        className="flex items-center gap-1.5 text-secondary hover:text-primary transition-colors text-sm -mt-2"
+      >
+        <Icon name="ArrowLeft" size={16} />
+        <span>Nazad na početnu</span>
+      </Link>
+
       <div className="text-center space-y-2">
         <h1 className="text-3xl font-bold text-primary">Registruj se</h1>
         <p className="text-secondary">
