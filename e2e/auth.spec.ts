@@ -11,8 +11,8 @@ test.describe('Authentication', () => {
     await expect(emailInput.first()).toBeVisible();
     await expect(passwordInput.first()).toBeVisible();
 
-    // Check for submit button
-    const submitButton = page.getByRole('button', { name: /prijava|login|sign in/i });
+    // Check for submit button with exact text
+    const submitButton = page.getByRole('button', { name: /prijavi se|login|sign in/i });
     await expect(submitButton.first()).toBeVisible();
   });
 
@@ -20,7 +20,7 @@ test.describe('Authentication', () => {
     await page.goto('/login');
 
     // Find and click the submit button
-    const submitButton = page.getByRole('button', { name: /prijava|login|sign in/i });
+    const submitButton = page.getByRole('button', { name: /prijavi se|login|sign in/i });
     await submitButton.first().click();
 
     // Wait a bit for validation to trigger
@@ -64,8 +64,8 @@ test.describe('Authentication', () => {
   test('should have link to password reset', async ({ page }) => {
     await page.goto('/login');
 
-    // Look for "Forgot password" or similar link
-    const resetLink = page.getByRole('link', { name: /zaboravili.*lozinku|forgot.*password|reset/i });
+    // Look for "Forgot password" or similar link - text is "Zaboravio si lozinku?"
+    const resetLink = page.getByRole('link', { name: /zaboravio.*lozinku|forgot.*password|reset/i });
     await expect(resetLink.first()).toBeVisible();
   });
 
