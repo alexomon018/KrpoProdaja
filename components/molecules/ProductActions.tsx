@@ -36,7 +36,7 @@ const ProductActions = forwardRef<HTMLDivElement, ProductActionsProps>(
         {/* Message Seller Button */}
         <Button
           variant="primary"
-          size="default"
+          size="md"
           onClick={handleMessageSeller}
           className="w-full text-base py-3"
         >
