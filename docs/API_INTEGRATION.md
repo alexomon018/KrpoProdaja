@@ -29,6 +29,48 @@ NEXT_PUBLIC_API_TIMEOUT=10000
 
 Make sure your krpoprodaja-api backend is running on the specified URL (default: `http://localhost:3000`).
 
+## File Structure
+
+The API integration is organized into the following structure:
+
+```
+lib/api/
+├── client.ts           # HTTP client with auth token management
+├── types.ts            # TypeScript type definitions
+├── index.ts            # Main export file
+├── hooks/              # React Query hooks (organized by resource)
+│   ├── index.ts        # Re-exports all hooks
+│   ├── useAuth.ts      # Authentication hooks
+│   ├── useProducts.ts  # Product management hooks
+│   ├── useUsers.ts     # User profile hooks
+│   └── useSearch.ts    # Search, categories, and favorites hooks
+└── services/           # API service functions
+    ├── auth.ts         # Authentication API calls
+    ├── products.ts     # Products API calls
+    ├── users.ts        # Users API calls
+    └── search.ts       # Search API calls
+```
+
+### Hooks Organization
+
+Each hooks file contains related hooks for a specific resource:
+
+- **useAuth.ts**: `useRegister`, `useLogin`, `useLogout`
+- **useProducts.ts**: `useProducts`, `useProduct`, `useCreateProduct`, `useUpdateProduct`, `useDeleteProduct`, `useUpdateProductStatus`, `useSimilarProducts`
+- **useUsers.ts**: `useCurrentUser`, `useUpdateCurrentUser`, `useUserProfile`, `useUserProducts`
+- **useSearch.ts**: `useSearchProducts`, `useSearchSuggestions`, `useCategories`, `useFavorites`, `useAddToFavorites`, `useRemoveFromFavorites`
+
+You can import all hooks from `@/lib/api` or from individual files:
+
+```tsx
+// Import from main index (recommended)
+import { useLogin, useProducts, useCurrentUser } from '@/lib/api';
+
+// Or import from specific hook files
+import { useLogin } from '@/lib/api/hooks/useAuth';
+import { useProducts } from '@/lib/api/hooks/useProducts';
+```
+
 ## Usage Examples
 
 ### Using React Query Hooks (Recommended)
@@ -40,7 +82,7 @@ The easiest way to use the API is through React Query hooks:
 ```tsx
 'use client';
 
-import { useLogin, useRegister, useLogout, useCurrentUser } from '@/lib/api/hooks';
+import { useLogin, useRegister, useLogout, useCurrentUser } from '@/lib/api';
 
 function LoginForm() {
   const login = useLogin();
@@ -94,7 +136,7 @@ function UserProfile() {
 ```tsx
 'use client';
 
-import { useProducts, useProduct, useCreateProduct } from '@/lib/api/hooks';
+import { useProducts, useProduct, useCreateProduct } from '@/lib/api';
 
 function ProductList() {
   const { data, isLoading } = useProducts({
@@ -187,7 +229,7 @@ import {
   useCategories,
   useFavorites,
   useAddToFavorites,
-} from '@/lib/api/hooks';
+} from '@/lib/api';
 
 function SearchBar() {
   const [query, setQuery] = useState('');
@@ -257,7 +299,7 @@ function FavoriteButton({ productId }: { productId: number }) {
 ```tsx
 'use client';
 
-import { useUserProfile, useUserProducts, useUpdateCurrentUser } from '@/lib/api/hooks';
+import { useUserProfile, useUserProducts, useUpdateCurrentUser } from '@/lib/api';
 
 function UserProfilePage({ userId }: { userId: number }) {
   const { data: profile, isLoading } = useUserProfile(userId);
