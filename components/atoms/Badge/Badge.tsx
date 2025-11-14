@@ -1,13 +1,15 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import cn from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { Badge as ShadcnBadge } from "@/components/ui/badge";
 import type { ConditionType } from "@/lib/types";
 
 /**
- * Badge variants for different use cases
+ * Extended badge variants for KrpoProdaja marketplace
+ * Built on shadcn/ui Badge with custom marketplace-specific variants
  */
 const badgeVariants = cva(
-  "inline-flex items-center justify-center rounded-2xs px-2.5 py-0.5 text-xs font-semibold transition-colors shadow-light",
+  "inline-flex items-center justify-center rounded-lg px-2.5 py-0.5 text-xs font-semibold shadow-light pointer-events-none",
   {
     variants: {
       variant: {
@@ -22,14 +24,14 @@ const badgeVariants = cva(
         veryGood: "bg-condition-veryGood/10 text-condition-veryGood",
         good: "bg-condition-good/10 text-condition-good",
         satisfactory: "bg-condition-satisfactory/10 text-condition-satisfactory",
-        // Status badges
-        sold: "bg-tertiary/80 text-white",
-        reserved: "bg-semantic-warning/80 text-white",
+        // Status badges - High contrast for image overlays
+        sold: "bg-black/90 text-white backdrop-blur-sm",
+        reserved: "bg-orange-500/90 text-white backdrop-blur-sm",
       },
       size: {
-        sm: "text-2xs px-2 py-0.5 rounded-2xs",
-        md: "text-xs px-2.5 py-1 rounded-xs",
-        lg: "text-sm px-3 py-1.5 rounded-xs",
+        sm: "text-2xs px-2 py-0.5 rounded-md",
+        md: "text-xs px-2.5 py-1 rounded-lg",
+        lg: "text-sm px-3 py-1.5 rounded-lg",
       },
     },
     defaultVariants: {
@@ -47,6 +49,7 @@ export interface BadgeProps
  * Badge Component - Atomic Design: Atom
  *
  * Used for displaying conditions, sizes, status indicators
+ * Built on shadcn/ui Badge with custom marketplace variants
  * Color-coded for quick visual scanning
  *
  * @example
@@ -58,7 +61,7 @@ export interface BadgeProps
  */
 function Badge({ className, variant, size, ...props }: BadgeProps) {
   return (
-    <div className={cn(badgeVariants({ variant, size }), className)} {...props} />
+    <ShadcnBadge className={cn(badgeVariants({ variant, size }), className)} {...props} />
   );
 }
 

@@ -9,7 +9,13 @@ import { EmailVerifier } from "@/components/organisms/AuthPage/EmailVerifier";
 export default function VerifyEmailPage() {
   // Server component with Suspense boundary for useSearchParams
   return (
-    <Suspense fallback={<div className="flex justify-center items-center min-h-screen">Loading...</div>}>
+    <Suspense
+      fallback={
+        <div className="flex justify-center items-center min-h-screen">
+          Loading...
+        </div>
+      }
+    >
       <EmailVerifier />
     </Suspense>
   );

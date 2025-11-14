@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { forwardRef } from 'react';
-import { Share2, Flag, Eye } from 'lucide-react';
-import cn from '@/lib/utils';
-import { Button } from '@/components/atoms/Button/Button';
+import { forwardRef } from "react";
+import { Share2, Flag, Eye } from "lucide-react";
+import cn from "@/lib/utils";
+import { Button } from "@/components/atoms/Button/Button";
 
 export interface ProductMetaProps extends React.HTMLAttributes<HTMLDivElement> {
   viewCount?: number;
@@ -13,7 +13,10 @@ export interface ProductMetaProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const ProductMeta = forwardRef<HTMLDivElement, ProductMetaProps>(
-  ({ className, viewCount = 0, onShare, onReport, productId, ...props }, ref) => {
+  (
+    { className, viewCount = 0, onShare, onReport, productId, ...props },
+    ref
+  ) => {
     const handleShare = async () => {
       if (onShare) {
         onShare();
@@ -21,21 +24,21 @@ const ProductMeta = forwardRef<HTMLDivElement, ProductMetaProps>(
       }
 
       const shareData = {
-        title: 'Check out this item',
-        text: 'I found this interesting item on Krpo Prodaja',
-        url: typeof window !== 'undefined' ? window.location.href : '',
+        title: "Check out this item",
+        text: "I found this interesting item on Krpo Prodaja",
+        url: typeof window !== "undefined" ? window.location.href : "",
       };
 
       try {
-        if (navigator.share && typeof window !== 'undefined') {
+        if (navigator.share && typeof window !== "undefined") {
           await navigator.share(shareData);
         } else {
           // Fallback: Copy to clipboard
           await navigator.clipboard.writeText(shareData.url);
-          alert('Link copied to clipboard!');
+          alert("Link copied to clipboard!");
         }
       } catch (error) {
-        console.error('Error sharing:', error);
+        console.error("Error sharing:", error);
       }
     };
 
@@ -45,14 +48,14 @@ const ProductMeta = forwardRef<HTMLDivElement, ProductMetaProps>(
       } else {
         console.log(`Report product ${productId}`);
         // TODO: Implement report modal
-        alert('Report functionality coming soon!');
+        alert("Report functionality coming soon!");
       }
     };
 
     return (
       <div
         ref={ref}
-        className={cn('flex items-center justify-between gap-4', className)}
+        className={cn("flex items-center justify-between gap-4", className)}
         {...props}
       >
         {/* View Count */}
@@ -64,7 +67,7 @@ const ProductMeta = forwardRef<HTMLDivElement, ProductMetaProps>(
         {/* Actions */}
         <div className="flex items-center gap-2">
           <Button
-            variant="ghost"
+            variant="primary"
             size="sm"
             onClick={handleShare}
             className="gap-2"
@@ -73,7 +76,7 @@ const ProductMeta = forwardRef<HTMLDivElement, ProductMetaProps>(
             Share
           </Button>
           <Button
-            variant="ghost"
+            variant="primary"
             size="sm"
             onClick={handleReport}
             className="gap-2 text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
@@ -87,6 +90,6 @@ const ProductMeta = forwardRef<HTMLDivElement, ProductMetaProps>(
   }
 );
 
-ProductMeta.displayName = 'ProductMeta';
+ProductMeta.displayName = "ProductMeta";
 
 export { ProductMeta };

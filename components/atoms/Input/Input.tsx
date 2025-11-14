@@ -1,5 +1,7 @@
 import { forwardRef, useId } from "react";
-import cn from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { Input as ShadcnInput } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -14,7 +16,7 @@ export interface InputProps
  * Input Component - Atomic Design: Atom
  *
  * Form input field with label, error states, and icon support
- * Follows Serbian marketplace design system
+ * Built on shadcn/ui Input with additional features for KrpoProdaja marketplace
  *
  * @example
  * ```tsx
@@ -46,12 +48,12 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="w-full">
         {label && (
-          <label
+          <Label
             htmlFor={inputId}
             className="block text-sm font-medium text-foreground mb-1.5"
           >
             {label}
-          </label>
+          </Label>
         )}
 
         <div className="relative">
@@ -61,15 +63,13 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             </div>
           )}
 
-          <input
+          <ShadcnInput
             type={type}
             id={inputId}
             className={cn(
-              "flex h-11 w-full rounded-sm border border-border bg-surface px-3 py-2 text-base shadow-light",
-              "text-foreground placeholder:text-foreground-subtle",
-              "focus:outline-none focus:ring-1 focus:ring-semantic-info focus:border-transparent focus:shadow-medium",
-              "disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-background",
-              "transition-all",
+              "h-11 rounded-sm shadow-light",
+              "focus:ring-semantic-info focus:border-transparent focus:shadow-medium",
+              "disabled:bg-background",
               error && "border-semantic-error focus:ring-semantic-error",
               startIcon && "pl-10",
               endIcon && "pr-10",

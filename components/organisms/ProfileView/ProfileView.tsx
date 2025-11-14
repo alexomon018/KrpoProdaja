@@ -4,7 +4,6 @@ import * as React from "react";
 import Link from "next/link";
 import { Avatar } from "@/components/atoms/Avatar/Avatar";
 import { Button } from "@/components/atoms/Button/Button";
-import { Badge } from "@/components/atoms/Badge/Badge";
 import { Icon } from "@/components/atoms/Icon/Icon";
 
 export interface ProfileData {
@@ -61,11 +60,10 @@ export function ProfileView({
       {/* Profile Header */}
       <div className="bg-surface border border-border rounded-lg p-6">
         <div className="flex flex-col md:flex-row gap-6">
-          <div className="flex-shrink-0">
+          <div className="shrink-0">
             <Avatar
               src={profile.avatar}
               alt={profile.name}
-              fallback={profile.name}
               size="2xl"
             />
           </div>
@@ -78,10 +76,7 @@ export function ProfileView({
                     {profile.name}
                   </h1>
                   {profile.verified && (
-                    <Badge variant="success" size="sm">
-                      <Icon name="CheckCircle" size={12} />
-                      Verifikovan
-                    </Badge>
+                    <Icon name="BadgeCheck" size={24} className="fill-blue-500 text-white" />
                   )}
                 </div>
                 {profile.location && (
@@ -95,12 +90,12 @@ export function ProfileView({
               {isOwnProfile && (
                 <div className="flex gap-2">
                   <Link href="/profile/edit">
-                    <Button variant="primary" size="sm">
+                    <Button variant="secondary" size="sm">
                       <Icon name="Edit" size={16} />
                       Izmeni profil
                     </Button>
                   </Link>
-                  <Button variant="ghost" size="sm" onClick={onLogout}>
+                  <Button variant="secondary" size="icon" onClick={onLogout}>
                     <Icon name="LogOut" size={16} />
                   </Button>
                 </div>
