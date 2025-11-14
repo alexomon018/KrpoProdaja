@@ -1,61 +1,53 @@
 "use client";
 
-import { useMutation } from "@tanstack/react-query";
-import { LoginForm, LoginFormData } from "@/components/molecules/AuthForm/LoginForm";
+import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import {
+  LoginForm,
+  LoginFormData,
+} from "@/components/molecules/AuthForm/LoginForm";
 import { Container } from "@/components/atoms/Container/Container";
-
-// TODO: Replace with actual API call
-const loginUser = async (data: LoginFormData): Promise<void> => {
-  console.log("Login data:", data);
-  // Simulate API call
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  // On success, redirect to home or previous page
-  // router.push("/");
-};
-
-const socialLogin = async (provider: "google" | "facebook"): Promise<void> => {
-  console.log("Social login:", provider);
-  // Simulate API call
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  // On success, redirect to home or previous page
-  // router.push("/");
-};
+import { loginAction } from "@/lib/auth";
 
 export function AuthLogin() {
-  const loginMutation = useMutation({
-    mutationFn: loginUser,
-    onError: () => {
-      // Error handling is done through mutation.error
-    },
-  });
-
-  const socialLoginMutation = useMutation({
-    mutationFn: socialLogin,
-    onError: () => {
-      // Error handling is done through mutation.error
-    },
-  });
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | undefined>();
 
   const handleLogin = (data: LoginFormData) => {
-    loginMutation.mutate(data);
+    setError(undefined);
+
+    startTransition(async () => {
+      const result = await loginAction({
+        email: data.email,
+        password: data.password,
+      });
+
+      if (result.success) {
+        // Redirect to home page on success
+        router.push("/");
+        router.refresh(); // Refresh to update auth state
+      } else {
+        setError(
+          result.error ||
+            "Email ili lozinka nisu ispravni. Molimo pokušajte ponovo."
+        );
+      }
+    });
   };
 
   const handleSocialLogin = (provider: "google" | "facebook") => {
-    socialLoginMutation.mutate(provider);
+    // TODO: Implement social login
+    console.log("Social login:", provider);
+    setError("Prijavljivanje putem društvenih mreža nije dostupno.");
   };
-
-  const loading = loginMutation.isPending || socialLoginMutation.isPending;
-  const error =
-    loginMutation.error ? "Email ili lozinka nisu ispravni. Molimo pokušajte ponovo." :
-    socialLoginMutation.error ? `Greška pri prijavljivanju. Molimo pokušajte ponovo.` :
-    undefined;
 
   return (
     <Container className="min-h-[calc(100vh-4rem)] flex items-center justify-center py-8">
       <LoginForm
         onSubmit={handleLogin}
         onSocialLogin={handleSocialLogin}
-        loading={loading}
+        loading={isPending}
         error={error}
       />
     </Container>

@@ -1,25 +1,13 @@
-"use client";
-
-import { usePathname } from "next/navigation";
-import { LayoutHeader } from "./LayoutHeader";
+import { getCurrentUser } from "@/lib/auth";
+import { LayoutHeaderClient } from "./LayoutHeaderClient";
 
 /**
- * Wrapper component that conditionally renders the header based on the current route
- * Hides the header on authentication pages (login, register, etc.)
+ * Server component that renders the header with current user
+ * Note: Auth pages should use their own layout that doesn't include this component
  */
-export function LayoutHeaderWrapper() {
-  const pathname = usePathname();
+export async function LayoutHeaderWrapper() {
+  // Fetch current user
+  const user = await getCurrentUser();
 
-  // Hide header on auth pages
-  const isAuthPage =
-    pathname?.startsWith("/login") ||
-    pathname?.startsWith("/register") ||
-    pathname?.startsWith("/reset-password") ||
-    pathname?.startsWith("/verify-email");
-
-  if (isAuthPage) {
-    return null;
-  }
-
-  return <LayoutHeader />;
+  return <LayoutHeaderClient user={user} />;
 }

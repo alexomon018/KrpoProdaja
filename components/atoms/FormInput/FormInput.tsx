@@ -1,7 +1,7 @@
 "use client";
 
 import { forwardRef } from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContext, Controller } from "react-hook-form";
 import { Input, InputProps } from "../Input/Input";
 
 export interface FormInputProps extends Omit<InputProps, "error"> {
@@ -41,18 +41,28 @@ export interface FormInputProps extends Omit<InputProps, "error"> {
 const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
   ({ name, required = false, ...props }, ref) => {
     const {
-      register,
+      control,
       formState: { errors },
     } = useFormContext();
 
     const error = errors[name]?.message as string | undefined;
 
     return (
-      <Input
-        {...props}
-        {...register(name, { required })}
-        ref={ref}
-        error={error}
+      <Controller
+        name={name}
+        control={control}
+        rules={{
+          required: required ? "Ovo polje je obavezno" : false,
+        }}
+        render={({ field }) => (
+          <Input
+            {...props}
+            {...field}
+            value={field.value ?? ""}
+            ref={ref}
+            error={error}
+          />
+        )}
       />
     );
   }

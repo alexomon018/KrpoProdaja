@@ -3,8 +3,14 @@
  * Handles all HTTP requests with authentication and error handling
  */
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
-const API_TIMEOUT = parseInt(process.env.NEXT_PUBLIC_API_TIMEOUT || '10000', 10);
+import { getAuthToken } from "../auth/cookies";
+
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api";
+const API_TIMEOUT = parseInt(
+  process.env.NEXT_PUBLIC_API_TIMEOUT || "10000",
+  10
+);
 
 export class ApiError extends Error {
   constructor(
@@ -13,34 +19,15 @@ export class ApiError extends Error {
     public data?: any
   ) {
     super(message);
-    this.name = 'ApiError';
+    this.name = "ApiError";
   }
 }
 
 export interface ApiRequestOptions extends RequestInit {
   timeout?: number;
   requiresAuth?: boolean;
+  token?: string; // Optional token override for server-side calls
 }
-
-/**
- * Token management
- */
-export const tokenManager = {
-  get: (): string | null => {
-    if (typeof window === 'undefined') return null;
-    return localStorage.getItem('auth_token');
-  },
-
-  set: (token: string): void => {
-    if (typeof window === 'undefined') return;
-    localStorage.setItem('auth_token', token);
-  },
-
-  remove: (): void => {
-    if (typeof window === 'undefined') return;
-    localStorage.removeItem('auth_token');
-  },
-};
 
 /**
  * Main API client
@@ -61,19 +48,25 @@ class ApiClient {
     endpoint: string,
     options: ApiRequestOptions = {}
   ): Promise<T> {
-    const { timeout = this.timeout, requiresAuth = false, ...fetchOptions } = options;
+    const {
+      timeout = this.timeout,
+      requiresAuth = false,
+      token,
+      ...fetchOptions
+    } = options;
 
     // Build headers
     const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       ...(fetchOptions.headers as Record<string, string>),
     };
 
     // Add auth token if required
     if (requiresAuth) {
-      const token = tokenManager.get();
-      if (token) {
-        headers['Authorization'] = `Bearer ${token}`;
+      // Use provided token or get from cookie
+      const authToken = token || (await getAuthToken());
+      if (authToken) {
+        headers["Authorization"] = `Bearer ${authToken}`;
       }
     }
 
@@ -101,8 +94,8 @@ class ApiClient {
       }
 
       // Parse response
-      const contentType = response.headers.get('content-type');
-      if (contentType?.includes('application/json')) {
+      const contentType = response.headers.get("content-type");
+      if (contentType?.includes("application/json")) {
         return await response.json();
       }
 
@@ -115,13 +108,13 @@ class ApiClient {
       }
 
       if (error instanceof Error) {
-        if (error.name === 'AbortError') {
-          throw new ApiError(408, 'Request timeout');
+        if (error.name === "AbortError") {
+          throw new ApiError(408, "Request timeout");
         }
         throw new ApiError(0, error.message);
       }
 
-      throw new ApiError(0, 'Unknown error occurred');
+      throw new ApiError(0, "Unknown error occurred");
     }
   }
 
@@ -129,16 +122,20 @@ class ApiClient {
    * GET request
    */
   async get<T>(endpoint: string, options?: ApiRequestOptions): Promise<T> {
-    return this.request<T>(endpoint, { ...options, method: 'GET' });
+    return this.request<T>(endpoint, { ...options, method: "GET" });
   }
 
   /**
    * POST request
    */
-  async post<T>(endpoint: string, data?: any, options?: ApiRequestOptions): Promise<T> {
+  async post<T>(
+    endpoint: string,
+    data?: any,
+    options?: ApiRequestOptions
+  ): Promise<T> {
     return this.request<T>(endpoint, {
       ...options,
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify(data),
     });
   }
@@ -146,10 +143,14 @@ class ApiClient {
   /**
    * PUT request
    */
-  async put<T>(endpoint: string, data?: any, options?: ApiRequestOptions): Promise<T> {
+  async put<T>(
+    endpoint: string,
+    data?: any,
+    options?: ApiRequestOptions
+  ): Promise<T> {
     return this.request<T>(endpoint, {
       ...options,
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify(data),
     });
   }
@@ -157,10 +158,14 @@ class ApiClient {
   /**
    * PATCH request
    */
-  async patch<T>(endpoint: string, data?: any, options?: ApiRequestOptions): Promise<T> {
+  async patch<T>(
+    endpoint: string,
+    data?: any,
+    options?: ApiRequestOptions
+  ): Promise<T> {
     return this.request<T>(endpoint, {
       ...options,
-      method: 'PATCH',
+      method: "PATCH",
       body: JSON.stringify(data),
     });
   }
@@ -169,7 +174,7 @@ class ApiClient {
    * DELETE request
    */
   async delete<T>(endpoint: string, options?: ApiRequestOptions): Promise<T> {
-    return this.request<T>(endpoint, { ...options, method: 'DELETE' });
+    return this.request<T>(endpoint, { ...options, method: "DELETE" });
   }
 }
 
