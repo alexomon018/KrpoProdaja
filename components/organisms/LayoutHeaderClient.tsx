@@ -1,23 +1,21 @@
 "use client";
 
 import { Header } from "./Header/Header";
-import { mockUsers } from "@/lib/mockData";
 import { usePathname } from "next/navigation";
+import type { ApiUser } from "@/lib/api/types";
+
+interface LayoutHeaderClientProps {
+  user: ApiUser | null;
+}
 
 /**
- * LayoutHeader Component
+ * LayoutHeaderClient Component
  *
- * Wrapper around Header for use in the root layout.
+ * Client component wrapper around Header for use in the root layout.
  * Handles routing and global header state.
  */
-export function LayoutHeader() {
+export function LayoutHeaderClient({ user }: LayoutHeaderClientProps) {
   const pathname = usePathname();
-
-  // Mock user (logged in)
-  const currentUser = {
-    username: mockUsers[0].username,
-    avatar: mockUsers[0].avatar,
-  };
 
   const handleSearch = (query: string) => {
     console.log("Global search:", query);
@@ -27,11 +25,20 @@ export function LayoutHeader() {
   // Only show filter button on home page
   const isHomePage = pathname === "/";
 
+  // Map API user to Header user format
+
+  const headerUser = user
+    ? {
+        username: user.username,
+        avatar: user.avatar,
+      }
+    : undefined;
+
   return (
     <Header
       showSearch
-      user={currentUser}
-      notificationCount={3}
+      user={headerUser}
+      notificationCount={0}
       onSearch={handleSearch}
       onFilterClick={isHomePage ? undefined : undefined}
     />

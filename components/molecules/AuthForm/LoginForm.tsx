@@ -52,7 +52,9 @@ export function LoginForm({
   loading = false,
   error,
 }: LoginFormProps) {
-  const methods = useForm<LoginFormData>();
+  const methods = useForm<LoginFormData>({
+    mode: "onSubmit",
+  });
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = methods.handleSubmit((data) => {

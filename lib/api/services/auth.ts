@@ -1,66 +1,68 @@
 /**
  * Authentication Service
- * Handles user registration, login, and logout
+ * Handles user registration, login, and logout using Server Actions
+ * @deprecated - Use Server Actions from lib/auth/actions directly for better security
  */
 
-import { apiClient, tokenManager } from '../client';
+import { registerAction, loginAction, logoutAction } from '../../auth/actions';
+import { getAuthToken, hasAuthToken } from '../../auth/cookies';
 import type { RegisterRequest, LoginRequest, AuthResponse } from '../types';
 
 export const authService = {
   /**
    * Register a new user
    * POST /api/auth/register
+   * @deprecated - Use registerAction from lib/auth/actions directly
    */
   async register(data: RegisterRequest): Promise<AuthResponse> {
-    const response = await apiClient.post<AuthResponse>('/auth/register', data);
+    const result = await registerAction(data);
 
-    // Store token after successful registration
-    if (response.token) {
-      tokenManager.set(response.token);
+    if (!result.success || !result.data) {
+      throw new Error(result.error || 'Registration failed');
     }
 
-    return response;
+    return result.data;
   },
 
   /**
    * Login user
    * POST /api/auth/login
+   * @deprecated - Use loginAction from lib/auth/actions directly
    */
   async login(data: LoginRequest): Promise<AuthResponse> {
-    const response = await apiClient.post<AuthResponse>('/auth/login', data);
+    const result = await loginAction(data);
 
-    // Store token after successful login
-    if (response.token) {
-      tokenManager.set(response.token);
+    if (!result.success || !result.data) {
+      throw new Error(result.error || 'Login failed');
     }
 
-    return response;
+    return result.data;
   },
 
   /**
    * Logout user
    * POST /api/auth/logout
+   * @deprecated - Use logoutAction from lib/auth/actions directly
    */
   async logout(): Promise<void> {
-    try {
-      await apiClient.post('/auth/logout', undefined, { requiresAuth: true });
-    } finally {
-      // Always remove token, even if API call fails
-      tokenManager.remove();
+    const result = await logoutAction();
+
+    if (!result.success) {
+      throw new Error(result.error || 'Logout failed');
     }
   },
 
   /**
    * Check if user is authenticated (has valid token)
    */
-  isAuthenticated(): boolean {
-    return tokenManager.get() !== null;
+  async isAuthenticated(): Promise<boolean> {
+    return await hasAuthToken();
   },
 
   /**
    * Get current auth token
    */
-  getToken(): string | null {
-    return tokenManager.get();
+  async getToken(): Promise<string | null> {
+    return await getAuthToken();
   },
 };
