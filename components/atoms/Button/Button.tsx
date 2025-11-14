@@ -8,20 +8,20 @@ import { Button as ShadcnButton } from "@/components/ui/button";
  * Extends shadcn/ui Button with custom variants and features
  */
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 touch-target shadow-low hover:shadow-medium",
+  "touch-target shadow-low hover:shadow-medium",
   {
     variants: {
       variant: {
         primary:
-          "bg-primary text-white hover:bg-primary-dark active:bg-primary-dark",
+          "bg-primary text-white dark:text-white hover:bg-primary-dark active:bg-primary-dark",
         secondary:
-          "border-2 border-primary text-primary bg-transparent hover:bg-primary/10 active:bg-primary/20",
+          "border-2 border-primary text-primary bg-white dark:bg-gray-900 hover:bg-primary/10 active:bg-primary/20",
         ghost:
-          "text-primary hover:bg-primary/10 active:bg-primary/20 shadow-none hover:shadow-none",
+          "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 active:bg-gray-200 dark:active:bg-gray-700 shadow-none hover:shadow-none",
         danger:
-          "bg-semantic-error text-white hover:bg-semantic-error/90 active:bg-semantic-error/80",
+          "bg-semantic-error text-white dark:text-white hover:bg-semantic-error/90 active:bg-semantic-error/80",
         success:
-          "bg-semantic-success text-white hover:bg-semantic-success/90 active:bg-semantic-success/80",
+          "bg-semantic-success text-white dark:text-white hover:bg-semantic-success/90 active:bg-semantic-success/80",
       },
       size: {
         sm: "h-9 px-3 text-sm",
@@ -70,6 +70,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         disabled={disabled || loading}
         asChild={asChild}
+        variant={null as any}
         {...props}
       >
         <>

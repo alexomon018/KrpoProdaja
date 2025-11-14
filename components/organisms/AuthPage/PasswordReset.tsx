@@ -25,7 +25,7 @@ export function PasswordReset() {
   const error = resetMutation.error ? "Greška pri slanju email-a. Molimo pokušajte ponovo." : undefined;
 
   return (
-    <Container className="py-8">
+    <Container className="min-h-screen flex items-center justify-center py-8">
       <PasswordResetRequest
         onSubmit={handleSubmit}
         loading={loading}

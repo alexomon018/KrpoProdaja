@@ -4,7 +4,6 @@ import { forwardRef, useState } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 import { Avatar as ShadcnAvatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import Image from "next/image";
 
 /**
  * Extended avatar size variants for KrpoProdaja marketplace
@@ -71,18 +70,13 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
         className={cn(avatarVariants({ size }), className)}
         {...props}
       >
-        {src && !imageError ? (
-          <AvatarImage asChild>
-            <Image
-              src={src}
-              alt={alt || "User avatar"}
-              fill
-              className="object-cover"
-              onError={() => setImageError(true)}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            />
-          </AvatarImage>
-        ) : null}
+        {src && !imageError && (
+          <AvatarImage
+            src={src}
+            alt={alt || "User avatar"}
+            onError={() => setImageError(true)}
+          />
+        )}
         <AvatarFallback className="bg-primary/10 text-primary font-semibold">
           {displayFallback}
         </AvatarFallback>

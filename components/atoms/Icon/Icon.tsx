@@ -55,6 +55,10 @@ export {
   BellOff,
   Moon,
   Sun,
+  BadgeCheck,
+  CheckCircle,
+  CheckCircle2,
+  ShieldCheck,
 } from "lucide-react";
 
 /**

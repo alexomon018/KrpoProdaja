@@ -275,7 +275,7 @@ const FilterPanel = forwardRef<HTMLDivElement, FilterPanelProps>(
           <Button variant="primary" fullWidth onClick={onClose}>
             Primeni filtere
           </Button>
-          <Button variant="ghost" fullWidth onClick={clearAllFilters}>
+          <Button variant="secondary" fullWidth onClick={clearAllFilters}>
             Obriši sve filtere
           </Button>
         </div>

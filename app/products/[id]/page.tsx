@@ -1,16 +1,22 @@
-import React from 'react';
-import { notFound } from 'next/navigation';
-import { mockProducts, mockReviews, mockReviewSummaries } from '@/lib/mockData';
-import { formatPrice } from '@/lib/utils';
-import { ProductDetailsHeader } from '@/components/organisms/ProductDetailsHeader';
-import { ProductDescription, type ItemDetail } from '@/components/molecules/ProductDescription';
-import { ProductActions } from '@/components/molecules/ProductActions';
-import { ProductMeta } from '@/components/molecules/ProductMeta';
-import { ShippingOptions, type ShippingOption } from '@/components/molecules/ShippingOptions';
-import { ClickableSellerInfo } from '@/components/molecules/SellerInfo/ClickableSellerInfo';
-import { SimilarItems } from '@/components/organisms/SimilarItems';
-import { ProductReviews } from '@/components/organisms/ProductReviews/ProductReviews';
-import { ConditionBadge } from '@/components/atoms/ConditionBadge';
+import React from "react";
+import { notFound } from "next/navigation";
+import { mockProducts, mockReviews, mockReviewSummaries } from "@/lib/mockData";
+import { formatPrice } from "@/lib/utils";
+import { ProductDetailsHeader } from "@/components/organisms/ProductDetailsHeader";
+import {
+  ProductDescription,
+  type ItemDetail,
+} from "@/components/molecules/ProductDescription";
+import { ProductActions } from "@/components/molecules/ProductActions";
+import { ProductMeta } from "@/components/molecules/ProductMeta";
+import {
+  ShippingOptions,
+  type ShippingOption,
+} from "@/components/molecules/ShippingOptions";
+import { ClickableSellerInfo } from "@/components/molecules/SellerInfo/ClickableSellerInfo";
+import { SimilarItems } from "@/components/organisms/SimilarItems";
+import { ProductReviews } from "@/components/organisms/ProductReviews/ProductReviews";
+import { ConditionBadge } from "@/components/atoms/ConditionBadge";
 
 interface ProductPageProps {
   params: Promise<{
@@ -20,38 +26,38 @@ interface ProductPageProps {
 
 // Mock view count data
 const mockViewCounts: Record<string, number> = {
-  '1': 247,
-  '2': 156,
-  '3': 432,
-  '4': 198,
-  '5': 89,
-  '6': 567,
-  '7': 123,
-  '8': 345,
+  "1": 247,
+  "2": 156,
+  "3": 432,
+  "4": 198,
+  "5": 89,
+  "6": 567,
+  "7": 123,
+  "8": 345,
 };
 
 // Mock shipping options
 const mockShippingOptions: ShippingOption[] = [
   {
-    id: '1',
-    name: 'Standard Shipping',
+    id: "1",
+    name: "Standard Shipping",
     price: 300,
-    estimatedDays: '3-5 business days',
-    icon: 'truck',
+    estimatedDays: "3-5 business days",
+    icon: "truck",
   },
   {
-    id: '2',
-    name: 'Express Shipping',
+    id: "2",
+    name: "Express Shipping",
     price: 600,
-    estimatedDays: '1-2 business days',
-    icon: 'package',
+    estimatedDays: "1-2 business days",
+    icon: "package",
   },
   {
-    id: '3',
-    name: 'Local Pickup',
+    id: "3",
+    name: "Local Pickup",
     price: 0,
-    estimatedDays: 'Available immediately',
-    icon: 'mappin',
+    estimatedDays: "Available immediately",
+    icon: "mappin",
   },
 ];
 
@@ -69,13 +75,20 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   // Build item details table
   const itemDetails: ItemDetail[] = [
-    { label: 'Brand', value: product.brand || 'N/A' },
-    { label: 'Size', value: product.size },
-    { label: 'Condition', value: product.condition.replace('-', ' ').charAt(0).toUpperCase() + product.condition.slice(1).replace('-', ' ') },
-    { label: 'Color', value: product.color || 'N/A' },
-    ...(product.material ? [{ label: 'Material', value: product.material }] : []),
-    { label: 'Location', value: product.location },
-    { label: 'Posted', value: product.createdAt.toLocaleDateString('sr-RS') },
+    { label: "Brand", value: product.brand || "N/A" },
+    { label: "Size", value: product.size },
+    {
+      label: "Condition",
+      value:
+        product.condition.replace("-", " ").charAt(0).toUpperCase() +
+        product.condition.slice(1).replace("-", " "),
+    },
+    { label: "Color", value: product.color || "N/A" },
+    ...(product.material
+      ? [{ label: "Material", value: product.material }]
+      : []),
+    { label: "Location", value: product.location },
+    { label: "Posted", value: product.createdAt.toLocaleDateString("sr-RS") },
   ];
 
   // Get similar products from the same category
@@ -108,7 +121,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
           {/* Right Column - Product Info, Actions, and Seller */}
           <div className="space-y-6">
-            <div className="lg:sticky lg:top-4 space-y-6">
+            <div className="lg:top-4 space-y-6">
               {/* Category */}
               {product.category && (
                 <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -162,7 +175,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         <div className="mt-12 space-y-8">
           {/* Description and Details */}
           <ProductDescription
-            description={product.description || 'No description available.'}
+            description={product.description || "No description available."}
             details={itemDetails}
           />
 
@@ -174,10 +187,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
           {/* Reviews Section */}
           {reviewSummary && productReviews.length > 0 && (
-            <ProductReviews
-              reviews={productReviews}
-              summary={reviewSummary}
-            />
+            <ProductReviews reviews={productReviews} summary={reviewSummary} />
           )}
 
           {/* Similar Items */}
@@ -194,4 +204,4 @@ export default async function ProductPage({ params }: ProductPageProps) {
 }
 
 // Force dynamic rendering to avoid prerendering errors with client components
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";

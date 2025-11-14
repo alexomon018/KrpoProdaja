@@ -36,7 +36,7 @@ export function PasswordResetForm() {
   const error = resetConfirmMutation.error ? "Greška pri promeni lozinke. Link možda nije važeći ili je istekao." : undefined;
 
   return (
-    <Container className="py-8">
+    <Container className="min-h-screen flex items-center justify-center py-8">
       <PasswordResetConfirm
         token={token}
         onSubmit={handleSubmit}
