@@ -2,14 +2,16 @@
 
 import { forwardRef, useState } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import cn from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { Avatar as ShadcnAvatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import Image from "next/image";
 
 /**
- * Avatar size variants
+ * Extended avatar size variants for KrpoProdaja marketplace
+ * Built on shadcn/ui Avatar with custom sizes
  */
 const avatarVariants = cva(
-  "relative flex shrink-0 overflow-hidden rounded-full bg-text-tertiary/20 shadow-light",
+  "shadow-light",
   {
     variants: {
       size: {
@@ -38,7 +40,7 @@ export interface AvatarProps
  * Avatar Component - Atomic Design: Atom
  *
  * User profile picture with automatic fallback to initials
- * Optimized with Next.js Image component
+ * Built on shadcn/ui Avatar with Next.js Image optimization
  *
  * @example
  * ```tsx
@@ -64,26 +66,27 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
     const displayFallback = fallback || getInitials(alt);
 
     return (
-      <div
+      <ShadcnAvatar
         ref={ref}
         className={cn(avatarVariants({ size }), className)}
         {...props}
       >
         {src && !imageError ? (
-          <Image
-            src={src}
-            alt={alt || "User avatar"}
-            fill
-            className="object-cover"
-            onError={() => setImageError(true)}
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center bg-primary/10 text-primary font-semibold">
-            {displayFallback}
-          </div>
-        )}
-      </div>
+          <AvatarImage asChild>
+            <Image
+              src={src}
+              alt={alt || "User avatar"}
+              fill
+              className="object-cover"
+              onError={() => setImageError(true)}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+          </AvatarImage>
+        ) : null}
+        <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+          {displayFallback}
+        </AvatarFallback>
+      </ShadcnAvatar>
     );
   }
 );

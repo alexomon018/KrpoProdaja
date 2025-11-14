@@ -16,6 +16,9 @@
     "test:e2e:debug": "playwright test --debug"
   },
   "dependencies": {
+    "@radix-ui/react-avatar": "^1.1.11",
+    "@radix-ui/react-label": "^2.1.8",
+    "@radix-ui/react-slot": "^1.2.4",
     "@tanstack/react-query": "^5.90.8",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
