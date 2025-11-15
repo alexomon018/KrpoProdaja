@@ -1,81 +1,110 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useMutation } from "@tanstack/react-query";
-import { ProfileEditForm, ProfileFormData } from "@/components/molecules/AuthForm/ProfileEditForm";
+import { useAuth } from "@/lib/auth/context";
+import { useUpdateCurrentUser } from "@/lib/api/hooks";
+import {
+  ProfileEditForm,
+  ProfileFormData,
+} from "@/components/molecules/AuthForm/ProfileEditForm";
 import { Container } from "@/components/atoms/Container/Container";
 import { Typography } from "@/components/atoms/Typography/Typography";
+import type { UpdateUserRequest } from "@/lib/api/types";
 
-// TODO: Replace with actual API calls
-const updateProfile = async (data: ProfileFormData): Promise<void> => {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  console.log("Profile update data:", data);
-};
-
+// TODO: Implement avatar upload functionality when backend supports it
 const uploadAvatar = async (file: File): Promise<string> => {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  console.log("Uploading avatar:", file);
+  console.log("Avatar upload - TODO: Implement when backend supports it", file);
   return URL.createObjectURL(file);
 };
 
 const removeAvatar = async (): Promise<void> => {
-  await new Promise((resolve) => setTimeout(resolve, 500));
-  console.log("Removing avatar");
+  console.log("Avatar removal - TODO: Implement when backend supports it");
 };
 
 export function ProfileEditor() {
   const router = useRouter();
   const [avatarUrl, setAvatarUrl] = useState<string>();
 
-  const updateProfileMutation = useMutation({
-    mutationFn: updateProfile,
-    onSuccess: () => {
-      setTimeout(() => {
-        router.push("/profile");
-      }, 1500);
-    },
-  });
+  // Get current user from auth context
+  const authContext = useAuth();
+  const currentUser = authContext?.user ?? null;
+  const isLoadingUser = authContext?.isLoading ?? false;
+  const updateProfileMutation = useUpdateCurrentUser();
 
-  const uploadAvatarMutation = useMutation({
-    mutationFn: uploadAvatar,
-    onSuccess: (url) => {
-      setAvatarUrl(url);
-    },
-  });
+  // Set initial avatar from user data
+  useEffect(() => {
+    if (currentUser?.avatar) {
+      setAvatarUrl(currentUser.avatar);
+    }
+  }, [currentUser]);
 
-  const removeAvatarMutation = useMutation({
-    mutationFn: removeAvatar,
-    onSuccess: () => {
-      setAvatarUrl(undefined);
-    },
-  });
+  // Transform form data to API request format
+  const transformFormData = (formData: ProfileFormData): UpdateUserRequest => {
+    // Split name into firstName and lastName
+    const nameParts = formData.name.trim().split(/\s+/);
+    const firstName = nameParts[0] || "";
+    const lastName = nameParts.slice(1).join(" ") || "";
 
-  // Mock initial data - TODO: fetch from backend
-  const initialData: Partial<ProfileFormData> = {
-    name: "Marko Marković",
-    email: "marko@example.com",
-    phone: "+381 60 123 4567",
-    bio: "Ljubitelj tehnologije i dobrih kupovina. Prodajem kvalitetne polovne stvari.",
-    location: "Beograd, Srbija",
+    return {
+      email: formData.email,
+      firstName,
+      lastName,
+      // Note: These fields may not be supported by backend yet
+      bio: formData.bio,
+      location: formData.location,
+      phoneNumber: formData.phone,
+    };
   };
+
+  // Prepare initial data from current user
+  const initialData: Partial<ProfileFormData> | undefined = currentUser
+    ? {
+        name:
+          currentUser.name ||
+          `${currentUser.firstName || ""} ${currentUser.lastName || ""}`.trim() ||
+          currentUser.username ||
+          "",
+        email: currentUser.email,
+        phone: currentUser.phone || currentUser.phoneNumber || "",
+        bio: currentUser.bio || "",
+        location: currentUser.location || "",
+      }
+    : undefined;
 
   const handleSubmit = (data: ProfileFormData) => {
-    updateProfileMutation.mutate(data);
+    const apiData = transformFormData(data);
+    updateProfileMutation.mutate(apiData, {
+      onSuccess: () => {
+        setTimeout(() => {
+          router.push("/profile");
+        }, 1500);
+      },
+    });
   };
 
-  const handleAvatarUpload = (file: File) => {
-    uploadAvatarMutation.mutate(file);
+  const handleAvatarUpload = async (file: File) => {
+    try {
+      const url = await uploadAvatar(file);
+      setAvatarUrl(url);
+    } catch (error) {
+      console.error("Avatar upload failed:", error);
+    }
   };
 
-  const handleAvatarRemove = () => {
-    removeAvatarMutation.mutate();
+  const handleAvatarRemove = async () => {
+    try {
+      await removeAvatar();
+      setAvatarUrl(undefined);
+    } catch (error) {
+      console.error("Avatar removal failed:", error);
+    }
   };
 
-  // Combine all mutation states
-  const loading = updateProfileMutation.isPending || uploadAvatarMutation.isPending || removeAvatarMutation.isPending;
+  // Combine loading states
+  const loading = isLoadingUser || updateProfileMutation.isPending;
   const success = updateProfileMutation.isSuccess;
-  const error = updateProfileMutation.error?.message || uploadAvatarMutation.error?.message || removeAvatarMutation.error?.message;
+  const error = updateProfileMutation.error?.message;
 
   return (
     <Container className="py-8">

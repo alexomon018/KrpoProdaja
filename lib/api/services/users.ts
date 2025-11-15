@@ -3,32 +3,39 @@
  * Handles user profile operations
  */
 
-import { apiClient } from '../client';
+import { apiClient } from "../client";
 import type {
   ApiUser,
   UpdateUserRequest,
+  ChangePasswordRequest,
   UserProfileResponse,
   ProductListResponse,
   PaginationParams,
-} from '../types';
+} from "../types";
 
 export const usersService = {
   /**
-   * Get current user profile
-   * GET /api/me
-   * Requires authentication
-   */
-  async getCurrentUser(): Promise<ApiUser> {
-    return apiClient.get<ApiUser>('/me', { requiresAuth: true });
-  },
-
-  /**
    * Update current user profile
-   * PUT /api/me
+   * PUT /api/profile
    * Requires authentication
    */
   async updateCurrentUser(data: UpdateUserRequest): Promise<ApiUser> {
-    return apiClient.put<ApiUser>('/me', data, { requiresAuth: true });
+    return apiClient.put<ApiUser>("/users/profile", data, {
+      requiresAuth: true,
+    });
+  },
+
+  /**
+   * Change password
+   * PUT /api/password
+   * Requires authentication
+   */
+  async changePassword(
+    data: ChangePasswordRequest
+  ): Promise<{ message: string }> {
+    return apiClient.put<{ message: string }>("/users/password", data, {
+      requiresAuth: true,
+    });
   },
 
   /**
@@ -49,8 +56,8 @@ export const usersService = {
   ): Promise<ProductListResponse> {
     const query = new URLSearchParams();
 
-    if (params?.page) query.append('page', String(params.page));
-    if (params?.limit) query.append('limit', String(params.limit));
+    if (params?.page) query.append("page", String(params.page));
+    if (params?.limit) query.append("limit", String(params.limit));
 
     const queryString = query.toString();
     const endpoint = queryString

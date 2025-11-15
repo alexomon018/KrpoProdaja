@@ -51,12 +51,20 @@ export interface ApiUser {
 }
 
 export interface UpdateUserRequest {
+  email?: string;
   username?: string;
-  fullName?: string;
+  firstName?: string;
+  lastName?: string;
+  // Extended fields (may not be supported by backend yet)
   bio?: string;
   avatar?: string;
   location?: string;
   phoneNumber?: string;
+}
+
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
 }
 
 export interface UserProfileResponse {

@@ -114,13 +114,15 @@ export function ProfileEditForm({
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="bg-surface border border-border rounded-lg p-6 space-y-4">
-            <h2 className="text-xl font-bold text-primary">Osnovne informacije</h2>
+            <h2 className="text-xl font-bold text-primary">
+              Osnovne informacije
+            </h2>
 
             <FormInput
               name="name"
               type="text"
               label="Ime i prezime"
-              placeholder="Marko Marković"
+              placeholder={initialData?.name || "Ime i prezime"}
               required
               disabled={loading}
             />
@@ -129,7 +131,7 @@ export function ProfileEditForm({
               name="email"
               type="email"
               label="Email adresa"
-              placeholder="tvoj.email@primer.com"
+              placeholder={initialData?.email || "Email adresa"}
               required
               disabled={loading}
             />
@@ -138,13 +140,15 @@ export function ProfileEditForm({
               name="phone"
               type="tel"
               label="Broj telefona"
-              placeholder="+381 60 123 4567"
+              placeholder={initialData?.phone || "Broj telefona"}
               disabled={loading}
             />
           </div>
 
           <div className="bg-surface border border-border rounded-lg p-6 space-y-4">
-            <h2 className="text-xl font-bold text-primary">Dodatne informacije</h2>
+            <h2 className="text-xl font-bold text-primary">
+              Dodatne informacije
+            </h2>
 
             <div>
               <label className="block text-sm font-medium text-secondary mb-2">
@@ -152,7 +156,7 @@ export function ProfileEditForm({
               </label>
               <textarea
                 {...methods.register("bio")}
-                placeholder="Reci nam nešto o sebi..."
+                placeholder={initialData?.bio || "Biografija"}
                 rows={4}
                 disabled={loading}
                 className="w-full px-3 py-2 bg-surface text-primary border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none placeholder:text-tertiary disabled:opacity-50 disabled:cursor-not-allowed"
@@ -163,7 +167,7 @@ export function ProfileEditForm({
               name="location"
               type="text"
               label="Lokacija"
-              placeholder="Beograd, Srbija"
+              placeholder={initialData?.location || "Lokacija"}
               disabled={loading}
             />
           </div>
