@@ -31,6 +31,14 @@ export interface LoginFormProps {
    * Error message to display
    */
   error?: string;
+  /**
+   * Callback to toggle between login and register mode (for modal usage)
+   */
+  onToggleMode?: () => void;
+  /**
+   * Whether this form is being used in a modal (hides back link and header)
+   */
+  isModal?: boolean;
 }
 
 /**
@@ -51,6 +59,8 @@ export function LoginForm({
   onSocialLogin,
   loading = false,
   error,
+  onToggleMode,
+  isModal = false,
 }: LoginFormProps) {
   const methods = useForm<LoginFormData>({
     mode: "onSubmit",
@@ -63,20 +73,24 @@ export function LoginForm({
 
   return (
     <div className="w-full max-w-md mx-auto space-y-6">
-      <Link
-        href="/"
-        className="flex items-center gap-1.5 text-secondary hover:text-primary transition-colors text-sm -mt-2"
-      >
-        <Icon name="ArrowLeft" size={16} />
-        <span>Nazad na početnu</span>
-      </Link>
+      {!isModal && (
+        <>
+          <Link
+            href="/"
+            className="flex items-center gap-1.5 text-secondary hover:text-primary transition-colors text-sm -mt-2"
+          >
+            <Icon name="ArrowLeft" size={16} />
+            <span>Nazad na početnu</span>
+          </Link>
 
-      <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-primary">Prijavi se</h1>
-        <p className="text-secondary">
-          Dobrodošli nazad! Prijavite se na svoj nalog
-        </p>
-      </div>
+          <div className="text-center space-y-2">
+            <h1 className="text-3xl font-bold text-primary">Prijavi se</h1>
+            <p className="text-secondary">
+              Dobrodošli nazad! Prijavite se na svoj nalog
+            </p>
+          </div>
+        </>
+      )}
 
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -151,12 +165,22 @@ export function LoginForm({
 
           <p className="text-center text-sm text-secondary">
             Nemaš nalog?{" "}
-            <Link
-              href="/register"
-              className="text-primary hover:text-primary-dark font-medium"
-            >
-              Registruj se
-            </Link>
+            {isModal && onToggleMode ? (
+              <button
+                type="button"
+                onClick={onToggleMode}
+                className="text-primary hover:text-primary-dark font-medium"
+              >
+                Registruj se
+              </button>
+            ) : (
+              <Link
+                href="/register"
+                className="text-primary hover:text-primary-dark font-medium"
+              >
+                Registruj se
+              </Link>
+            )}
           </p>
         </form>
       </FormProvider>

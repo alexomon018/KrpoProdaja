@@ -5,9 +5,11 @@ import { useRouter } from "next/navigation";
 import { RegisterForm, RegisterFormData } from "@/components/molecules/AuthForm/RegisterForm";
 import { Container } from "@/components/atoms/Container/Container";
 import { registerAction } from "@/lib/auth";
+import { useAuth } from "@/lib/auth/context";
 
 export function AuthRegister() {
   const router = useRouter();
+  const { setUser } = useAuth();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>();
 
@@ -23,10 +25,12 @@ export function AuthRegister() {
         fullName: data.name,
       });
 
-      if (result.success) {
+      if (result.success && result.data) {
+        // Update auth context with the user data from the response
+        setUser(result.data.user);
+
         // Redirect to home page on success
         router.push("/");
-        router.refresh(); // Refresh to update auth state
       } else {
         setError(result.error || "Greška pri registraciji. Molimo pokušajte ponovo.");
       }

@@ -3,7 +3,9 @@ import { Source_Sans_3, Lato } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@lib/ThemeContext";
 import { QueryProvider } from "@lib/QueryProvider";
-import { LayoutHeaderWrapper } from "@/components/organisms/LayoutHeaderWrapper";
+import { AuthProvider } from "@/lib/auth/context";
+import { AuthModalManager } from "@/components/organisms/AuthModal/AuthModalManager";
+import { getCurrentUser } from "@/lib/auth/server";
 
 const sourceSans = Source_Sans_3({
   subsets: ["latin"],
@@ -23,18 +25,22 @@ export const metadata: Metadata = {
   description: "Buy and sell pre-loved fashion items in Serbia",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const user = await getCurrentUser();
+
   return (
     <html lang="sr">
       <body>
         <QueryProvider>
           <ThemeProvider>
-            <LayoutHeaderWrapper />
-            {children}
+            <AuthProvider initialUser={user}>
+              {children}
+              <AuthModalManager />
+            </AuthProvider>
           </ThemeProvider>
         </QueryProvider>
       </body>

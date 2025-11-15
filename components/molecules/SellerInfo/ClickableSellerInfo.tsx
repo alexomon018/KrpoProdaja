@@ -3,6 +3,7 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { SellerInfo } from "./SellerInfo";
+import { useRequireAuth } from "@/lib/auth/context";
 import type { UserType } from "@/lib/types";
 
 export interface ClickableSellerInfoProps {
@@ -16,7 +17,8 @@ export interface ClickableSellerInfoProps {
 /**
  * ClickableSellerInfo Component - Wrapper for SellerInfo with navigation
  *
- * Adds click handling to navigate to seller profile
+ * Adds click handling to navigate to seller profile and messaging
+ * Requires authentication for messaging functionality
  *
  * @example
  * ```tsx
@@ -25,6 +27,7 @@ export interface ClickableSellerInfoProps {
  */
 export function ClickableSellerInfo({ seller, compact = false }: ClickableSellerInfoProps) {
   const router = useRouter();
+  const { requireAuth } = useRequireAuth();
 
   const handleProfileClick = () => {
     // Navigate to seller's profile
@@ -32,10 +35,13 @@ export function ClickableSellerInfo({ seller, compact = false }: ClickableSeller
   };
 
   const handleMessageClick = () => {
-    // TODO: Implement messaging functionality
-    console.log("Open message to seller:", seller.id);
-    // For now, you could navigate to a messages page or open a modal
-    // router.push(`/messages/${seller.id}`);
+    // Require authentication before allowing messaging
+    requireAuth(() => {
+      // TODO: Implement messaging functionality
+      console.log("Open message to seller:", seller.id);
+      // For now, you could navigate to a messages page or open a modal
+      // router.push(`/messages/${seller.id}`);
+    });
   };
 
   return (

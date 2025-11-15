@@ -153,12 +153,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </div>
               </div>
 
-              {/* Action Buttons */}
-              <ProductActions
-                sellerId={product.seller.id}
-                productId={product.id}
-              />
-
               {/* Seller Info Card */}
               <ClickableSellerInfo seller={product.seller} />
 
