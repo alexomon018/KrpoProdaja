@@ -12,7 +12,6 @@ export function UserProfile() {
   const router = useRouter();
   const { user, logout, isLoading } = useAuth();
 
-  console.log("bratee");
   console.log("user", user);
 
   const handleLogout = async () => {

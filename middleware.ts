@@ -14,7 +14,7 @@ const protectedRoutes = [
 const authRoutes = ["/login", "/register"];
 
 // Get backend API URL from environment
-const BACKEND_API_URL = process.env.BACKEND_API_URL || "http://localhost:3001";
+const BACKEND_API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
 /**
  * Validates auth token by calling backend verification endpoint
