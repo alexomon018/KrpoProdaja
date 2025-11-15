@@ -2,11 +2,15 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useCurrentUser, useUpdateCurrentUser } from "@/lib/api/hooks";
-import { ProfileEditForm, ProfileFormData } from "@/components/molecules/AuthForm/ProfileEditForm";
+import { useAuth } from "@/lib/auth/context";
+import { useUpdateCurrentUser } from "@/lib/api/hooks";
+import {
+  ProfileEditForm,
+  ProfileFormData,
+} from "@/components/molecules/AuthForm/ProfileEditForm";
 import { Container } from "@/components/atoms/Container/Container";
 import { Typography } from "@/components/atoms/Typography/Typography";
-import type { UpdateUserRequest, ApiUser } from "@/lib/api/types";
+import type { UpdateUserRequest } from "@/lib/api/types";
 
 // TODO: Implement avatar upload functionality when backend supports it
 const uploadAvatar = async (file: File): Promise<string> => {
@@ -22,8 +26,10 @@ export function ProfileEditor() {
   const router = useRouter();
   const [avatarUrl, setAvatarUrl] = useState<string>();
 
-  // Fetch current user data
-  const { data: currentUser, isLoading: isLoadingUser } = useCurrentUser();
+  // Get current user from auth context
+  const authContext = useAuth();
+  const currentUser = authContext?.user ?? null;
+  const isLoadingUser = authContext?.isLoading ?? false;
   const updateProfileMutation = useUpdateCurrentUser();
 
   // Set initial avatar from user data
@@ -37,8 +43,8 @@ export function ProfileEditor() {
   const transformFormData = (formData: ProfileFormData): UpdateUserRequest => {
     // Split name into firstName and lastName
     const nameParts = formData.name.trim().split(/\s+/);
-    const firstName = nameParts[0] || '';
-    const lastName = nameParts.slice(1).join(' ') || '';
+    const firstName = nameParts[0] || "";
+    const lastName = nameParts.slice(1).join(" ") || "";
 
     return {
       email: formData.email,
@@ -52,15 +58,19 @@ export function ProfileEditor() {
   };
 
   // Prepare initial data from current user
-  const initialData: Partial<ProfileFormData> | undefined = currentUser ? {
-    name: (currentUser as ApiUser).name ||
-          `${(currentUser as ApiUser).firstName || ''} ${(currentUser as ApiUser).lastName || ''}`.trim() ||
-          (currentUser as ApiUser).username || '',
-    email: (currentUser as ApiUser).email,
-    phone: (currentUser as ApiUser).phone || (currentUser as ApiUser).phoneNumber || '',
-    bio: (currentUser as ApiUser).bio || '',
-    location: (currentUser as ApiUser).location || '',
-  } : undefined;
+  const initialData: Partial<ProfileFormData> | undefined = currentUser
+    ? {
+        name:
+          currentUser.name ||
+          `${currentUser.firstName || ""} ${currentUser.lastName || ""}`.trim() ||
+          currentUser.username ||
+          "",
+        email: currentUser.email,
+        phone: currentUser.phone || currentUser.phoneNumber || "",
+        bio: currentUser.bio || "",
+        location: currentUser.location || "",
+      }
+    : undefined;
 
   const handleSubmit = (data: ProfileFormData) => {
     const apiData = transformFormData(data);

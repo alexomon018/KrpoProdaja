@@ -34,10 +34,10 @@ export default async function RootLayout({
 
   return (
     <html lang="sr">
-      <body>
+      <body className={`${sourceSans.variable} ${lato.variable}`}>
         <QueryProvider>
           <ThemeProvider>
-            <AuthProvider initialUser={user}>
+            <AuthProvider initialUser={user ? user.user : null}>
               {children}
               <AuthModalManager />
             </AuthProvider>
