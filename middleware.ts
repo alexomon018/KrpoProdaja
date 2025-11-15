@@ -13,10 +13,34 @@ const protectedRoutes = [
 // Define auth routes that should redirect to home if already authenticated
 const authRoutes = ['/login', '/register'];
 
-export function middleware(request: NextRequest) {
+// Get backend API URL from environment
+const BACKEND_API_URL = process.env.BACKEND_API_URL || 'http://localhost:3001';
+
+/**
+ * Validates auth token by calling backend verification endpoint
+ */
+async function validateToken(token: string): Promise<boolean> {
+  try {
+    const response = await fetch(`${BACKEND_API_URL}/auth/verify`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      // Add timeout to prevent hanging
+      signal: AbortSignal.timeout(5000),
+    });
+
+    return response.ok;
+  } catch (error) {
+    // On network errors or timeouts, fail closed (deny access)
+    console.error('Token validation failed:', error);
+    return false;
+  }
+}
+
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const authToken = request.cookies.get('auth_token');
-  const isAuthenticated = !!authToken;
 
   // Check if the current path is protected
   const isProtectedRoute = protectedRoutes.some(route =>
@@ -28,16 +52,44 @@ export function middleware(request: NextRequest) {
     pathname.startsWith(route)
   );
 
-  // Redirect to login if trying to access protected route without auth
-  if (isProtectedRoute && !isAuthenticated) {
-    const loginUrl = new URL('/login', request.url);
-    loginUrl.searchParams.set('redirect', pathname);
-    return NextResponse.redirect(loginUrl);
+  // For protected routes, validate the token
+  if (isProtectedRoute) {
+    if (!authToken?.value) {
+      const loginUrl = new URL('/login', request.url);
+      loginUrl.searchParams.set('redirect', pathname);
+      return NextResponse.redirect(loginUrl);
+    }
+
+    // Validate token with backend
+    const isValid = await validateToken(authToken.value);
+
+    if (!isValid) {
+      // Token is invalid or expired - redirect to login
+      const loginUrl = new URL('/login', request.url);
+      loginUrl.searchParams.set('redirect', pathname);
+
+      // Create response with redirect and clear the invalid cookie
+      const response = NextResponse.redirect(loginUrl);
+      response.cookies.delete('auth_token');
+
+      return response;
+    }
   }
 
-  // Redirect to home if trying to access auth routes while authenticated
-  if (isAuthRoute && isAuthenticated) {
-    return NextResponse.redirect(new URL('/', request.url));
+  // For auth routes, check if user has a valid token
+  if (isAuthRoute && authToken?.value) {
+    // Validate token with backend
+    const isValid = await validateToken(authToken.value);
+
+    if (isValid) {
+      // User is authenticated, redirect to home
+      return NextResponse.redirect(new URL('/', request.url));
+    } else {
+      // Token is invalid, clear it and allow access to auth routes
+      const response = NextResponse.next();
+      response.cookies.delete('auth_token');
+      return response;
+    }
   }
 
   return NextResponse.next();
