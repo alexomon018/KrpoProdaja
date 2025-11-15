@@ -2,20 +2,11 @@
 
 import { Header } from "./Header/Header";
 import { usePathname } from "next/navigation";
-import type { ApiUser } from "@/lib/api/types";
+import { useAuth } from "@/lib/auth/context";
 
-interface LayoutHeaderClientProps {
-  user: ApiUser | null;
-}
-
-/**
- * LayoutHeaderClient Component
- *
- * Client component wrapper around Header for use in the root layout.
- * Handles routing and global header state.
- */
-export function LayoutHeaderClient({ user }: LayoutHeaderClientProps) {
+export function LayoutHeaderClient() {
   const pathname = usePathname();
+  const { user } = useAuth();
 
   const handleSearch = (query: string) => {
     console.log("Global search:", query);
@@ -26,7 +17,6 @@ export function LayoutHeaderClient({ user }: LayoutHeaderClientProps) {
   const isHomePage = pathname === "/";
 
   // Map API user to Header user format
-
   const headerUser = user
     ? {
         username: user.username,

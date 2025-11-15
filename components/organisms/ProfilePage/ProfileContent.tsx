@@ -2,7 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { ProfileView, ProfileData } from "@/components/organisms/ProfileView/ProfileView";
+import {
+  ProfileView,
+  ProfileData,
+} from "@/components/organisms/ProfileView/ProfileView";
 import { Container } from "@/components/atoms/Container/Container";
 
 // TODO: Replace with actual API call
@@ -30,7 +33,7 @@ const fetchProfile = async (): Promise<ProfileData> => {
 export function ProfileContent() {
   const router = useRouter();
   const { data: profile, isLoading: loading } = useQuery({
-    queryKey: ['profile'],
+    queryKey: ["profile"],
     queryFn: fetchProfile,
   });
 

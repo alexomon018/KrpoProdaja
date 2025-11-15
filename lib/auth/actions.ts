@@ -3,12 +3,12 @@
  * Handles login, register, and logout operations with cookie-based tokens
  */
 
-'use server';
+"use server";
 
-import { setAuthToken, removeAuthToken } from './cookies';
-import type { RegisterRequest, LoginRequest, AuthResponse } from '../api/types';
+import { setAuthToken, removeAuthToken } from "./cookies";
+import type { RegisterRequest, LoginRequest, AuthResponse } from "../api/types";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
 /**
  * Register a new user
@@ -18,9 +18,9 @@ export async function registerAction(
 ): Promise<{ success: boolean; data?: AuthResponse; error?: string }> {
   try {
     const response = await fetch(`${API_BASE_URL}/auth/register`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     });
@@ -29,7 +29,7 @@ export async function registerAction(
       const errorData = await response.json().catch(() => ({}));
       return {
         success: false,
-        error: errorData.message || 'Registration failed',
+        error: errorData.message || "Registration failed",
       };
     }
 
@@ -44,7 +44,7 @@ export async function registerAction(
   } catch (error) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error occurred',
+      error: error instanceof Error ? error.message : "Unknown error occurred",
     };
   }
 }
@@ -57,9 +57,9 @@ export async function loginAction(
 ): Promise<{ success: boolean; data?: AuthResponse; error?: string }> {
   try {
     const response = await fetch(`${API_BASE_URL}/auth/login`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     });
@@ -68,7 +68,7 @@ export async function loginAction(
       const errorData = await response.json().catch(() => ({}));
       return {
         success: false,
-        error: errorData.message || 'Login failed',
+        error: errorData.message || "Login failed",
       };
     }
 
@@ -83,7 +83,7 @@ export async function loginAction(
   } catch (error) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error occurred',
+      error: error instanceof Error ? error.message : "Unknown error occurred",
     };
   }
 }
@@ -91,7 +91,10 @@ export async function loginAction(
 /**
  * Logout user
  */
-export async function logoutAction(): Promise<{ success: boolean; error?: string }> {
+export async function logoutAction(): Promise<{
+  success: boolean;
+  error?: string;
+}> {
   try {
     // Remove token from cookie
     await removeAuthToken();
@@ -104,7 +107,7 @@ export async function logoutAction(): Promise<{ success: boolean; error?: string
   } catch (error) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Logout failed',
+      error: error instanceof Error ? error.message : "Logout failed",
     };
   }
 }

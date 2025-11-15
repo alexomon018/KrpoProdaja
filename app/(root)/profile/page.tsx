@@ -1,4 +1,4 @@
-import { ProfileContent } from "@/components/organisms/ProfilePage/ProfileContent";
+import { UserProfile } from "@/components/organisms/ProfilePage/UserProfile";
 
 /**
  * Profile Page
@@ -7,5 +7,5 @@ import { ProfileContent } from "@/components/organisms/ProfilePage/ProfileConten
  */
 export default function ProfilePage() {
   // Server component
-  return <ProfileContent />;
+  return <UserProfile />;
 }

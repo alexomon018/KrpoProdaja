@@ -8,9 +8,11 @@ import {
 } from "@/components/molecules/AuthForm/LoginForm";
 import { Container } from "@/components/atoms/Container/Container";
 import { loginAction } from "@/lib/auth";
+import { useAuth } from "@/lib/auth/context";
 
 export function AuthLogin() {
   const router = useRouter();
+  const { setUser } = useAuth();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>();
 
@@ -23,10 +25,12 @@ export function AuthLogin() {
         password: data.password,
       });
 
-      if (result.success) {
+      if (result.success && result.data) {
+        // Update auth context with the user data from the response
+        setUser(result.data.user);
+
         // Redirect to home page on success
         router.push("/");
-        router.refresh(); // Refresh to update auth state
       } else {
         setError(
           result.error ||
