@@ -7,6 +7,7 @@ import { apiClient } from '../client';
 import type {
   ApiUser,
   UpdateUserRequest,
+  ChangePasswordRequest,
   UserProfileResponse,
   ProductListResponse,
   PaginationParams,
@@ -15,20 +16,29 @@ import type {
 export const usersService = {
   /**
    * Get current user profile
-   * GET /api/me
+   * GET /api/profile
    * Requires authentication
    */
   async getCurrentUser(): Promise<ApiUser> {
-    return apiClient.get<ApiUser>('/me', { requiresAuth: true });
+    return apiClient.get<ApiUser>('/profile', { requiresAuth: true });
   },
 
   /**
    * Update current user profile
-   * PUT /api/me
+   * PUT /api/profile
    * Requires authentication
    */
   async updateCurrentUser(data: UpdateUserRequest): Promise<ApiUser> {
-    return apiClient.put<ApiUser>('/me', data, { requiresAuth: true });
+    return apiClient.put<ApiUser>('/profile', data, { requiresAuth: true });
+  },
+
+  /**
+   * Change password
+   * PUT /api/password
+   * Requires authentication
+   */
+  async changePassword(data: ChangePasswordRequest): Promise<{ message: string }> {
+    return apiClient.put<{ message: string }>('/password', data, { requiresAuth: true });
   },
 
   /**

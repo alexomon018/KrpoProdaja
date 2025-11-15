@@ -32,6 +32,7 @@ export {
   useUpdateCurrentUser,
   useUserProfile,
   useUserProducts,
+  useChangePassword,
 } from './useUsers';
 
 // Search & discovery hooks

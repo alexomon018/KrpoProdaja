@@ -43,7 +43,8 @@ export function useFavorites(params?: PaginationParams) {
   return useQuery({
     queryKey: ['favorites', params],
     queryFn: () => searchService.getFavorites(params),
-    enabled: authService.isAuthenticated(),
+    // No need for enabled check - API will return 401 if not authenticated
+    retry: false,
   });
 }
 

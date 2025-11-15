@@ -8,13 +8,14 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { authService } from '../services/auth';
 import { usersService } from '../services/users';
-import type { UpdateUserRequest, PaginationParams } from '../types';
+import type { UpdateUserRequest, ChangePasswordRequest, PaginationParams } from '../types';
 
 export function useCurrentUser() {
   return useQuery({
     queryKey: ['currentUser'],
     queryFn: () => usersService.getCurrentUser(),
-    enabled: authService.isAuthenticated(),
+    // No need for enabled check - API will return 401 if not authenticated
+    retry: false, // Don't retry on auth failures
   });
 }
 
@@ -42,5 +43,11 @@ export function useUserProducts(userId: number, params?: PaginationParams) {
     queryKey: ['users', userId, 'products', params],
     queryFn: () => usersService.getUserProducts(userId, params),
     enabled: !!userId,
+  });
+}
+
+export function useChangePassword() {
+  return useMutation({
+    mutationFn: (data: ChangePasswordRequest) => usersService.changePassword(data),
   });
 }
