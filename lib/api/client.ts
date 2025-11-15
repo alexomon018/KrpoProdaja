@@ -3,7 +3,7 @@
  * Handles all HTTP requests with authentication and error handling
  */
 
-import { getAuthToken } from "../auth/cookies";
+import { getAccessToken } from "../auth/cookies";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api";
@@ -64,7 +64,7 @@ class ApiClient {
     // Add auth token if required
     if (requiresAuth) {
       // Use provided token or get from cookie
-      const authToken = token || (await getAuthToken());
+      const authToken = token || (await getAccessToken());
       if (authToken) {
         headers["Authorization"] = `Bearer ${authToken}`;
       }

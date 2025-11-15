@@ -1,11 +1,25 @@
 # Backend Changes Required for Token Validation
 
 ## Overview
-The Next.js middleware now validates authentication tokens by calling the backend API. This requires a new endpoint in the `krpoprodaja-api` repository.
+The Next.js frontend now implements the **three-token authentication system** (accessToken, idToken, refreshToken) to match your backend's JWT implementation. The middleware validates tokens by calling the backend API.
 
-## Required Backend Changes
+## ✅ Backend Implementation Status
 
-### 1. Add Token Verification Endpoint
+Your backend already supports the three-token system! The login/register endpoints return:
+
+```json
+{
+  "message": "Login successful",
+  "user": { /* user object */ },
+  "accessToken": "string",   // 30 min
+  "idToken": "string",        // 30 min
+  "refreshToken": "string"    // 30 days
+}
+```
+
+## Required Backend Endpoint
+
+### Token Verification Endpoint
 
 **File:** `src/routes/auth.ts` (or wherever your auth routes are defined)
 
@@ -14,9 +28,9 @@ Add this endpoint to your existing auth routes:
 ```typescript
 /**
  * Token verification endpoint
- * Used by the Next.js middleware to validate JWT tokens
+ * Used by the Next.js middleware to validate access tokens
  */
-router.get('/verify', authenticateToken, (req, res) => {
+router.get('/api/auth/verify', authenticateToken, (req, res) => {
   // If authenticateToken middleware passes, token is valid
   res.json({
     valid: true,
@@ -25,52 +39,111 @@ router.get('/verify', authenticateToken, (req, res) => {
 });
 ```
 
-### 2. Update CORS Configuration (if needed)
+**Note:** The endpoint should be at `/api/auth/verify` to match the middleware configuration.
 
-Ensure your backend allows requests from your Next.js application:
+## Frontend Implementation
 
-```typescript
-// Example CORS configuration
-app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-  credentials: true
-}));
-```
+### Token Storage (httpOnly Cookies)
 
-## How It Works
+The frontend now stores all three tokens in secure httpOnly cookies:
 
-1. User tries to access a protected route (e.g., `/profile`)
-2. Next.js middleware extracts the `auth_token` cookie
-3. Middleware calls `GET /auth/verify` with the token in the `Authorization` header
-4. Backend's `authenticateToken` middleware validates the JWT
-5. If valid (200 OK), access is granted
-6. If invalid (401/403), user is redirected to login and cookie is cleared
+- `accessToken` - 30 min (used for API authorization and middleware validation)
+- `idToken` - 30 min (used for user identity)
+- `refreshToken` - 30 days (used for token refresh)
+
+**Cookie Attributes:**
+- `httpOnly: true` - Prevents JavaScript access (XSS protection)
+- `secure: true` (in production) - HTTPS only
+- `sameSite: 'strict'` - CSRF protection
+
+### How It Works
+
+1. **Login/Register:**
+   - User submits credentials
+   - Backend returns accessToken, idToken, refreshToken
+   - Frontend stores all three in httpOnly cookies
+
+2. **Protected Route Access:**
+   - User tries to access protected route (e.g., `/profile`)
+   - Middleware extracts `accessToken` cookie
+   - Middleware calls `GET /api/auth/verify` with token
+   - Backend validates the JWT
+   - If valid (200 OK), access is granted
+   - If invalid (401/403), user is redirected to login and all cookies are cleared
+
+3. **API Requests:**
+   - API client automatically includes `accessToken` in Authorization header
+   - Backend validates token using existing middleware
+
+4. **Logout:**
+   - Frontend calls backend `/api/auth/revoke` endpoint
+   - All three cookies are deleted
+   - User is redirected to login
 
 ## Benefits
 
-- ✅ Single source of truth for token validation
-- ✅ No need to duplicate JWT_SECRET across services
-- ✅ Backend controls all authentication logic
-- ✅ Automatic token expiry handling
-- ✅ Invalid tokens are automatically cleared
+✅ **Security:**
+- Proper JWT signature validation (prevents fake tokens)
+- httpOnly cookies protect against XSS attacks
+- SameSite=Strict protects against CSRF
+- Tokens automatically expire
 
-## Testing
+✅ **Architecture:**
+- Single source of truth for validation
+- No JWT_SECRET duplication
+- Backend controls all auth logic
+- Automatic token cleanup on logout
 
-After implementing the backend endpoint:
+✅ **User Experience:**
+- Seamless authentication flow
+- Invalid/expired tokens handled gracefully
+- Automatic redirect to login when needed
 
-1. Start your backend API server
-2. Start the Next.js dev server
-3. Try accessing `/profile` without logging in → should redirect to login
-4. Log in successfully
-5. Try accessing `/profile` → should work
-6. Manually set an invalid `auth_token` cookie → should redirect to login and clear cookie
+## Testing Checklist
+
+After implementing the backend `/api/auth/verify` endpoint:
+
+- [ ] Start backend API server
+- [ ] Start Next.js dev server
+- [ ] Try accessing `/profile` without login → redirects to login
+- [ ] Log in successfully → stores three cookies
+- [ ] Access `/profile` → works correctly
+- [ ] Check browser DevTools → see httpOnly cookies
+- [ ] Manually delete `accessToken` cookie → redirects to login
+- [ ] Log out → all cookies cleared
 
 ## Environment Variables
 
-Make sure to set in your `.env.local`:
+Set in your `.env.local`:
 
 ```bash
+# Backend API URL for server-side validation (used in middleware)
 BACKEND_API_URL=http://localhost:3001
+
+# API Base URL for client-side requests
+NEXT_PUBLIC_API_URL=http://localhost:3001/api
 ```
 
-Adjust the port to match your backend API server.
+Adjust ports to match your backend API server.
+
+## Migration Notes
+
+The frontend has been updated from the old single-token system to the new three-token system:
+
+**Old (Deprecated):**
+```typescript
+// Single token stored in auth_token cookie
+{ token: string }
+```
+
+**New (Current):**
+```typescript
+// Three tokens stored in separate cookies
+{
+  accessToken: string,   // For API authorization
+  idToken: string,        // For user identity
+  refreshToken: string    // For token refresh
+}
+```
+
+All legacy code paths have been updated to support the new system.

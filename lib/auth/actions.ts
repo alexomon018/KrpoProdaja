@@ -1,11 +1,12 @@
 /**
  * Authentication Server Actions
  * Handles login, register, and logout operations with cookie-based tokens
+ * Supports three-token system: accessToken, idToken, refreshToken
  */
 
 "use server";
 
-import { setAuthToken, removeAuthToken } from "./cookies";
+import { setAuthTokens, removeAuthTokens, getAccessToken } from "./cookies";
 import type { RegisterRequest, LoginRequest, AuthResponse } from "../api/types";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
@@ -35,9 +36,9 @@ export async function registerAction(
 
     const result: AuthResponse = await response.json();
 
-    // Store token in httpOnly cookie
-    if (result.token) {
-      await setAuthToken(result.token);
+    // Store all three tokens in httpOnly cookies
+    if (result.accessToken && result.idToken && result.refreshToken) {
+      await setAuthTokens(result.accessToken, result.idToken, result.refreshToken);
     }
 
     return { success: true, data: result };
@@ -74,9 +75,9 @@ export async function loginAction(
 
     const result: AuthResponse = await response.json();
 
-    // Store token in httpOnly cookie
-    if (result.token) {
-      await setAuthToken(result.token);
+    // Store all three tokens in httpOnly cookies
+    if (result.accessToken && result.idToken && result.refreshToken) {
+      await setAuthTokens(result.accessToken, result.idToken, result.refreshToken);
     }
 
     return { success: true, data: result };
@@ -96,12 +97,26 @@ export async function logoutAction(): Promise<{
   error?: string;
 }> {
   try {
-    // Remove token from cookie
-    await removeAuthToken();
+    // Get access token for backend revocation
+    const accessToken = await getAccessToken();
 
-    // Optionally call backend logout endpoint
-    // Note: We can't easily get the token here since it's httpOnly
-    // Backend logout is optional for stateless JWT tokens
+    // Call backend revocation endpoint if token exists
+    if (accessToken) {
+      try {
+        await fetch(`${API_BASE_URL}/auth/revoke`, {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${accessToken}`,
+          },
+        });
+      } catch (error) {
+        // Continue even if backend revocation fails
+        console.error("Backend token revocation failed:", error);
+      }
+    }
+
+    // Remove all tokens from cookies
+    await removeAuthTokens();
 
     return { success: true };
   } catch (error) {

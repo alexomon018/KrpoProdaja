@@ -18,23 +18,36 @@ export interface LoginRequest {
 }
 
 export interface AuthResponse {
-  token: string;
+  message: string;
   user: ApiUser;
+  accessToken: string;   // 30 min - for API authorization
+  idToken: string;        // 30 min - for user identity
+  refreshToken: string;   // 30 days - for refreshing tokens
+  // Legacy support (deprecated)
+  token?: string;
 }
 
 // ==================== User Types ====================
 
 export interface ApiUser {
-  id: number;
+  id: string;  // UUID from backend
   email: string;
   username: string;
-  fullName?: string;
-  bio?: string;
+  firstName?: string;
+  lastName?: string;
+  name?: string;
+  phone?: string;
   avatar?: string;
+  bio?: string;
   location?: string;
-  phoneNumber?: string;
+  verified?: boolean;
+  verifiedSeller?: boolean;
+  responseTime?: string;
   createdAt: string;
-  updatedAt: string;
+  // Legacy fields
+  fullName?: string;
+  phoneNumber?: string;
+  updatedAt?: string;
 }
 
 export interface UpdateUserRequest {

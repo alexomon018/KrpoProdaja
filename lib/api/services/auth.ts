@@ -5,7 +5,7 @@
  */
 
 import { registerAction, loginAction, logoutAction } from '../../auth/actions';
-import { getAuthToken, hasAuthToken } from '../../auth/cookies';
+import { getAccessToken, hasAuthToken } from '../../auth/cookies';
 import type { RegisterRequest, LoginRequest, AuthResponse } from '../types';
 
 export const authService = {
@@ -60,9 +60,9 @@ export const authService = {
   },
 
   /**
-   * Get current auth token
+   * Get current access token
    */
   async getToken(): Promise<string | null> {
-    return await getAuthToken();
+    return await getAccessToken();
   },
 };

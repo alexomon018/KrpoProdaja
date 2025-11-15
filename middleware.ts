@@ -40,7 +40,7 @@ async function validateToken(token: string): Promise<boolean> {
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const authToken = request.cookies.get('auth_token');
+  const accessToken = request.cookies.get('accessToken');
 
   // Check if the current path is protected
   const isProtectedRoute = protectedRoutes.some(route =>
@@ -54,40 +54,44 @@ export async function middleware(request: NextRequest) {
 
   // For protected routes, validate the token
   if (isProtectedRoute) {
-    if (!authToken?.value) {
+    if (!accessToken?.value) {
       const loginUrl = new URL('/login', request.url);
       loginUrl.searchParams.set('redirect', pathname);
       return NextResponse.redirect(loginUrl);
     }
 
     // Validate token with backend
-    const isValid = await validateToken(authToken.value);
+    const isValid = await validateToken(accessToken.value);
 
     if (!isValid) {
       // Token is invalid or expired - redirect to login
       const loginUrl = new URL('/login', request.url);
       loginUrl.searchParams.set('redirect', pathname);
 
-      // Create response with redirect and clear the invalid cookie
+      // Create response with redirect and clear all invalid cookies
       const response = NextResponse.redirect(loginUrl);
-      response.cookies.delete('auth_token');
+      response.cookies.delete('accessToken');
+      response.cookies.delete('idToken');
+      response.cookies.delete('refreshToken');
 
       return response;
     }
   }
 
   // For auth routes, check if user has a valid token
-  if (isAuthRoute && authToken?.value) {
+  if (isAuthRoute && accessToken?.value) {
     // Validate token with backend
-    const isValid = await validateToken(authToken.value);
+    const isValid = await validateToken(accessToken.value);
 
     if (isValid) {
       // User is authenticated, redirect to home
       return NextResponse.redirect(new URL('/', request.url));
     } else {
-      // Token is invalid, clear it and allow access to auth routes
+      // Token is invalid, clear all tokens and allow access to auth routes
       const response = NextResponse.next();
-      response.cookies.delete('auth_token');
+      response.cookies.delete('accessToken');
+      response.cookies.delete('idToken');
+      response.cookies.delete('refreshToken');
       return response;
     }
   }
