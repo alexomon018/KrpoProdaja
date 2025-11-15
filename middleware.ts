@@ -21,7 +21,7 @@ const BACKEND_API_URL = process.env.BACKEND_API_URL || 'http://localhost:3001';
  */
 async function validateToken(token: string): Promise<boolean> {
   try {
-    const response = await fetch(`${BACKEND_API_URL}/auth/verify`, {
+    const response = await fetch(`${BACKEND_API_URL}/api/auth/verify`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
