@@ -40,11 +40,11 @@ export function AuthLogin() {
     });
   };
 
-  const handleGoogleSuccess = (accessToken: string) => {
+  const handleGoogleSuccess = (idToken: string) => {
     setError(undefined);
 
     startTransition(async () => {
-      const result = await googleAuthAction(accessToken);
+      const result = await googleAuthAction(idToken);
 
       if (result.success && result.data) {
         // Update auth context with the user data from the response

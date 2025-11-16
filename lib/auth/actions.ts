@@ -38,7 +38,11 @@ export async function registerAction(
 
     // Store all three tokens in httpOnly cookies
     if (result.accessToken && result.idToken && result.refreshToken) {
-      await setAuthTokens(result.accessToken, result.idToken, result.refreshToken);
+      await setAuthTokens(
+        result.accessToken,
+        result.idToken,
+        result.refreshToken
+      );
     }
 
     return { success: true, data: result };
@@ -77,7 +81,11 @@ export async function loginAction(
 
     // Store all three tokens in httpOnly cookies
     if (result.accessToken && result.idToken && result.refreshToken) {
-      await setAuthTokens(result.accessToken, result.idToken, result.refreshToken);
+      await setAuthTokens(
+        result.accessToken,
+        result.idToken,
+        result.refreshToken
+      );
     }
 
     return { success: true, data: result };
@@ -106,7 +114,7 @@ export async function logoutAction(): Promise<{
         await fetch(`${API_BASE_URL}/auth/revoke`, {
           method: "POST",
           headers: {
-            "Authorization": `Bearer ${accessToken}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         });
       } catch (error) {
@@ -135,13 +143,15 @@ export async function googleAuthAction(
   googleToken: string
 ): Promise<{ success: boolean; data?: AuthResponse; error?: string }> {
   try {
-    const response = await fetch(`${API_BASE_URL}/oauth/google`, {
+    const response = await fetch(`${API_BASE_URL}/auth/google`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ token: googleToken }),
     });
+
+    console.log("respone", response);
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
@@ -155,7 +165,11 @@ export async function googleAuthAction(
 
     // Store all three tokens in httpOnly cookies
     if (result.accessToken && result.idToken && result.refreshToken) {
-      await setAuthTokens(result.accessToken, result.idToken, result.refreshToken);
+      await setAuthTokens(
+        result.accessToken,
+        result.idToken,
+        result.refreshToken
+      );
     }
 
     return { success: true, data: result };
@@ -175,7 +189,7 @@ export async function facebookAuthAction(
   facebookAccessToken: string
 ): Promise<{ success: boolean; data?: AuthResponse; error?: string }> {
   try {
-    const response = await fetch(`${API_BASE_URL}/oauth/facebook`, {
+    const response = await fetch(`${API_BASE_URL}/auth/facebook`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -195,7 +209,11 @@ export async function facebookAuthAction(
 
     // Store all three tokens in httpOnly cookies
     if (result.accessToken && result.idToken && result.refreshToken) {
-      await setAuthTokens(result.accessToken, result.idToken, result.refreshToken);
+      await setAuthTokens(
+        result.accessToken,
+        result.idToken,
+        result.refreshToken
+      );
     }
 
     return { success: true, data: result };

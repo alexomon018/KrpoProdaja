@@ -21,8 +21,9 @@ export interface LoginFormProps {
   onSubmit: (data: LoginFormData) => void;
   /**
    * Callback when Google login succeeds
+   * @param idToken - Google ID token (JWT format)
    */
-  onGoogleSuccess?: (accessToken: string) => void;
+  onGoogleSuccess?: (idToken: string) => void;
   /**
    * Callback when Facebook login succeeds
    */

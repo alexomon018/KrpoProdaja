@@ -7,6 +7,7 @@ import { AuthProvider } from "@/lib/auth/context";
 import { AuthModalManager } from "@/components/organisms/AuthModal/AuthModalManager";
 import { getCurrentUser } from "@/lib/auth/server";
 import { GoogleOAuthProvider } from "@/components/providers/GoogleOAuthProvider";
+import { FacebookSDKProvider } from "@/components/providers/FacebookSDKProvider";
 
 const sourceSans = Source_Sans_3({
   subsets: ["latin"],
@@ -36,6 +37,7 @@ export default async function RootLayout({
   return (
     <html lang="sr">
       <body className={`${sourceSans.variable} ${lato.variable}`}>
+        <FacebookSDKProvider />
         <QueryProvider>
           <ThemeProvider>
             <GoogleOAuthProvider>

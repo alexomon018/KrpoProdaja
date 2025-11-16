@@ -33,6 +33,10 @@ export interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
   user?: {
     username: string;
     avatar?: string;
+    firstName?: string;
+    lastName?: string;
+    name?: string;
+    fullName?: string;
   };
   /**
    * Notification count
@@ -156,8 +160,7 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
                 <Link href="/profile">
                   <Avatar
                     src={user.avatar}
-                    alt={user.username}
-                    fallback={user.username}
+                    alt={user.name || user.fullName || `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.username}
                     size="md"
                   />
                 </Link>
