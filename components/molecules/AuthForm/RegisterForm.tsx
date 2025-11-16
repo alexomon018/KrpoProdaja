@@ -23,9 +23,18 @@ export interface RegisterFormProps {
    */
   onSubmit: (data: RegisterFormData) => void;
   /**
-   * Callback for social login
+   * Callback when Google login succeeds
+   * @param idToken - Google ID token (JWT format)
    */
-  onSocialLogin?: (provider: "google" | "facebook") => void;
+  onGoogleSuccess?: (idToken: string) => void;
+  /**
+   * Callback when Facebook login succeeds
+   */
+  onFacebookSuccess?: (accessToken: string) => void;
+  /**
+   * Callback when OAuth login fails
+   */
+  onOAuthError?: (error: string) => void;
   /**
    * Loading state
    */
@@ -59,7 +68,9 @@ export interface RegisterFormProps {
  */
 export function RegisterForm({
   onSubmit,
-  onSocialLogin,
+  onGoogleSuccess,
+  onFacebookSuccess,
+  onOAuthError,
   loading = false,
   error,
   onToggleMode,
@@ -210,8 +221,9 @@ export function RegisterForm({
           </Button>
 
           <SocialLogin
-            onGoogleLogin={() => onSocialLogin?.("google")}
-            onFacebookLogin={() => onSocialLogin?.("facebook")}
+            onGoogleSuccess={onGoogleSuccess}
+            onFacebookSuccess={onFacebookSuccess}
+            onError={onOAuthError}
             loading={loading}
           />
 

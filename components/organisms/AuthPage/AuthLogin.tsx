@@ -7,7 +7,7 @@ import {
   LoginFormData,
 } from "@/components/molecules/AuthForm/LoginForm";
 import { Container } from "@/components/atoms/Container/Container";
-import { loginAction } from "@/lib/auth";
+import { loginAction, googleAuthAction, facebookAuthAction } from "@/lib/auth";
 import { useAuth } from "@/lib/auth/context";
 
 export function AuthLogin() {
@@ -40,17 +40,57 @@ export function AuthLogin() {
     });
   };
 
-  const handleSocialLogin = (provider: "google" | "facebook") => {
-    // TODO: Implement social login
-    console.log("Social login:", provider);
-    setError("Prijavljivanje putem društvenih mreža nije dostupno.");
+  const handleGoogleSuccess = (idToken: string) => {
+    setError(undefined);
+
+    startTransition(async () => {
+      const result = await googleAuthAction(idToken);
+
+      if (result.success && result.data) {
+        // Update auth context with the user data from the response
+        setUser(result.data.user);
+
+        // Redirect to home page on success
+        router.push("/");
+      } else {
+        setError(
+          result.error || "Google prijavljivanje nije uspelo. Molimo pokušajte ponovo."
+        );
+      }
+    });
+  };
+
+  const handleFacebookSuccess = (accessToken: string) => {
+    setError(undefined);
+
+    startTransition(async () => {
+      const result = await facebookAuthAction(accessToken);
+
+      if (result.success && result.data) {
+        // Update auth context with the user data from the response
+        setUser(result.data.user);
+
+        // Redirect to home page on success
+        router.push("/");
+      } else {
+        setError(
+          result.error || "Facebook prijavljivanje nije uspelo. Molimo pokušajte ponovo."
+        );
+      }
+    });
+  };
+
+  const handleOAuthError = (errorMessage: string) => {
+    setError(errorMessage);
   };
 
   return (
     <Container className="min-h-[calc(100vh-4rem)] flex items-center justify-center py-8">
       <LoginForm
         onSubmit={handleLogin}
-        onSocialLogin={handleSocialLogin}
+        onGoogleSuccess={handleGoogleSuccess}
+        onFacebookSuccess={handleFacebookSuccess}
+        onOAuthError={handleOAuthError}
         loading={isPending}
         error={error}
       />

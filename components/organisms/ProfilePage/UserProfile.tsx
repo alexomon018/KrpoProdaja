@@ -12,8 +12,6 @@ export function UserProfile() {
   const router = useRouter();
   const { user, logout, isLoading } = useAuth();
 
-  console.log("user", user);
-
   const handleLogout = async () => {
     try {
       await logout();
@@ -67,7 +65,7 @@ export function UserProfile() {
   // Map user from context to ProfileData format
   const profile: ProfileData = {
     id: user.id,
-    name: user.fullName || user.username,
+    name: `${user.firstName} ${user.lastName}` || user.username,
     email: user.email,
     phone: user.phoneNumber,
     avatar: user.avatar,

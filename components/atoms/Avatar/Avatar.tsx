@@ -3,29 +3,30 @@
 import { forwardRef, useState } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
-import { Avatar as ShadcnAvatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import {
+  Avatar as ShadcnAvatar,
+  AvatarImage,
+  AvatarFallback,
+} from "@/components/ui/avatar";
 
 /**
  * Extended avatar size variants for KrpoProdaja marketplace
  * Built on shadcn/ui Avatar with custom sizes
  */
-const avatarVariants = cva(
-  "shadow-light",
-  {
-    variants: {
-      size: {
-        sm: "h-8 w-8 text-2xs",
-        md: "h-10 w-10 text-xs",
-        lg: "h-12 w-12 text-sm",
-        xl: "h-16 w-16 text-base",
-        "2xl": "h-24 w-24 text-lg",
-      },
+const avatarVariants = cva("shadow-light", {
+  variants: {
+    size: {
+      sm: "h-8 w-8 text-2xs",
+      md: "h-10 w-10 text-xs",
+      lg: "h-12 w-12 text-sm",
+      xl: "h-16 w-16 text-base",
+      "2xl": "h-24 w-24 text-lg",
     },
-    defaultVariants: {
-      size: "md",
-    },
-  }
-);
+  },
+  defaultVariants: {
+    size: "md",
+  },
+});
 
 export interface AvatarProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -74,7 +75,10 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
           <AvatarImage
             src={src}
             alt={alt || "User avatar"}
-            onError={() => setImageError(true)}
+            onError={(e) => {
+              console.error("Avatar image failed to load:", src, e);
+              setImageError(true);
+            }}
           />
         )}
         <AvatarFallback className="bg-primary/10 text-primary font-semibold">
