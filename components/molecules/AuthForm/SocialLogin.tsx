@@ -1,18 +1,22 @@
 "use client";
 
 import * as React from "react";
+import { useGoogleLogin } from "@react-oauth/google";
 import { Button } from "@/components/atoms/Button/Button";
-import { Icon } from "@/components/atoms/Icon/Icon";
 
 export interface SocialLoginProps {
   /**
-   * Callback when Google login is clicked
+   * Callback when Google login succeeds
    */
-  onGoogleLogin?: () => void;
+  onGoogleSuccess?: (accessToken: string) => void;
   /**
-   * Callback when Facebook login is clicked
+   * Callback when Facebook login succeeds
    */
-  onFacebookLogin?: () => void;
+  onFacebookSuccess?: (accessToken: string) => void;
+  /**
+   * Callback when OAuth login fails
+   */
+  onError?: (error: string) => void;
   /**
    * Loading state
    */
@@ -27,16 +31,100 @@ export interface SocialLoginProps {
  * @example
  * ```tsx
  * <SocialLogin
- *   onGoogleLogin={() => console.log("Google login")}
- *   onFacebookLogin={() => console.log("Facebook login")}
+ *   onGoogleSuccess={(token) => console.log("Google token:", token)}
+ *   onFacebookSuccess={(token) => console.log("Facebook token:", token)}
+ *   onError={(error) => console.error(error)}
  * />
  * ```
  */
 export function SocialLogin({
-  onGoogleLogin,
-  onFacebookLogin,
+  onGoogleSuccess,
+  onFacebookSuccess,
+  onError,
   loading = false,
 }: SocialLoginProps) {
+  const [isGoogleLoading, setIsGoogleLoading] = React.useState(false);
+  const [isFacebookLoading, setIsFacebookLoading] = React.useState(false);
+
+  // Google OAuth login handler
+  const googleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        setIsGoogleLoading(true);
+        // The tokenResponse.access_token is what we need to send to the backend
+        onGoogleSuccess?.(tokenResponse.access_token);
+      } catch (error) {
+        onError?.(
+          error instanceof Error ? error.message : "Google login failed"
+        );
+      } finally {
+        setIsGoogleLoading(false);
+      }
+    },
+    onError: () => {
+      onError?.("Google login was cancelled or failed");
+    },
+  });
+
+  // Facebook OAuth login handler
+  const handleFacebookLogin = React.useCallback(() => {
+    const facebookAppId = process.env.NEXT_PUBLIC_FACEBOOK_APP_ID;
+
+    if (!facebookAppId) {
+      onError?.(
+        "Facebook App ID not configured. Please add NEXT_PUBLIC_FACEBOOK_APP_ID to your .env.local file."
+      );
+      return;
+    }
+
+    setIsFacebookLoading(true);
+
+    // Load Facebook SDK if not already loaded
+    if (!window.FB) {
+      // Load Facebook SDK
+      const script = document.createElement("script");
+      script.src = "https://connect.facebook.net/en_US/sdk.js";
+      script.async = true;
+      script.defer = true;
+      script.crossOrigin = "anonymous";
+      script.onload = () => {
+        window.FB.init({
+          appId: facebookAppId,
+          cookie: true,
+          xfbml: true,
+          version: "v18.0",
+        });
+        initiateFacebookLogin();
+      };
+      script.onerror = () => {
+        setIsFacebookLoading(false);
+        onError?.("Failed to load Facebook SDK");
+      };
+      document.body.appendChild(script);
+    } else {
+      initiateFacebookLogin();
+    }
+  }, [onError, onFacebookSuccess]);
+
+  const initiateFacebookLogin = () => {
+    window.FB.login(
+      (response: any) => {
+        if (response.authResponse) {
+          // User successfully logged in
+          const accessToken = response.authResponse.accessToken;
+          onFacebookSuccess?.(accessToken);
+        } else {
+          // User cancelled login or did not fully authorize
+          onError?.("Facebook login was cancelled");
+        }
+        setIsFacebookLoading(false);
+      },
+      { scope: "public_profile,email" }
+    );
+  };
+
+  const isLoading = loading || isGoogleLoading || isFacebookLoading;
+
   return (
     <div className="space-y-3">
       <div className="relative">
@@ -52,8 +140,8 @@ export function SocialLogin({
         <Button
           type="button"
           variant="secondary"
-          onClick={onGoogleLogin}
-          disabled={loading}
+          onClick={() => googleLogin()}
+          disabled={isLoading}
           className="flex items-center justify-center gap-2 dark:text-white"
         >
           <svg className="h-5 w-5" viewBox="0 0 24 24">
@@ -80,8 +168,8 @@ export function SocialLogin({
         <Button
           type="button"
           variant="secondary"
-          onClick={onFacebookLogin}
-          disabled={loading}
+          onClick={handleFacebookLogin}
+          disabled={isLoading}
           className="flex items-center justify-center gap-2 dark:text-white"
         >
           <svg className="h-5 w-5" fill="#1877F2" viewBox="0 0 24 24">
@@ -92,4 +180,11 @@ export function SocialLogin({
       </div>
     </div>
   );
+}
+
+// Extend Window interface for Facebook SDK
+declare global {
+  interface Window {
+    FB: any;
+  }
 }

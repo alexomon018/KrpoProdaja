@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/dialog';
 import { LoginForm, LoginFormData } from '@/components/molecules/AuthForm/LoginForm';
 import { RegisterForm, RegisterFormData } from '@/components/molecules/AuthForm/RegisterForm';
-import { loginAction, registerAction } from '@/lib/auth';
+import { loginAction, registerAction, googleAuthAction, facebookAuthAction } from '@/lib/auth';
 import { useAuth } from '@/lib/auth/context';
 
 interface AuthModalProps {
@@ -103,10 +103,70 @@ export function AuthModal({
     });
   };
 
-  const handleSocialLogin = (provider: 'google' | 'facebook') => {
-    // TODO: Implement social login
-    console.log('Social login:', provider);
-    setError('Prijavljivanje putem društvenih mreža nije dostupno.');
+  const handleGoogleSuccess = (accessToken: string) => {
+    setError(undefined);
+
+    startTransition(async () => {
+      const result = await googleAuthAction(accessToken);
+
+      if (result.success && result.data) {
+        // Update auth context with the user data from the response
+        setUser(result.data.user);
+
+        // Close the modal
+        if (controlledOnOpenChange) {
+          controlledOnOpenChange(false);
+        } else {
+          closeAuthModal();
+        }
+
+        // Redirect if specified, or refresh the current page to update server components
+        if (redirectAfterAuth) {
+          router.push(redirectAfterAuth);
+        } else {
+          router.refresh();
+        }
+      } else {
+        setError(
+          result.error || 'Google prijavljivanje nije uspelo. Molimo pokušajte ponovo.'
+        );
+      }
+    });
+  };
+
+  const handleFacebookSuccess = (accessToken: string) => {
+    setError(undefined);
+
+    startTransition(async () => {
+      const result = await facebookAuthAction(accessToken);
+
+      if (result.success && result.data) {
+        // Update auth context with the user data from the response
+        setUser(result.data.user);
+
+        // Close the modal
+        if (controlledOnOpenChange) {
+          controlledOnOpenChange(false);
+        } else {
+          closeAuthModal();
+        }
+
+        // Redirect if specified, or refresh the current page to update server components
+        if (redirectAfterAuth) {
+          router.push(redirectAfterAuth);
+        } else {
+          router.refresh();
+        }
+      } else {
+        setError(
+          result.error || 'Facebook prijavljivanje nije uspelo. Molimo pokušajte ponovo.'
+        );
+      }
+    });
+  };
+
+  const handleOAuthError = (errorMessage: string) => {
+    setError(errorMessage);
   };
 
   const toggleMode = () => {
@@ -147,7 +207,9 @@ export function AuthModal({
         {mode === 'login' ? (
           <LoginForm
             onSubmit={handleLogin}
-            onSocialLogin={handleSocialLogin}
+            onGoogleSuccess={handleGoogleSuccess}
+            onFacebookSuccess={handleFacebookSuccess}
+            onOAuthError={handleOAuthError}
             loading={isPending}
             error={error}
             onToggleMode={toggleMode}
@@ -156,7 +218,9 @@ export function AuthModal({
         ) : (
           <RegisterForm
             onSubmit={handleRegister}
-            onSocialLogin={handleSocialLogin}
+            onGoogleSuccess={handleGoogleSuccess}
+            onFacebookSuccess={handleFacebookSuccess}
+            onOAuthError={handleOAuthError}
             loading={isPending}
             error={error}
             onToggleMode={toggleMode}

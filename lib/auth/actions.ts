@@ -126,3 +126,83 @@ export async function logoutAction(): Promise<{
     };
   }
 }
+
+/**
+ * Google OAuth login
+ * Sends Google token to backend for verification and user creation/login
+ */
+export async function googleAuthAction(
+  googleToken: string
+): Promise<{ success: boolean; data?: AuthResponse; error?: string }> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/oauth/google`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ token: googleToken }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      return {
+        success: false,
+        error: errorData.message || "Google authentication failed",
+      };
+    }
+
+    const result: AuthResponse = await response.json();
+
+    // Store all three tokens in httpOnly cookies
+    if (result.accessToken && result.idToken && result.refreshToken) {
+      await setAuthTokens(result.accessToken, result.idToken, result.refreshToken);
+    }
+
+    return { success: true, data: result };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error occurred",
+    };
+  }
+}
+
+/**
+ * Facebook OAuth login
+ * Sends Facebook access token to backend for verification and user creation/login
+ */
+export async function facebookAuthAction(
+  facebookAccessToken: string
+): Promise<{ success: boolean; data?: AuthResponse; error?: string }> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/oauth/facebook`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ accessToken: facebookAccessToken }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      return {
+        success: false,
+        error: errorData.message || "Facebook authentication failed",
+      };
+    }
+
+    const result: AuthResponse = await response.json();
+
+    // Store all three tokens in httpOnly cookies
+    if (result.accessToken && result.idToken && result.refreshToken) {
+      await setAuthTokens(result.accessToken, result.idToken, result.refreshToken);
+    }
+
+    return { success: true, data: result };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error occurred",
+    };
+  }
+}

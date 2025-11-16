@@ -20,9 +20,17 @@ export interface LoginFormProps {
    */
   onSubmit: (data: LoginFormData) => void;
   /**
-   * Callback for social login
+   * Callback when Google login succeeds
    */
-  onSocialLogin?: (provider: "google" | "facebook") => void;
+  onGoogleSuccess?: (accessToken: string) => void;
+  /**
+   * Callback when Facebook login succeeds
+   */
+  onFacebookSuccess?: (accessToken: string) => void;
+  /**
+   * Callback when OAuth login fails
+   */
+  onOAuthError?: (error: string) => void;
   /**
    * Loading state
    */
@@ -56,7 +64,9 @@ export interface LoginFormProps {
  */
 export function LoginForm({
   onSubmit,
-  onSocialLogin,
+  onGoogleSuccess,
+  onFacebookSuccess,
+  onOAuthError,
   loading = false,
   error,
   onToggleMode,
@@ -158,8 +168,9 @@ export function LoginForm({
           </Button>
 
           <SocialLogin
-            onGoogleLogin={() => onSocialLogin?.("google")}
-            onFacebookLogin={() => onSocialLogin?.("facebook")}
+            onGoogleSuccess={onGoogleSuccess}
+            onFacebookSuccess={onFacebookSuccess}
+            onError={onOAuthError}
             loading={loading}
           />
 

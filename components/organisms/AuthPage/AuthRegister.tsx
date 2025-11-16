@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { RegisterForm, RegisterFormData } from "@/components/molecules/AuthForm/RegisterForm";
 import { Container } from "@/components/atoms/Container/Container";
-import { registerAction } from "@/lib/auth";
+import { registerAction, googleAuthAction, facebookAuthAction } from "@/lib/auth";
 import { useAuth } from "@/lib/auth/context";
 
 export function AuthRegister() {
@@ -37,17 +37,57 @@ export function AuthRegister() {
     });
   };
 
-  const handleSocialLogin = (provider: "google" | "facebook") => {
-    // TODO: Implement social login
-    console.log("Social login:", provider);
-    setError("Registracija putem društvenih mreža nije dostupna.");
+  const handleGoogleSuccess = (accessToken: string) => {
+    setError(undefined);
+
+    startTransition(async () => {
+      const result = await googleAuthAction(accessToken);
+
+      if (result.success && result.data) {
+        // Update auth context with the user data from the response
+        setUser(result.data.user);
+
+        // Redirect to home page on success
+        router.push("/");
+      } else {
+        setError(
+          result.error || "Google registracija nije uspela. Molimo pokušajte ponovo."
+        );
+      }
+    });
+  };
+
+  const handleFacebookSuccess = (accessToken: string) => {
+    setError(undefined);
+
+    startTransition(async () => {
+      const result = await facebookAuthAction(accessToken);
+
+      if (result.success && result.data) {
+        // Update auth context with the user data from the response
+        setUser(result.data.user);
+
+        // Redirect to home page on success
+        router.push("/");
+      } else {
+        setError(
+          result.error || "Facebook registracija nije uspela. Molimo pokušajte ponovo."
+        );
+      }
+    });
+  };
+
+  const handleOAuthError = (errorMessage: string) => {
+    setError(errorMessage);
   };
 
   return (
     <Container className="min-h-[calc(100vh-4rem)] flex items-center justify-center py-8">
       <RegisterForm
         onSubmit={handleRegister}
-        onSocialLogin={handleSocialLogin}
+        onGoogleSuccess={handleGoogleSuccess}
+        onFacebookSuccess={handleFacebookSuccess}
+        onOAuthError={handleOAuthError}
         loading={isPending}
         error={error}
       />

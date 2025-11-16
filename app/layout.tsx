@@ -6,6 +6,7 @@ import { QueryProvider } from "@lib/QueryProvider";
 import { AuthProvider } from "@/lib/auth/context";
 import { AuthModalManager } from "@/components/organisms/AuthModal/AuthModalManager";
 import { getCurrentUser } from "@/lib/auth/server";
+import { GoogleOAuthProvider } from "@/components/providers/GoogleOAuthProvider";
 
 const sourceSans = Source_Sans_3({
   subsets: ["latin"],
@@ -37,10 +38,12 @@ export default async function RootLayout({
       <body className={`${sourceSans.variable} ${lato.variable}`}>
         <QueryProvider>
           <ThemeProvider>
-            <AuthProvider initialUser={user ? user.user : null}>
-              {children}
-              <AuthModalManager />
-            </AuthProvider>
+            <GoogleOAuthProvider>
+              <AuthProvider initialUser={user ? user.user : null}>
+                {children}
+                <AuthModalManager />
+              </AuthProvider>
+            </GoogleOAuthProvider>
           </ThemeProvider>
         </QueryProvider>
       </body>
