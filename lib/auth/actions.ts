@@ -7,9 +7,17 @@
 "use server";
 
 import { setAuthTokens, removeAuthTokens, getAccessToken } from "./cookies";
-import type { RegisterRequest, LoginRequest, AuthResponse } from "../api/types";
+import type {
+  RegisterRequest,
+  LoginRequest,
+  AuthResponse,
+  RequestPasswordResetRequest,
+  RequestPasswordResetResponse,
+  ResetPasswordRequest,
+  ResetPasswordResponse
+} from "../api/types";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api";
 
 /**
  * Register a new user
@@ -215,6 +223,76 @@ export async function facebookAuthAction(
         result.refreshToken
       );
     }
+
+    return { success: true, data: result };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error occurred",
+    };
+  }
+}
+
+/**
+ * Request password reset
+ * Sends an email with a reset token if the email exists
+ */
+export async function requestPasswordResetAction(
+  data: RequestPasswordResetRequest
+): Promise<{ success: boolean; data?: RequestPasswordResetResponse; error?: string }> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/auth/request-password-reset`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      return {
+        success: false,
+        error: errorData.error || "Failed to request password reset",
+      };
+    }
+
+    const result: RequestPasswordResetResponse = await response.json();
+
+    return { success: true, data: result };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error occurred",
+    };
+  }
+}
+
+/**
+ * Reset password with token
+ * Sets a new password using the reset token from email
+ */
+export async function resetPasswordAction(
+  data: ResetPasswordRequest
+): Promise<{ success: boolean; data?: ResetPasswordResponse; error?: string }> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/auth/reset-password`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      return {
+        success: false,
+        error: errorData.error || "Failed to reset password",
+      };
+    }
+
+    const result: ResetPasswordResponse = await response.json();
 
     return { success: true, data: result };
   } catch (error) {
