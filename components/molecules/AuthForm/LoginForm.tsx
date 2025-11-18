@@ -2,17 +2,16 @@
 
 import { useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
 import { Button } from "@/components/atoms/Button/Button";
 import { FormInput } from "@/components/atoms/FormInput/FormInput";
 import { Icon } from "@/components/atoms/Icon/Icon";
 import { SocialLogin } from "./SocialLogin";
+import { loginFormSchema, type LoginFormData } from "@/lib/validation/schemas";
 
-export interface LoginFormData {
-  email: string;
-  password: string;
-  rememberMe?: boolean;
-}
+// Re-export LoginFormData for backward compatibility
+export type { LoginFormData };
 
 export interface LoginFormProps {
   /**
@@ -74,7 +73,8 @@ export function LoginForm({
   isModal = false,
 }: LoginFormProps) {
   const methods = useForm<LoginFormData>({
-    mode: "onSubmit",
+    resolver: yupResolver(loginFormSchema),
+    mode: "onBlur",
   });
   const [showPassword, setShowPassword] = useState(false);
 

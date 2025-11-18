@@ -1,7 +1,7 @@
 "use client";
 
 import { forwardRef } from "react";
-import { useFormContext, Controller } from "react-hook-form";
+import { useFormContext, Controller, RegisterOptions } from "react-hook-form";
 import { Input, InputProps } from "../Input/Input";
 
 export interface FormInputProps extends Omit<InputProps, "error"> {
@@ -13,6 +13,11 @@ export interface FormInputProps extends Omit<InputProps, "error"> {
    * Whether the field is required
    */
   required?: boolean;
+  /**
+   * Custom validation rules for react-hook-form
+   * Use this to add email validation, password strength, etc.
+   */
+  validation?: Omit<RegisterOptions, "required">;
 }
 
 /**
@@ -39,7 +44,7 @@ export interface FormInputProps extends Omit<InputProps, "error"> {
  * ```
  */
 const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
-  ({ name, required = false, ...props }, ref) => {
+  ({ name, required = false, validation, ...props }, ref) => {
     const {
       control,
       formState: { errors },
@@ -47,13 +52,17 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
 
     const error = errors[name]?.message as string | undefined;
 
+    // Merge required validation with custom validation rules
+    const rules = {
+      required: required ? "Ovo polje je obavezno" : false,
+      ...validation,
+    };
+
     return (
       <Controller
         name={name}
         control={control}
-        rules={{
-          required: required ? "Ovo polje je obavezno" : false,
-        }}
+        rules={rules}
         render={({ field }) => (
           <Input
             {...props}

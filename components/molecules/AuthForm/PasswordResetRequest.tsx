@@ -2,14 +2,15 @@
 
 import * as React from "react";
 import { useForm, FormProvider } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
 import { Button } from "@/components/atoms/Button/Button";
 import { FormInput } from "@/components/atoms/FormInput/FormInput";
 import { Icon } from "@/components/atoms/Icon/Icon";
+import { passwordResetRequestSchema, type PasswordResetRequestData } from "@/lib/validation/schemas";
 
-export interface PasswordResetRequestData {
-  email: string;
-}
+// Re-export PasswordResetRequestData for backward compatibility
+export type { PasswordResetRequestData };
 
 export interface PasswordResetRequestProps {
   /**
@@ -48,7 +49,10 @@ export function PasswordResetRequest({
   success = false,
   error,
 }: PasswordResetRequestProps) {
-  const methods = useForm<PasswordResetRequestData>();
+  const methods = useForm<PasswordResetRequestData>({
+    resolver: yupResolver(passwordResetRequestSchema),
+    mode: "onBlur",
+  });
 
   const handleSubmit = methods.handleSubmit((data) => {
     onSubmit(data);
