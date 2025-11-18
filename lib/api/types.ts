@@ -22,7 +22,7 @@ export interface AuthResponse {
   user: ApiUser;
   accessToken: string;   // 30 min - for API authorization
   idToken: string;        // 30 min - for user identity
-  refreshToken: string;   // 30 days - for refreshing tokens
+  // refreshToken is now managed by backend via httpOnly cookie, not in response
   // Legacy support (deprecated)
   token?: string;
 }

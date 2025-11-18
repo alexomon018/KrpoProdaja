@@ -1,7 +1,8 @@
 /**
  * Authentication Server Actions
  * Handles login, register, and logout operations with cookie-based tokens
- * Supports three-token system: accessToken, idToken, refreshToken
+ * Stores accessToken and idToken in cookies
+ * refreshToken is managed by backend via httpOnly cookie
  */
 
 "use server";
@@ -32,6 +33,7 @@ export async function registerAction(
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
+      credentials: "include",
     });
 
     if (!response.ok) {
@@ -44,12 +46,12 @@ export async function registerAction(
 
     const result: AuthResponse = await response.json();
 
-    // Store all three tokens in httpOnly cookies
-    if (result.accessToken && result.idToken && result.refreshToken) {
+    // Store accessToken and idToken in httpOnly cookies
+    // refreshToken is now managed by backend via httpOnly cookie
+    if (result.accessToken && result.idToken) {
       await setAuthTokens(
         result.accessToken,
-        result.idToken,
-        result.refreshToken
+        result.idToken
       );
     }
 
@@ -75,6 +77,7 @@ export async function loginAction(
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
+      credentials: "include",
     });
 
     if (!response.ok) {
@@ -87,12 +90,12 @@ export async function loginAction(
 
     const result: AuthResponse = await response.json();
 
-    // Store all three tokens in httpOnly cookies
-    if (result.accessToken && result.idToken && result.refreshToken) {
+    // Store accessToken and idToken in httpOnly cookies
+    // refreshToken is now managed by backend via httpOnly cookie
+    if (result.accessToken && result.idToken) {
       await setAuthTokens(
         result.accessToken,
-        result.idToken,
-        result.refreshToken
+        result.idToken
       );
     }
 
@@ -124,6 +127,7 @@ export async function logoutAction(): Promise<{
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
+          credentials: "include",
         });
       } catch (error) {
         // Continue even if backend revocation fails
@@ -157,6 +161,7 @@ export async function googleAuthAction(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ token: googleToken }),
+      credentials: "include",
     });
 
     console.log("respone", response);
@@ -171,12 +176,12 @@ export async function googleAuthAction(
 
     const result: AuthResponse = await response.json();
 
-    // Store all three tokens in httpOnly cookies
-    if (result.accessToken && result.idToken && result.refreshToken) {
+    // Store accessToken and idToken in httpOnly cookies
+    // refreshToken is now managed by backend via httpOnly cookie
+    if (result.accessToken && result.idToken) {
       await setAuthTokens(
         result.accessToken,
-        result.idToken,
-        result.refreshToken
+        result.idToken
       );
     }
 
@@ -203,6 +208,7 @@ export async function facebookAuthAction(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ accessToken: facebookAccessToken }),
+      credentials: "include",
     });
 
     if (!response.ok) {
@@ -215,12 +221,12 @@ export async function facebookAuthAction(
 
     const result: AuthResponse = await response.json();
 
-    // Store all three tokens in httpOnly cookies
-    if (result.accessToken && result.idToken && result.refreshToken) {
+    // Store accessToken and idToken in httpOnly cookies
+    // refreshToken is now managed by backend via httpOnly cookie
+    if (result.accessToken && result.idToken) {
       await setAuthTokens(
         result.accessToken,
-        result.idToken,
-        result.refreshToken
+        result.idToken
       );
     }
 
@@ -247,6 +253,7 @@ export async function requestPasswordResetAction(
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
+      credentials: "include",
     });
 
     if (!response.ok) {
@@ -282,6 +289,7 @@ export async function resetPasswordAction(
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
+      credentials: "include",
     });
 
     if (!response.ok) {
