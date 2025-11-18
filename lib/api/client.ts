@@ -4,6 +4,7 @@
  */
 
 import { getAccessToken } from "../auth/cookies";
+import { refreshTokenAction } from "../auth/actions";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api";
@@ -11,6 +12,10 @@ const API_TIMEOUT = parseInt(
   process.env.NEXT_PUBLIC_API_TIMEOUT || "10000",
   10
 );
+
+// Flag to prevent multiple simultaneous refresh attempts
+let isRefreshing = false;
+let refreshPromise: Promise<boolean> | null = null;
 
 export class ApiError extends Error {
   constructor(
@@ -42,11 +47,38 @@ class ApiClient {
   }
 
   /**
+   * Refresh the access token
+   */
+  private async refreshToken(): Promise<boolean> {
+    // If already refreshing, wait for that request
+    if (isRefreshing && refreshPromise) {
+      return refreshPromise;
+    }
+
+    isRefreshing = true;
+    refreshPromise = (async () => {
+      try {
+        const result = await refreshTokenAction();
+        return result.success;
+      } catch (error) {
+        console.error("Token refresh failed:", error);
+        return false;
+      } finally {
+        isRefreshing = false;
+        refreshPromise = null;
+      }
+    })();
+
+    return refreshPromise;
+  }
+
+  /**
    * Make an HTTP request with timeout and auth handling
    */
   private async request<T>(
     endpoint: string,
-    options: ApiRequestOptions = {}
+    options: ApiRequestOptions = {},
+    isRetry = false
   ): Promise<T> {
     const {
       timeout = this.timeout,
@@ -82,6 +114,26 @@ class ApiClient {
       });
 
       clearTimeout(timeoutId);
+
+      // Handle 401 Unauthorized - Try to refresh token
+      if (response.status === 401 && requiresAuth && !isRetry) {
+        console.log("Access token expired, attempting refresh...");
+
+        const refreshSuccess = await this.refreshToken();
+
+        if (refreshSuccess) {
+          console.log("Token refreshed successfully, retrying request...");
+          // Retry the original request with the new token
+          return this.request<T>(endpoint, options, true);
+        } else {
+          console.error("Token refresh failed, redirecting to login...");
+          // Refresh failed, redirect to login
+          if (typeof window !== "undefined") {
+            window.location.href = "/login";
+          }
+          throw new ApiError(401, "Session expired. Please login again.");
+        }
+      }
 
       // Handle non-OK responses
       if (!response.ok) {

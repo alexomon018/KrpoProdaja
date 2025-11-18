@@ -2,20 +2,16 @@
 
 import { useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
 import { Button } from "@/components/atoms/Button/Button";
 import { FormInput } from "@/components/atoms/FormInput/FormInput";
 import { Icon } from "@/components/atoms/Icon/Icon";
 import { SocialLogin } from "./SocialLogin";
+import { registerFormSchema, type RegisterFormData } from "@/lib/validation/schemas";
 
-export interface RegisterFormData {
-  name: string;
-  email: string;
-  phone?: string;
-  password: string;
-  confirmPassword: string;
-  agreeToTerms: boolean;
-}
+// Re-export RegisterFormData for backward compatibility
+export type { RegisterFormData };
 
 export interface RegisterFormProps {
   /**
@@ -76,18 +72,14 @@ export function RegisterForm({
   onToggleMode,
   isModal = false,
 }: RegisterFormProps) {
-  const methods = useForm<RegisterFormData>();
+  const methods = useForm<RegisterFormData>({
+    resolver: yupResolver(registerFormSchema),
+    mode: "onBlur",
+  });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleSubmit = methods.handleSubmit((data) => {
-    if (data.password !== data.confirmPassword) {
-      methods.setError("confirmPassword", {
-        type: "manual",
-        message: "Lozinke se ne podudaraju",
-      });
-      return;
-    }
     onSubmit(data);
   });
 

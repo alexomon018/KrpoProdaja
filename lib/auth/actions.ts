@@ -2,6 +2,7 @@
 
 import { cookies } from "next/headers";
 import { setAuthTokens, removeAuthTokens, getAccessToken } from "./cookies";
+import { translateError, defaultErrorMessages } from "../utils/errorTranslations";
 import type {
   RegisterRequest,
   LoginRequest,
@@ -82,9 +83,10 @@ export async function registerAction(
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
+      const errorMessage = errorData.message || errorData.error || "Registration failed";
       return {
         success: false,
-        error: errorData.message || "Registration failed",
+        error: translateError(errorMessage, defaultErrorMessages.register),
       };
     }
 
@@ -97,9 +99,10 @@ export async function registerAction(
 
     return { success: true, data: result };
   } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
     return {
       success: false,
-      error: error instanceof Error ? error.message : "Unknown error occurred",
+      error: translateError(errorMessage, defaultErrorMessages.register),
     };
   }
 }
@@ -125,9 +128,10 @@ export async function loginAction(
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
+      const errorMessage = errorData.error || errorData.message || "Login failed";
       return {
         success: false,
-        error: errorData.error || "Login failed",
+        error: translateError(errorMessage, defaultErrorMessages.login),
       };
     }
 
@@ -140,9 +144,10 @@ export async function loginAction(
 
     return { success: true, data: result };
   } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
     return {
       success: false,
-      error: error instanceof Error ? error.message : "Unknown error occurred",
+      error: translateError(errorMessage, defaultErrorMessages.login),
     };
   }
 }
@@ -183,9 +188,10 @@ export async function logoutAction(): Promise<{
 
     return { success: true };
   } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : "Logout failed";
     return {
       success: false,
-      error: error instanceof Error ? error.message : "Logout failed",
+      error: translateError(errorMessage, "Odjava nije uspela"),
     };
   }
 }
@@ -211,9 +217,10 @@ export async function googleAuthAction(
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
+      const errorMessage = errorData.message || errorData.error || "Google authentication failed";
       return {
         success: false,
-        error: errorData.message || "Google authentication failed",
+        error: translateError(errorMessage, "Google prijavljivanje nije uspelo. Molimo pokušajte ponovo."),
       };
     }
 
@@ -225,9 +232,10 @@ export async function googleAuthAction(
 
     return { success: true, data: result };
   } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
     return {
       success: false,
-      error: error instanceof Error ? error.message : "Unknown error occurred",
+      error: translateError(errorMessage, "Google prijavljivanje nije uspelo. Molimo pokušajte ponovo."),
     };
   }
 }
@@ -253,9 +261,10 @@ export async function facebookAuthAction(
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
+      const errorMessage = errorData.message || errorData.error || "Facebook authentication failed";
       return {
         success: false,
-        error: errorData.message || "Facebook authentication failed",
+        error: translateError(errorMessage, "Facebook prijavljivanje nije uspelo. Molimo pokušajte ponovo."),
       };
     }
 
@@ -267,9 +276,10 @@ export async function facebookAuthAction(
 
     return { success: true, data: result };
   } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
     return {
       success: false,
-      error: error instanceof Error ? error.message : "Unknown error occurred",
+      error: translateError(errorMessage, "Facebook prijavljivanje nije uspelo. Molimo pokušajte ponovo."),
     };
   }
 }
@@ -299,18 +309,20 @@ export async function requestPasswordResetAction(
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
+      const errorMessage = errorData.error || errorData.message || "Failed to request password reset";
       return {
         success: false,
-        error: errorData.error || "Failed to request password reset",
+        error: translateError(errorMessage, defaultErrorMessages.passwordReset),
       };
     }
 
     const result: RequestPasswordResetResponse = await response.json();
     return { success: true, data: result };
   } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
     return {
       success: false,
-      error: error instanceof Error ? error.message : "Unknown error occurred",
+      error: translateError(errorMessage, defaultErrorMessages.passwordReset),
     };
   }
 }
@@ -333,13 +345,59 @@ export async function resetPasswordAction(
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
+      const errorMessage = errorData.error || errorData.message || "Failed to reset password";
       return {
         success: false,
-        error: errorData.error || "Failed to reset password",
+        error: translateError(errorMessage, defaultErrorMessages.passwordReset),
       };
     }
 
     const result: ResetPasswordResponse = await response.json();
+    return { success: true, data: result };
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
+    return {
+      success: false,
+      error: translateError(errorMessage, defaultErrorMessages.passwordReset),
+    };
+  }
+}
+
+/**
+ * Refresh access token using the httpOnly refresh token cookie
+ */
+export async function refreshTokenAction(): Promise<{
+  success: boolean;
+  data?: AuthResponse;
+  error?: string;
+}> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/auth/refresh`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include", // Important: sends the refreshToken cookie
+    });
+
+    // Proxy cookies from API to browser BEFORE consuming response body
+    await proxyCookiesFromResponse(response);
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      return {
+        success: false,
+        error: errorData.error || "Failed to refresh token",
+      };
+    }
+
+    const result: AuthResponse = await response.json();
+
+    // Store new accessToken and idToken in httpOnly cookies
+    if (result.accessToken && result.idToken) {
+      await setAuthTokens(result.accessToken, result.idToken);
+    }
+
     return { success: true, data: result };
   } catch (error) {
     return {

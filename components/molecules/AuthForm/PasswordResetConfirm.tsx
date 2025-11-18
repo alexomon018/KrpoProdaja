@@ -2,15 +2,15 @@
 
 import { useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
 import { Button } from "@/components/atoms/Button/Button";
 import { FormInput } from "@/components/atoms/FormInput/FormInput";
 import { Icon } from "@/components/atoms/Icon/Icon";
+import { passwordResetConfirmSchema, type PasswordResetConfirmData } from "@/lib/validation/schemas";
 
-export interface PasswordResetConfirmData {
-  password: string;
-  confirmPassword: string;
-}
+// Re-export PasswordResetConfirmData for backward compatibility
+export type { PasswordResetConfirmData };
 
 export interface PasswordResetConfirmProps {
   /**
@@ -55,18 +55,14 @@ export function PasswordResetConfirm({
   success = false,
   error,
 }: PasswordResetConfirmProps) {
-  const methods = useForm<PasswordResetConfirmData>();
+  const methods = useForm<PasswordResetConfirmData>({
+    resolver: yupResolver(passwordResetConfirmSchema),
+    mode: "onBlur",
+  });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleSubmit = methods.handleSubmit((data) => {
-    if (data.password !== data.confirmPassword) {
-      methods.setError("confirmPassword", {
-        type: "manual",
-        message: "Lozinke se ne podudaraju",
-      });
-      return;
-    }
     onSubmit({ ...data, token });
   });
 
