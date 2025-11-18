@@ -348,3 +348,47 @@ export async function resetPasswordAction(
     };
   }
 }
+
+/**
+ * Refresh access token using the httpOnly refresh token cookie
+ */
+export async function refreshTokenAction(): Promise<{
+  success: boolean;
+  data?: AuthResponse;
+  error?: string;
+}> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/auth/refresh`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include", // Important: sends the refreshToken cookie
+    });
+
+    // Proxy cookies from API to browser BEFORE consuming response body
+    await proxyCookiesFromResponse(response);
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      return {
+        success: false,
+        error: errorData.error || "Failed to refresh token",
+      };
+    }
+
+    const result: AuthResponse = await response.json();
+
+    // Store new accessToken and idToken in httpOnly cookies
+    if (result.accessToken && result.idToken) {
+      await setAuthTokens(result.accessToken, result.idToken);
+    }
+
+    return { success: true, data: result };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error occurred",
+    };
+  }
+}

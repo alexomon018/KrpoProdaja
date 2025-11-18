@@ -1,5 +1,12 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import {
+  validateToken,
+  attemptTokenRefresh,
+  setTokensInResponse,
+  clearTokensInResponse,
+  createLoginRedirect,
+} from "./lib/auth/middleware-helpers";
 
 // Define protected routes that require authentication
 const protectedRoutes = [
@@ -13,85 +20,86 @@ const protectedRoutes = [
 // Define auth routes that should redirect to home if already authenticated
 const authRoutes = ["/login", "/register"];
 
-// Get backend API URL from environment
-const BACKEND_API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
-
 /**
- * Validates auth token by calling backend verification endpoint
+ * Helper: Handle token refresh and return appropriate response
  */
-async function validateToken(token: string): Promise<boolean> {
-  try {
-    const response = await fetch(`${BACKEND_API_URL}/auth/verify`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      // Add timeout to prevent hanging
-      signal: AbortSignal.timeout(5000),
-    });
+async function handleTokenRefresh(
+  request: NextRequest,
+  pathname: string,
+  isProtectedRoute: boolean
+): Promise<NextResponse | null> {
+  const refreshResult = await attemptTokenRefresh(request);
 
-    return response.ok;
-  } catch (error) {
-    // On network errors or timeouts, fail closed (deny access)
-    console.error("Token validation failed:", error);
-    return false;
+  if (
+    refreshResult.success &&
+    refreshResult.accessToken &&
+    refreshResult.idToken
+  ) {
+    // Refresh successful - set new tokens and continue
+    console.log("Token refreshed successfully");
+    return setTokensInResponse(
+      NextResponse.next(),
+      refreshResult.accessToken,
+      refreshResult.idToken
+    );
   }
+
+  // Refresh failed - clear cookies
+  console.log("Token refresh failed");
+  const response = isProtectedRoute
+    ? clearTokensInResponse(createLoginRedirect(request, pathname))
+    : clearTokensInResponse(NextResponse.next());
+
+  return response;
 }
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const accessToken = request.cookies.get("accessToken");
+  const refreshToken = request.cookies.get("refreshToken");
 
-  // Check if the current path is protected
   const isProtectedRoute = protectedRoutes.some((route) =>
     pathname.startsWith(route)
   );
-
-  // Check if the current path is an auth route
   const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
 
-  // For protected routes, validate the token
-  if (isProtectedRoute) {
+  // Auto-refresh tokens on ALL routes (if refresh token exists but access token is missing/invalid)
+  // This ensures users stay logged in when returning after access token expiration
+  if (refreshToken?.value && !isAuthRoute) {
+    // Case 1: No access token but have refresh token - attempt refresh
     if (!accessToken?.value) {
-      const loginUrl = new URL("/login", request.url);
-      loginUrl.searchParams.set("redirect", pathname);
-      return NextResponse.redirect(loginUrl);
+      console.log("No access token, attempting refresh...");
+      return await handleTokenRefresh(request, pathname, isProtectedRoute);
     }
 
-    // Validate token with backend
-    const isValid = await validateToken(accessToken.value);
+    // Case 2: Have access token - validate it for protected routes only
+    if (isProtectedRoute) {
+      const isValid = await validateToken(accessToken.value);
 
-    if (!isValid) {
-      // Token is invalid or expired - redirect to login
-      const loginUrl = new URL("/login", request.url);
-      loginUrl.searchParams.set("redirect", pathname);
-
-      // Create response with redirect and clear all invalid cookies
-      const response = NextResponse.redirect(loginUrl);
-      response.cookies.delete("accessToken");
-      response.cookies.delete("idToken");
-      response.cookies.delete("refreshToken");
-
-      return response;
+      if (!isValid) {
+        console.log("Access token invalid on protected route, attempting refresh...");
+        return await handleTokenRefresh(request, pathname, isProtectedRoute);
+      }
     }
+  }
+
+  // For protected routes without refresh token, require login
+  if (isProtectedRoute && !accessToken?.value) {
+    console.log("Protected route without tokens, redirecting to login");
+    return createLoginRedirect(request, pathname);
   }
 
   // For auth routes, check if user has a valid token
   if (isAuthRoute && accessToken?.value) {
-    // Validate token with backend
     const isValid = await validateToken(accessToken.value);
 
     if (isValid) {
       // User is authenticated, redirect to home
       return NextResponse.redirect(new URL("/", request.url));
-    } else {
-      // Token is invalid, clear all tokens and allow access to auth routes
-      const response = NextResponse.next();
-      response.cookies.delete("accessToken");
-      response.cookies.delete("idToken");
-      response.cookies.delete("refreshToken");
-      return response;
     }
+
+    // Token is invalid, clear all tokens and allow access to auth routes
+    return clearTokensInResponse(NextResponse.next());
   }
 
   return NextResponse.next();
