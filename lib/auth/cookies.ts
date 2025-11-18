@@ -1,7 +1,8 @@
 /**
  * Cookie-based Token Management with Server Actions
  * Provides secure, httpOnly cookie storage for authentication tokens
- * Supports three-token system: accessToken, idToken, refreshToken
+ * Manages accessToken and idToken in frontend cookies
+ * refreshToken is managed by backend via httpOnly cookie
  */
 
 'use server';
@@ -19,12 +20,12 @@ const ID_TOKEN_MAX_AGE = 30 * 60; // 30 minutes
 const REFRESH_TOKEN_MAX_AGE = 30 * 24 * 60 * 60; // 30 days
 
 /**
- * Set all authentication tokens in httpOnly cookies
+ * Set authentication tokens in httpOnly cookies
+ * refreshToken is managed by backend and set via Set-Cookie header
  */
 export async function setAuthTokens(
   accessToken: string,
-  idToken: string,
-  refreshToken: string
+  idToken: string
 ): Promise<void> {
   const cookieStore = await cookies();
 
@@ -50,16 +51,7 @@ export async function setAuthTokens(
     path: '/',
   });
 
-  // Set refresh token (30 days)
-  cookieStore.set({
-    name: REFRESH_TOKEN_COOKIE,
-    value: refreshToken,
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
-    maxAge: REFRESH_TOKEN_MAX_AGE,
-    path: '/',
-  });
+  // refreshToken is set by backend via Set-Cookie header, not here
 }
 
 /**
@@ -91,11 +83,14 @@ export async function getRefreshToken(): Promise<string | null> {
 
 /**
  * Remove all authentication token cookies
+ * Note: refreshToken deletion is for cleanup only; backend manages the actual httpOnly cookie
  */
 export async function removeAuthTokens(): Promise<void> {
   const cookieStore = await cookies();
   cookieStore.delete(ACCESS_TOKEN_COOKIE);
   cookieStore.delete(ID_TOKEN_COOKIE);
+  // Delete refreshToken cookie for cleanup (if any legacy data exists)
+  // Backend manages the actual httpOnly refreshToken cookie
   cookieStore.delete(REFRESH_TOKEN_COOKIE);
 }
 
