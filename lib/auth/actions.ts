@@ -1,12 +1,6 @@
-/**
- * Authentication Server Actions
- * Handles login, register, and logout operations with cookie-based tokens
- * Stores accessToken and idToken in cookies
- * refreshToken is managed by backend via httpOnly cookie
- */
-
 "use server";
 
+import { cookies } from "next/headers";
 import { setAuthTokens, removeAuthTokens, getAccessToken } from "./cookies";
 import type {
   RegisterRequest,
@@ -15,10 +9,57 @@ import type {
   RequestPasswordResetRequest,
   RequestPasswordResetResponse,
   ResetPasswordRequest,
-  ResetPasswordResponse
+  ResetPasswordResponse,
 } from "../api/types";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api";
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api";
+
+/**
+ * Helper function to proxy cookies from API response to browser
+ */
+async function proxyCookiesFromResponse(response: Response) {
+  const setCookieHeaders: string[] = [];
+
+  response.headers.forEach((value, key) => {
+    if (key.toLowerCase() === "set-cookie") {
+      setCookieHeaders.push(value);
+    }
+  });
+
+  if (setCookieHeaders.length === 0) {
+    return;
+  }
+
+  const cookieStore = await cookies();
+
+  for (const setCookieHeader of setCookieHeaders) {
+    const cookieParts = setCookieHeader.split(";").map((part) => part.trim());
+    const [nameValue] = cookieParts;
+    const [name, value] = nameValue.split("=");
+
+    console.log("Setting cookie:", name);
+
+    const options: any = {
+      httpOnly: cookieParts.some((part) => part.toLowerCase() === "httponly"),
+      secure: cookieParts.some((part) => part.toLowerCase() === "secure"),
+      sameSite: "lax" as const,
+    };
+
+    const maxAgePart = cookieParts.find((part) =>
+      part.toLowerCase().startsWith("max-age=")
+    );
+    if (maxAgePart) {
+      const maxAge = parseInt(maxAgePart.split("=")[1]);
+      options.maxAge = maxAge;
+    }
+
+    console.log("Cookie options:", options);
+
+    // Set the cookie in the browser via Next.js
+    cookieStore.set(name, value, options);
+  }
+}
 
 /**
  * Register a new user
@@ -36,6 +77,9 @@ export async function registerAction(
       credentials: "include",
     });
 
+    // Proxy cookies from API to browser BEFORE consuming response body
+    await proxyCookiesFromResponse(response);
+
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       return {
@@ -47,12 +91,8 @@ export async function registerAction(
     const result: AuthResponse = await response.json();
 
     // Store accessToken and idToken in httpOnly cookies
-    // refreshToken is now managed by backend via httpOnly cookie
     if (result.accessToken && result.idToken) {
-      await setAuthTokens(
-        result.accessToken,
-        result.idToken
-      );
+      await setAuthTokens(result.accessToken, result.idToken);
     }
 
     return { success: true, data: result };
@@ -80,23 +120,22 @@ export async function loginAction(
       credentials: "include",
     });
 
+    // Proxy cookies from API to browser BEFORE consuming response body
+    await proxyCookiesFromResponse(response);
+
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       return {
         success: false,
-        error: errorData.message || "Login failed",
+        error: errorData.error || "Login failed",
       };
     }
 
     const result: AuthResponse = await response.json();
 
     // Store accessToken and idToken in httpOnly cookies
-    // refreshToken is now managed by backend via httpOnly cookie
     if (result.accessToken && result.idToken) {
-      await setAuthTokens(
-        result.accessToken,
-        result.idToken
-      );
+      await setAuthTokens(result.accessToken, result.idToken);
     }
 
     return { success: true, data: result };
@@ -116,27 +155,31 @@ export async function logoutAction(): Promise<{
   error?: string;
 }> {
   try {
-    // Get access token for backend revocation
     const accessToken = await getAccessToken();
 
-    // Call backend revocation endpoint if token exists
     if (accessToken) {
       try {
-        await fetch(`${API_BASE_URL}/auth/revoke`, {
+        const response = await fetch(`${API_BASE_URL}/auth/revoke`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
           credentials: "include",
         });
+
+        // Proxy cookie clearing from API to browser
+        await proxyCookiesFromResponse(response);
       } catch (error) {
-        // Continue even if backend revocation fails
         console.error("Backend token revocation failed:", error);
       }
     }
 
     // Remove all tokens from cookies
     await removeAuthTokens();
+
+    // Also clear refreshToken cookie
+    const cookieStore = await cookies();
+    cookieStore.delete("refreshToken");
 
     return { success: true };
   } catch (error) {
@@ -149,7 +192,6 @@ export async function logoutAction(): Promise<{
 
 /**
  * Google OAuth login
- * Sends Google token to backend for verification and user creation/login
  */
 export async function googleAuthAction(
   googleToken: string
@@ -164,7 +206,8 @@ export async function googleAuthAction(
       credentials: "include",
     });
 
-    console.log("respone", response);
+    // Proxy cookies from API to browser
+    await proxyCookiesFromResponse(response);
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
@@ -176,13 +219,8 @@ export async function googleAuthAction(
 
     const result: AuthResponse = await response.json();
 
-    // Store accessToken and idToken in httpOnly cookies
-    // refreshToken is now managed by backend via httpOnly cookie
     if (result.accessToken && result.idToken) {
-      await setAuthTokens(
-        result.accessToken,
-        result.idToken
-      );
+      await setAuthTokens(result.accessToken, result.idToken);
     }
 
     return { success: true, data: result };
@@ -196,7 +234,6 @@ export async function googleAuthAction(
 
 /**
  * Facebook OAuth login
- * Sends Facebook access token to backend for verification and user creation/login
  */
 export async function facebookAuthAction(
   facebookAccessToken: string
@@ -211,6 +248,9 @@ export async function facebookAuthAction(
       credentials: "include",
     });
 
+    // Proxy cookies from API to browser
+    await proxyCookiesFromResponse(response);
+
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       return {
@@ -221,13 +261,8 @@ export async function facebookAuthAction(
 
     const result: AuthResponse = await response.json();
 
-    // Store accessToken and idToken in httpOnly cookies
-    // refreshToken is now managed by backend via httpOnly cookie
     if (result.accessToken && result.idToken) {
-      await setAuthTokens(
-        result.accessToken,
-        result.idToken
-      );
+      await setAuthTokens(result.accessToken, result.idToken);
     }
 
     return { success: true, data: result };
@@ -241,20 +276,26 @@ export async function facebookAuthAction(
 
 /**
  * Request password reset
- * Sends an email with a reset token if the email exists
  */
 export async function requestPasswordResetAction(
   data: RequestPasswordResetRequest
-): Promise<{ success: boolean; data?: RequestPasswordResetResponse; error?: string }> {
+): Promise<{
+  success: boolean;
+  data?: RequestPasswordResetResponse;
+  error?: string;
+}> {
   try {
-    const response = await fetch(`${API_BASE_URL}/auth/request-password-reset`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-      credentials: "include",
-    });
+    const response = await fetch(
+      `${API_BASE_URL}/auth/request-password-reset`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+        credentials: "include",
+      }
+    );
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
@@ -265,7 +306,6 @@ export async function requestPasswordResetAction(
     }
 
     const result: RequestPasswordResetResponse = await response.json();
-
     return { success: true, data: result };
   } catch (error) {
     return {
@@ -277,7 +317,6 @@ export async function requestPasswordResetAction(
 
 /**
  * Reset password with token
- * Sets a new password using the reset token from email
  */
 export async function resetPasswordAction(
   data: ResetPasswordRequest
@@ -301,7 +340,6 @@ export async function resetPasswordAction(
     }
 
     const result: ResetPasswordResponse = await response.json();
-
     return { success: true, data: result };
   } catch (error) {
     return {
