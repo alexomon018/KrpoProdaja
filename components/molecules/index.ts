@@ -25,3 +25,6 @@ export type { ChatBubbleProps } from "./ChatBubble/ChatBubble";
 
 export { SellerInfo } from "./SellerInfo/SellerInfo";
 export type { SellerInfoProps } from "./SellerInfo/SellerInfo";
+
+export { ImageUpload } from "./ImageUpload/ImageUpload";
+export type { ImageUploadProps } from "./ImageUpload/ImageUpload";
