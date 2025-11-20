@@ -1,9 +1,9 @@
 /**
  * Upload Service
- * Handles image uploads to S3 via backend API
+ * Client-side wrapper for upload server actions
  */
 
-import { apiClient } from '../client';
+import { uploadImageAction, uploadImagesAction } from '../actions/upload';
 
 export interface UploadImageResponse {
   url: string;
@@ -13,42 +13,26 @@ export interface UploadImageResponse {
 export const uploadService = {
   /**
    * Upload a single image file
-   * POST /api/upload/image
-   * Requires authentication
+   * Uses server action for secure authentication
    */
   async uploadImage(file: File): Promise<UploadImageResponse> {
     const formData = new FormData();
     formData.append('image', file);
 
-    // We need to use fetch directly here since we're sending FormData, not JSON
-    const token = await import('../../auth/cookies').then(m => m.getAccessToken());
-
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api'}/upload/image`,
-      {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-        body: formData,
-      }
-    );
-
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({ message: 'Upload failed' }));
-      throw new Error(error.message || 'Failed to upload image');
-    }
-
-    return await response.json();
+    return await uploadImageAction(formData);
   },
 
   /**
    * Upload multiple images
-   * Uploads images sequentially and returns all URLs
+   * Uploads images in parallel and returns all URLs
    */
   async uploadImages(files: File[]): Promise<string[]> {
-    const uploadPromises = files.map(file => this.uploadImage(file));
-    const results = await Promise.all(uploadPromises);
-    return results.map(result => result.url);
+    const formDataArray = files.map(file => {
+      const formData = new FormData();
+      formData.append('image', file);
+      return formData;
+    });
+
+    return await uploadImagesAction(formDataArray);
   },
 };

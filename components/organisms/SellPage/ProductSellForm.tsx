@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { BottomNavigation } from "@organisms";
 import { FormInput, Button, Typography, Container } from "@atoms";
 import { ImageUpload } from "@molecules";
+import { uploadService } from "@lib/api";
 import { useCreateProduct } from "@lib/api/hooks/useProducts";
 import type { SizeType, ConditionType } from "@lib/types";
 import type { ProductCondition } from "@lib/api";
@@ -27,6 +28,7 @@ export function ProductSellForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [imageUrls, setImageUrls] = React.useState<string[]>([]);
+  const [imageFiles, setImageFiles] = React.useState<File[]>([]);
   const [formError, setFormError] = React.useState<string | null>(null);
 
   // Extract query parameters for pre-filling form
@@ -50,10 +52,10 @@ export function ProductSellForm() {
   // Map local condition types to API condition types
   const mapConditionToApi = (condition: ConditionType): ProductCondition => {
     const mapping: Record<ConditionType, ProductCondition> = {
-      "new": "new",
+      new: "new",
       "very-good": "like-new",
-      "good": "good",
-      "satisfactory": "fair",
+      good: "good",
+      satisfactory: "fair",
     };
     return mapping[condition];
   };
@@ -61,14 +63,21 @@ export function ProductSellForm() {
   const onSubmit = async (data: ProductFormData) => {
     setFormError(null);
 
-    // Validate that at least one image is uploaded
-    if (imageUrls.length === 0) {
+    // Validate that at least one image is selected
+    if (imageFiles.length === 0 && imageUrls.length === 0) {
       setFormError("Molimo dodajte bar jednu sliku proizvoda");
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
 
     try {
+      // Upload images first if there are any files
+      let uploadedImageUrls = [...imageUrls];
+
+      if (imageFiles.length > 0) {
+        uploadedImageUrls = await uploadService.uploadImages(imageFiles);
+      }
+
       // Create product with uploaded image URLs
       const product = await createProductMutation.mutateAsync({
         title: data.title,
@@ -80,7 +89,7 @@ export function ProductSellForm() {
         brand: data.brand || undefined,
         color: data.color || undefined,
         location: data.location,
-        images: imageUrls,
+        images: uploadedImageUrls,
       });
 
       // Navigate to product detail page or success page
@@ -134,17 +143,11 @@ export function ProductSellForm() {
             >
               {/* Step 0: Images */}
               <div className="bg-surface rounded-xl p-6 md:p-8 border border-border shadow-sm">
-                <Typography variant="h2" className="mb-2">
-                  Fotografije *
-                </Typography>
-                <Typography variant="bodySmall" className="text-secondary mb-6">
-                  Dodajte do 5 slika. Prva slika će biti glavna slika proizvoda.
-                </Typography>
-
                 <ImageUpload
-                  maxFiles={5}
+                  variant="labeled"
+                  maxFiles={8}
                   maxSizeMB={5}
-                  onImagesChange={setImageUrls}
+                  onFilesChange={setImageFiles}
                   disabled={createProductMutation.isPending}
                 />
               </div>
@@ -307,7 +310,9 @@ export function ProductSellForm() {
                   className="sm:flex-1"
                   disabled={createProductMutation.isPending}
                 >
-                  {createProductMutation.isPending ? "Objavljivanje..." : "Objavi proizvod"}
+                  {createProductMutation.isPending
+                    ? "Objavljivanje..."
+                    : "Objavi proizvod"}
                 </Button>
                 <Button
                   type="button"
@@ -316,6 +321,7 @@ export function ProductSellForm() {
                   onClick={() => {
                     methods.reset();
                     setImageUrls([]);
+                    setImageFiles([]);
                     setFormError(null);
                   }}
                   disabled={createProductMutation.isPending}
