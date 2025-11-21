@@ -8,6 +8,7 @@ import { FormInput, Button, Typography, Container } from "@atoms";
 import { ImageUpload } from "@molecules";
 import { uploadService } from "@lib/api";
 import { useCreateProduct } from "@lib/api/hooks/useProducts";
+import { useRequireAuth } from "@/lib/auth/context";
 import type { SizeType, ConditionType } from "@lib/types";
 import type { ProductCondition } from "@lib/api";
 
@@ -27,6 +28,7 @@ interface ProductFormData {
 export function ProductSellForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { requireAuth } = useRequireAuth();
   const [imageUrls, setImageUrls] = React.useState<string[]>([]);
   const [imageFiles, setImageFiles] = React.useState<File[]>([]);
   const [formError, setFormError] = React.useState<string | null>(null);
@@ -45,6 +47,7 @@ export function ProductSellForm() {
       brand: brandParam || "",
       location: locationParam || "Beograd",
     },
+    mode: "onBlur",
   });
 
   const createProductMutation = useCreateProduct();
@@ -53,14 +56,22 @@ export function ProductSellForm() {
   const mapConditionToApi = (condition: ConditionType): ProductCondition => {
     const mapping: Record<ConditionType, ProductCondition> = {
       new: "new",
-      "very-good": "like-new",
+      "very-good": "very-good",
       good: "good",
-      satisfactory: "fair",
+      satisfactory: "satisfactory",
     };
     return mapping[condition];
   };
 
   const onSubmit = async (data: ProductFormData) => {
+    // Check if user is authenticated before proceeding
+    // If not authenticated, requireAuth will show the auth modal and return false
+    requireAuth(async () => {
+      await handleProductSubmission(data);
+    });
+  };
+
+  const handleProductSubmission = async (data: ProductFormData) => {
     setFormError(null);
 
     // Validate that at least one image is selected
@@ -75,25 +86,50 @@ export function ProductSellForm() {
       let uploadedImageUrls = [...imageUrls];
 
       if (imageFiles.length > 0) {
+        console.log("Uploading images:", imageFiles.length);
         uploadedImageUrls = await uploadService.uploadImages(imageFiles);
+        console.log("Upload result:", uploadedImageUrls);
+
+        // Filter out any null/undefined URLs
+        uploadedImageUrls = uploadedImageUrls.filter(
+          (url) => url != null && url !== ""
+        );
+
+        if (uploadedImageUrls.length === 0) {
+          throw new Error(
+            "Upload nije uspeo - nisu primljene URL adrese slika"
+          );
+        }
       }
 
       // Create product with uploaded image URLs
-      const product = await createProductMutation.mutateAsync({
+      // TODO: Replace with actual category selection
+      // Using a placeholder UUID - you'll need to get a real category ID from your backend
+      const PLACEHOLDER_CATEGORY_ID = "69d0c42a-2d5a-464b-870d-29f60707bec7";
+
+      const productData = {
         title: data.title,
         description: data.description || undefined,
         price: Number(data.price),
-        categoryId: 1, // TODO: Add category selection to form
+        categoryId: PLACEHOLDER_CATEGORY_ID,
         condition: mapConditionToApi(data.condition),
         size: data.size,
         brand: data.brand || undefined,
         color: data.color || undefined,
         location: data.location,
         images: uploadedImageUrls,
-      });
+      };
 
-      // Navigate to product detail page or success page
-      router.push(`/products/${product.id}`);
+      const response = await createProductMutation.mutateAsync(productData);
+
+      if (response.product?.id) {
+        router.push(`/products/${response.product.id}`);
+      } else {
+        console.error("Product ID is undefined in response:", response);
+        setFormError(
+          "Proizvod je kreiran, ali ID nije pronađen u odgovoru servera."
+        );
+      }
     } catch (error) {
       console.error("Failed to create product:", error);
       setFormError(
@@ -164,6 +200,13 @@ export function ProductSellForm() {
                     label="Naziv proizvoda *"
                     placeholder="npr. Zara crna haljina"
                     required
+                    helperText="Najmanje 10 karaktera"
+                    validation={{
+                      minLength: {
+                        value: 10,
+                        message: "Naziv mora imati najmanje 10 karaktera",
+                      },
+                    }}
                   />
 
                   <div className="space-y-2">

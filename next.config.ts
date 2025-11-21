@@ -5,6 +5,11 @@ const nextConfig: NextConfig = {
   env: {
     NEXT_PUBLIC_PACKAGE_VERSION: process.env.npm_package_version || "0.1.0",
   },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '10mb', // Increase limit for image uploads
+    },
+  },
   images: {
     formats: ['image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
@@ -21,6 +26,10 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'platform-lookaside.fbsbx.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'krpoprodaja-images.s3.eu-central-1.amazonaws.com',
       },
     ],
   },

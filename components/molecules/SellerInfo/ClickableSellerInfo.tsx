@@ -25,7 +25,10 @@ export interface ClickableSellerInfoProps {
  * <ClickableSellerInfo seller={sellerData} />
  * ```
  */
-export function ClickableSellerInfo({ seller, compact = false }: ClickableSellerInfoProps) {
+export function ClickableSellerInfo({
+  seller,
+  compact = false,
+}: ClickableSellerInfoProps) {
   const router = useRouter();
   const { requireAuth } = useRequireAuth();
 

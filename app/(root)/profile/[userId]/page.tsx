@@ -7,6 +7,5 @@ import { UserProfile } from "@/components/organisms/ProfilePage/UserProfile";
  * Route: /profile/[userId]
  */
 export default function UserProfilePage() {
-  // Server component
   return <UserProfile />;
 }
