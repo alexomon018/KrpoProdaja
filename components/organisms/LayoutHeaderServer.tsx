@@ -1,4 +1,3 @@
-import { getCurrentUser } from "@/lib/auth";
 import { LayoutHeaderClient } from "./LayoutHeaderClient";
 
 /**
@@ -6,7 +5,5 @@ import { LayoutHeaderClient } from "./LayoutHeaderClient";
  * Fetches current user and passes to client component
  */
 export async function LayoutHeaderServer() {
-  const user = await getCurrentUser();
-
-  return <LayoutHeaderClient user={user} />;
+  return <LayoutHeaderClient />;
 }

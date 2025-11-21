@@ -1,4 +1,9 @@
-import type { ProductType, UserType, ReviewType, ReviewSummaryType } from "./types";
+import type {
+  ProductType,
+  UserType,
+  ReviewType,
+  ReviewSummaryType,
+} from "./types";
 
 /**
  * Mock data for development and demonstration
@@ -9,7 +14,8 @@ export const mockUsers: UserType[] = [
   {
     id: "1",
     email: "marija.k@example.com",
-    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
+    avatar:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
     rating: 4.9,
     reviewCount: 127,
     responseTime: "2h",
@@ -20,7 +26,8 @@ export const mockUsers: UserType[] = [
   {
     id: "2",
     email: "stefan.m@example.com",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
+    avatar:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
     rating: 4.7,
     reviewCount: 83,
     responseTime: "3h",
@@ -31,7 +38,8 @@ export const mockUsers: UserType[] = [
   {
     id: "3",
     email: "ana.p@example.com",
-    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop",
+    avatar:
+      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop",
     rating: 5.0,
     reviewCount: 45,
     responseTime: "1h",
@@ -55,7 +63,8 @@ export const mockProducts: ProductType[] = [
   {
     id: "1",
     title: "Zara crna haljina sa etiketom",
-    description: "Prelepa crna haljina, nikad nošena, sa etiketom. Kupljena u Zari pre mesec dana, ali mi ne odgovara veličina.",
+    description:
+      "Prelepa crna haljina, nikad nošena, sa etiketom. Kupljena u Zari pre mesec dana, ali mi ne odgovara veličina.",
     price: 2500,
     originalPrice: 4990,
     images: [
@@ -93,7 +102,8 @@ export const mockProducts: ProductType[] = [
   {
     id: "3",
     title: "Nike patike Air Max",
-    description: "Original Nike Air Max patike, nošene nekoliko puta. Veoma očuvane.",
+    description:
+      "Original Nike Air Max patike, nošene nekoliko puta. Veoma očuvane.",
     price: 6500,
     originalPrice: 12990,
     images: [
@@ -202,10 +212,11 @@ export const mockReviews: Record<string, ReviewType[]> = {
     {
       id: "r1",
       rating: 5,
-      comment: "The Zara dress's unique design is a warm addition to my wardrobe. I can hardly wait to wear it again next season!",
+      comment:
+        "The Zara dress's unique design is a warm addition to my wardrobe. I can hardly wait to wear it again next season!",
       reviewer: {
         id: "5",
-        username: "arthur purzycki",
+        email: "user5@example.com",
         memberSince: new Date("2023-05-10"),
       },
       createdAt: new Date("2025-01-14"),
@@ -214,10 +225,11 @@ export const mockReviews: Record<string, ReviewType[]> = {
     {
       id: "r2",
       rating: 5,
-      comment: "Beautiful and with an original design. Arrived on time and very happy with it",
+      comment:
+        "Beautiful and with an original design. Arrived on time and very happy with it",
       reviewer: {
         id: "6",
-        username: "Max Ein",
+        email: "user6@example.com",
         memberSince: new Date("2022-08-20"),
       },
       createdAt: new Date("2025-01-01"),
@@ -230,10 +242,11 @@ export const mockReviews: Record<string, ReviewType[]> = {
     {
       id: "r3",
       rating: 5,
-      comment: "Fast shipping and excellent packaging. Item exactly as described.",
+      comment:
+        "Fast shipping and excellent packaging. Item exactly as described.",
       reviewer: {
         id: "7",
-        username: "Jelena S.",
+        email: "user7@example.com",
         memberSince: new Date("2023-02-14"),
       },
       createdAt: new Date("2024-12-28"),
@@ -245,7 +258,7 @@ export const mockReviews: Record<string, ReviewType[]> = {
       comment: "Great seller, very responsive to messages!",
       reviewer: {
         id: "8",
-        username: "Miloš T.",
+        email: "user8@example.com",
         memberSince: new Date("2021-11-05"),
       },
       createdAt: new Date("2024-12-25"),
@@ -257,7 +270,7 @@ export const mockReviews: Record<string, ReviewType[]> = {
       comment: "Perfect condition, exactly as shown in photos.",
       reviewer: {
         id: "9",
-        username: "Tamara V.",
+        email: "user9@example.com",
         memberSince: new Date("2022-07-19"),
       },
       createdAt: new Date("2024-12-20"),
@@ -268,10 +281,13 @@ export const mockReviews: Record<string, ReviewType[]> = {
     {
       id: "r6",
       rating: 5,
-      comment: "Amazing Nike shoes! Very comfortable and look brand new. Fast delivery too!",
+      comment:
+        "Amazing Nike shoes! Very comfortable and look brand new. Fast delivery too!",
       reviewer: {
         id: "10",
-        username: "Petar K.",
+        email: "petar.k@example.com",
+        firstName: "Petar",
+        lastName: "K.",
         memberSince: new Date("2022-03-10"),
       },
       createdAt: new Date("2025-01-12"),
@@ -280,10 +296,13 @@ export const mockReviews: Record<string, ReviewType[]> = {
     {
       id: "r7",
       rating: 4,
-      comment: "Good quality shoes, minor wear but overall great value for money.",
+      comment:
+        "Good quality shoes, minor wear but overall great value for money.",
       reviewer: {
         id: "11",
-        username: "Milica R.",
+        email: "milica.r@example.com",
+        firstName: "Milica",
+        lastName: "R.",
         memberSince: new Date("2023-06-15"),
       },
       createdAt: new Date("2025-01-08"),
@@ -292,10 +311,13 @@ export const mockReviews: Record<string, ReviewType[]> = {
     {
       id: "r8",
       rating: 5,
-      comment: "Perfect size and fit. Seller was very helpful with sizing questions.",
+      comment:
+        "Perfect size and fit. Seller was very helpful with sizing questions.",
       reviewer: {
         id: "12",
-        username: "Dušan M.",
+        email: "dusan.m@example.com",
+        firstName: "Dušan",
+        lastName: "M.",
         memberSince: new Date("2021-09-22"),
       },
       createdAt: new Date("2025-01-05"),

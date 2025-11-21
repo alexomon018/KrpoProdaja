@@ -124,14 +124,10 @@ export const termsSchema = yup
 export const loginFormSchema = yup.object({
   email: emailSchema,
   password: yup.string().required("Lozinka je obavezna"),
-  rememberMe: yup.boolean().notRequired().default(false),
+  rememberMe: yup.boolean().optional().default(false),
 });
 
-export type LoginFormData = {
-  email: string;
-  password: string;
-  rememberMe?: boolean;
-};
+export type LoginFormData = yup.InferType<typeof loginFormSchema>;
 
 /**
  * Register form validation schema

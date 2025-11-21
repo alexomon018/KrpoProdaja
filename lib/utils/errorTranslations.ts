@@ -16,13 +16,17 @@ const errorTranslations: Record<string, string> = {
   "Login failed": "Prijavljivanje nije uspelo. Molimo pokušajte ponovo.",
 
   // Account status errors
-  "Account is locked": "Nalog je zaključan zbog previše neuspelih pokušaja prijavljivanja",
+  "Account is locked":
+    "Nalog je zaključan zbog previše neuspelih pokušaja prijavljivanja",
   "Account locked": "Nalog je zaključan. Molimo pokušajte ponovo kasnije.",
   "User account is locked": "Korisnički nalog je zaključan",
-  "This account can only be accessed through Google": "Ovaj nalog može biti pristupljen samo kroz Google",
-  "This account can only be accessed through Facebook": "Ovaj nalog može biti pristupljen samo kroz Facebook",
+  "This account can only be accessed through Google":
+    "Ovaj nalog može biti pristupljen samo kroz Google",
+  "This account can only be accessed through Facebook":
+    "Ovaj nalog može biti pristupljen samo kroz Facebook",
   "Please use Google to sign in": "Molimo koristite Google za prijavljivanje",
-  "Please use Facebook to sign in": "Molimo koristite Facebook za prijavljivanje",
+  "Please use Facebook to sign in":
+    "Molimo koristite Facebook za prijavljivanje",
 
   // Registration errors
   "Email already in use": "Ova email adresa je već u upotrebi",
@@ -31,10 +35,13 @@ const errorTranslations: Record<string, string> = {
   "Registration failed": "Registracija nije uspela. Molimo pokušajte ponovo.",
 
   // Password validation errors (from backend)
-  "Password must be at least 8 characters": "Lozinka mora imati najmanje 8 karaktera",
+  "Password must be at least 8 characters":
+    "Lozinka mora imati najmanje 8 karaktera",
   "Password is too weak": "Lozinka je previše slaba",
-  "Password must contain at least one uppercase letter": "Lozinka mora sadržati najmanje jedno veliko slovo",
-  "Password must contain at least one number": "Lozinka mora sadržati najmanje jedan broj",
+  "Password must contain at least one uppercase letter":
+    "Lozinka mora sadržati najmanje jedno veliko slovo",
+  "Password must contain at least one number":
+    "Lozinka mora sadržati najmanje jedan broj",
 
   // Password reset errors
   "Invalid or expired token": "Nevažeći ili istekao link za resetovanje",
@@ -42,9 +49,11 @@ const errorTranslations: Record<string, string> = {
   "Token has expired": "Link za resetovanje je istekao",
   "Reset token has already been used": "Link za resetovanje je već iskorišćen",
   "Token already used": "Link je već iskorišćen",
-  "Failed to request password reset": "Zahtev za resetovanje lozinke nije uspeo",
+  "Failed to request password reset":
+    "Zahtev za resetovanje lozinke nije uspeo",
   "Failed to reset password": "Resetovanje lozinke nije uspelo",
-  "Password reset token is invalid or has expired": "Link za resetovanje je nevažeći ili je istekao",
+  "Password reset token is invalid or has expired":
+    "Link za resetovanje je nevažeći ili je istekao",
 
   // Email validation errors
   "Invalid email format": "Neispravan format email adrese",
@@ -54,7 +63,8 @@ const errorTranslations: Record<string, string> = {
   // OAuth errors
   "Google authentication failed": "Google prijavljivanje nije uspelo",
   "Facebook authentication failed": "Facebook prijavljivanje nije uspelo",
-  "OAuth authentication failed": "Prijavljivanje preko društvene mreže nije uspelo",
+  "OAuth authentication failed":
+    "Prijavljivanje preko društvene mreže nije uspelo",
   "Invalid OAuth token": "Nevažeći token za prijavljivanje",
   "Failed to verify Google token": "Verifikacija Google tokena nije uspela",
   "Failed to verify Facebook token": "Verifikacija Facebook tokena nije uspela",
@@ -64,15 +74,17 @@ const errorTranslations: Record<string, string> = {
   "Failed to fetch": "Greška u konekciji. Molimo pokušajte ponovo.",
   "Server error": "Greška na serveru. Molimo pokušajte kasnije.",
   "Internal server error": "Interna greška servera. Molimo pokušajte kasnije.",
-  "Service unavailable": "Servis trenutno nije dostupan. Molimo pokušajte kasnije.",
-  "Unknown error occurred": "Došlo je do nepoznate greške. Molimo pokušajte ponovo.",
+  "Service unavailable":
+    "Servis trenutno nije dostupan. Molimo pokušajte kasnije.",
+  "Unknown error occurred":
+    "Došlo je do nepoznate greške. Molimo pokušajte ponovo.",
 
   // Token errors
   "Token is invalid": "Nevažeći token",
-  "Token has expired": "Token je istekao",
+
   "No token provided": "Token nije prosleđen",
   "Invalid access token": "Nevažeći pristupni token",
-  "Unauthorized": "Neautorizovan pristup",
+  Unauthorized: "Neautorizovan pristup",
 
   // Validation errors
   "Missing required fields": "Nedostaju obavezna polja",
@@ -131,18 +143,27 @@ export function translateError(
     return errorTranslations["Account locked"];
   }
 
-  if (lowerMessage.includes("invalid credentials") || lowerMessage.includes("incorrect")) {
+  if (
+    lowerMessage.includes("invalid credentials") ||
+    lowerMessage.includes("incorrect")
+  ) {
     return errorTranslations["Invalid credentials"];
   }
 
-  if (lowerMessage.includes("already exists") || lowerMessage.includes("already in use")) {
+  if (
+    lowerMessage.includes("already exists") ||
+    lowerMessage.includes("already in use")
+  ) {
     if (lowerMessage.includes("email")) {
       return errorTranslations["Email already in use"];
     }
     return "Podaci su već u upotrebi";
   }
 
-  if (lowerMessage.includes("expired") || lowerMessage.includes("invalid token")) {
+  if (
+    lowerMessage.includes("expired") ||
+    lowerMessage.includes("invalid token")
+  ) {
     return errorTranslations["Invalid or expired token"];
   }
 
@@ -205,5 +226,6 @@ export const defaultErrorMessages = {
   register: "Registracija nije uspela. Molimo pokušajte ponovo.",
   passwordReset: "Resetovanje lozinke nije uspelo. Molimo pokušajte ponovo.",
   unknown: "Došlo je do nepoznate greške. Molimo pokušajte ponovo.",
-  network: "Greška u konekciji. Proverite internet konekciju i pokušajte ponovo.",
+  network:
+    "Greška u konekciji. Proverite internet konekciju i pokušajte ponovo.",
 } as const;

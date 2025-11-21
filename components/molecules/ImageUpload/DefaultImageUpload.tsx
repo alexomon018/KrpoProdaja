@@ -81,8 +81,8 @@ export function DefaultImageUpload({
           setUploadProgress((prev) => ({ ...prev, [fileId]: 0 }));
 
           try {
-            const response = await uploadService.uploadImage(file);
-            uploadedUrls.push(response.url);
+            const url = await uploadService.uploadImage(file);
+            uploadedUrls.push(url);
 
             setUploadProgress((prev) => ({ ...prev, [fileId]: 100 }));
           } catch (err) {
