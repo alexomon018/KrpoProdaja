@@ -10,6 +10,9 @@ export interface RegisterRequest {
   password: string;
   username: string;
   fullName?: string;
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
 }
 
 export interface LoginRequest {
@@ -81,6 +84,23 @@ export interface ResetPasswordRequest {
 }
 
 export interface ResetPasswordResponse {
+  message: string;
+}
+
+export interface VerifyEmailRequest {
+  token: string;
+}
+
+export interface VerifyEmailResponse {
+  message: string;
+  user?: ApiUser;
+}
+
+export interface ResendVerificationRequest {
+  email: string;
+}
+
+export interface ResendVerificationResponse {
   message: string;
 }
 

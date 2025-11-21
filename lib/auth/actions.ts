@@ -406,3 +406,84 @@ export async function refreshTokenAction(): Promise<{
     };
   }
 }
+
+/**
+ * Verify email with token
+ */
+export async function verifyEmailAction(
+  token: string
+): Promise<{ success: boolean; data?: any; error?: string }> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/auth/verify-email`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ token }),
+      credentials: "include",
+    });
+
+    // Proxy cookies from API to browser
+    await proxyCookiesFromResponse(response);
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      const errorMessage = errorData.message || errorData.error || "Email verification failed";
+      return {
+        success: false,
+        error: translateError(errorMessage, "Verifikacija email-a nije uspela. Link je možda istekao."),
+      };
+    }
+
+    const result = await response.json();
+
+    // Store tokens if provided (user is now logged in)
+    if (result.accessToken && result.idToken) {
+      await setAuthTokens(result.accessToken, result.idToken);
+    }
+
+    return { success: true, data: result };
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
+    return {
+      success: false,
+      error: translateError(errorMessage, "Verifikacija email-a nije uspela."),
+    };
+  }
+}
+
+/**
+ * Resend verification email
+ */
+export async function resendVerificationEmailAction(
+  email: string
+): Promise<{ success: boolean; data?: any; error?: string }> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/auth/resend-verification`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      const errorMessage = errorData.message || errorData.error || "Failed to resend verification email";
+      return {
+        success: false,
+        error: translateError(errorMessage, "Slanje verifikacionog email-a nije uspelo."),
+      };
+    }
+
+    const result = await response.json();
+    return { success: true, data: result };
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
+    return {
+      success: false,
+      error: translateError(errorMessage, "Slanje verifikacionog email-a nije uspelo."),
+    };
+  }
+}

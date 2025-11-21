@@ -17,20 +17,16 @@ export function AuthRegister() {
     setError(undefined);
 
     startTransition(async () => {
-      // Map form data to API request format
+      // Map form data to API request format - only email and password
       const result = await registerAction({
         email: data.email,
         password: data.password,
         username: data.email.split('@')[0], // Generate username from email
-        fullName: data.name,
       });
 
-      if (result.success && result.data) {
-        // Update auth context with the user data from the response
-        setUser(result.data.user);
-
-        // Redirect to home page on success
-        router.push("/");
+      if (result.success) {
+        // Redirect to email verification page
+        router.push(`/verify-email?email=${encodeURIComponent(data.email)}`);
       } else {
         setError(result.error || "Greška pri registraciji. Molimo pokušajte ponovo.");
       }

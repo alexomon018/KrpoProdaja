@@ -147,14 +147,10 @@ export type LoginFormData = {
 
 /**
  * Register form validation schema
+ * Email is the single source of truth - no name or phone required
  */
 export const registerFormSchema = yup.object({
-  name: nameSchema,
   email: emailSchema,
-  phone: yup.string().matches(
-    /^(\+381|0)?[6-7][0-9]\s?\d{3}\s?\d{3,4}$/,
-    "Unesite ispravan broj telefona (npr. +381 60 123 4567 ili 060 123 4567)"
-  ).notRequired(),
   password: passwordSchema,
   confirmPassword: yup
     .string()
@@ -164,9 +160,7 @@ export const registerFormSchema = yup.object({
 });
 
 export type RegisterFormData = {
-  name: string;
   email: string;
-  phone?: string;
   password: string;
   confirmPassword: string;
   agreeToTerms: boolean;
