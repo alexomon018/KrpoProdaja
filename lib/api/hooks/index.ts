@@ -9,11 +9,7 @@
  */
 
 // Auth hooks
-export {
-  useRegister,
-  useLogin,
-  useLogout,
-} from './useAuth';
+export { useRegister, useLogin, useLogout } from "./useAuth";
 
 // Products hooks
 export {
@@ -24,16 +20,15 @@ export {
   useDeleteProduct,
   useUpdateProductStatus,
   useSimilarProducts,
-} from './useProducts';
+} from "./useProducts";
 
 // User hooks
 export {
-  useCurrentUser,
   useUpdateCurrentUser,
   useUserProfile,
   useUserProducts,
   useChangePassword,
-} from './useUsers';
+} from "./useUsers";
 
 // Search & discovery hooks
 export {
@@ -43,4 +38,4 @@ export {
   useFavorites,
   useAddToFavorites,
   useRemoveFromFavorites,
-} from './useSearch';
+} from "./useSearch";

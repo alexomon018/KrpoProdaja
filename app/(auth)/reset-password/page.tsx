@@ -6,6 +6,5 @@ import { PasswordReset } from "@/components/organisms/AuthPage/PasswordReset";
  * Request password reset via email
  */
 export default function ResetPasswordPage() {
-  // Server component
   return <PasswordReset />;
 }

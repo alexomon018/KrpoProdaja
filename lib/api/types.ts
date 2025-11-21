@@ -97,25 +97,30 @@ export interface UserProfileResponse {
 // ==================== Product Types ====================
 
 export type ProductStatus = 'available' | 'reserved' | 'sold';
-export type ProductCondition = 'new' | 'like-new' | 'good' | 'fair';
+export type ProductCondition = 'new' | 'very-good' | 'good' | 'satisfactory';
 
 export interface ApiProduct {
-  id: number;
-  userId: number;
+  id: string; // UUID from backend
+  userId: string; // UUID from backend
   title: string;
   description?: string;
   price: number;
-  categoryId: number;
+  originalPrice?: number;
+  categoryId: string; // UUID from backend
   condition: ProductCondition;
   size?: string;
   brand?: string;
   color?: string;
+  material?: string;
   location?: string;
   status: ProductStatus;
+  viewCount?: number;
+  favoriteCount?: number;
   images: string[];
   createdAt: string;
   updatedAt: string;
   user?: ApiUser;
+  seller?: ApiUser;  // API returns seller instead of user for product details
   category?: ApiCategory;
   isFavorite?: boolean;
 }
@@ -124,7 +129,7 @@ export interface CreateProductRequest {
   title: string;
   description?: string;
   price: number;
-  categoryId: number;
+  categoryId: string; // Backend expects string, not number
   condition: ProductCondition;
   size?: string;
   brand?: string;
@@ -133,11 +138,16 @@ export interface CreateProductRequest {
   images?: string[];
 }
 
+export interface CreateProductResponse {
+  message: string;
+  product: ApiProduct;
+}
+
 export interface UpdateProductRequest {
   title?: string;
   description?: string;
   price?: number;
-  categoryId?: number;
+  categoryId?: string; // UUID
   condition?: ProductCondition;
   size?: string;
   brand?: string;
@@ -151,7 +161,7 @@ export interface UpdateProductStatusRequest {
 }
 
 export interface ProductFilters {
-  categoryId?: number;
+  categoryId?: string; // UUID
   minPrice?: number;
   maxPrice?: number;
   condition?: ProductCondition;
@@ -160,29 +170,28 @@ export interface ProductFilters {
   color?: string;
   location?: string;
   status?: ProductStatus;
-  userId?: number;
+  userId?: string; // UUID
   page?: number;
   limit?: number;
 }
 
 export interface ProductListResponse {
-  products: ApiProduct[];
+  data: ApiProduct[];
   pagination: {
-    page: number;
-    limit: number;
-    total: number;
+    currentPage: number;
     totalPages: number;
+    total: number;
   };
 }
 
 // ==================== Category Types ====================
 
 export interface ApiCategory {
-  id: number;
+  id: string; // UUID
   name: string;
   slug: string;
   description?: string;
-  parentId?: number;
+  parentId?: string; // UUID
   createdAt: string;
   updatedAt: string;
   children?: ApiCategory[];
@@ -192,7 +201,7 @@ export interface ApiCategory {
 
 export interface SearchParams {
   q: string;
-  categoryId?: number;
+  categoryId?: string; // UUID
   minPrice?: number;
   maxPrice?: number;
   condition?: ProductCondition;
@@ -217,9 +226,9 @@ export interface SearchSuggestion {
 // ==================== Favorites Types ====================
 
 export interface FavoriteProduct {
-  id: number;
-  userId: number;
-  productId: number;
+  id: string; // UUID
+  userId: string; // UUID
+  productId: string; // UUID
   createdAt: string;
   product: ApiProduct;
 }

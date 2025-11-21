@@ -1,26 +1,61 @@
 "use client";
 
 import { useState } from "react";
-import { BottomNavigation, ProductGrid, FilterPanel } from "@/components/organisms";
+import {
+  BottomNavigation,
+  ProductGrid,
+  FilterPanel,
+} from "@/components/organisms";
 import { FilterChip, FilterChipGroup } from "@/components/molecules";
+import { useProducts } from "@/lib/api/hooks/useProducts";
 import type { FilterOptions } from "@/components/organisms";
-import type { ProductType } from "@/lib/types";
+import type { ProductType, SizeType, ConditionType } from "@/lib/types";
+import type { ApiProduct } from "@/lib/api";
 
-interface HomeContentProps {
-  initialProducts: ProductType[];
+// Map API product to ProductType
+function mapApiProductToProductType(apiProduct: ApiProduct): ProductType {
+  // API may return either user or seller object - check both
+  const sellerData = apiProduct.seller || apiProduct.user;
+  const sellerId =
+    sellerData?.id || apiProduct.userId?.toString() || "unknown";
+  const sellerUsername =
+    sellerData?.username || `User ${apiProduct.userId || "Unknown"}`;
+
+  return {
+    id: apiProduct.id.toString(),
+    title: apiProduct.title,
+    price: apiProduct.price,
+    images: apiProduct.images || [],
+    brand: apiProduct.brand,
+    size: (apiProduct.size as SizeType) || "M",
+    condition: (apiProduct.condition as ConditionType) || "good",
+    category: apiProduct.category?.name || "Other",
+    location: apiProduct.location || "",
+    seller: {
+      id: sellerId,
+      username: sellerUsername,
+      avatar: sellerData?.avatar,
+      memberSince: new Date(sellerData?.createdAt || apiProduct.createdAt),
+    },
+    createdAt: new Date(apiProduct.createdAt),
+    isFavorite: apiProduct.isFavorite || false,
+  };
 }
 
-export function HomeContent({ initialProducts }: HomeContentProps) {
+export function HomeContent() {
   const [filters, setFilters] = useState<FilterOptions>({});
   const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
-  const [products, setProducts] = useState<ProductType[]>(initialProducts);
+
+  // Fetch products using React Query - will use prefetched data from server
+  const { data: productsResponse } = useProducts();
+
+  // Map API products to ProductType
+  const products: ProductType[] =
+    productsResponse?.data?.map(mapApiProductToProductType) || [];
 
   const handleFavoriteClick = (productId: string) => {
-    setProducts((prev) =>
-      prev.map((p) =>
-        p.id === productId ? { ...p, isFavorite: !p.isFavorite } : p
-      )
-    );
+    // TODO: Implement favorite toggle with API mutation
+    console.log("Toggle favorite for product:", productId);
   };
 
   const handleFiltersChange = (newFilters: FilterOptions) => {
@@ -39,12 +74,12 @@ export function HomeContent({ initialProducts }: HomeContentProps) {
   };
 
   // Calculate active filter count
-  const activeFilterCount = Object.keys(filters).filter(
-    (key) => {
-      const value = filters[key as keyof FilterOptions];
-      return value !== undefined && (Array.isArray(value) ? value.length > 0 : true);
-    }
-  ).length;
+  const activeFilterCount = Object.keys(filters).filter((key) => {
+    const value = filters[key as keyof FilterOptions];
+    return (
+      value !== undefined && (Array.isArray(value) ? value.length > 0 : true)
+    );
+  }).length;
 
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-8">
@@ -72,7 +107,9 @@ export function HomeContent({ initialProducts }: HomeContentProps) {
                       key={size}
                       label={`Veličina: ${size}`}
                       onRemove={() => {
-                        const newSizes = filters.sizes?.filter((s) => s !== size);
+                        const newSizes = filters.sizes?.filter(
+                          (s) => s !== size
+                        );
                         setFilters({ ...filters, sizes: newSizes });
                       }}
                     />
@@ -82,7 +119,9 @@ export function HomeContent({ initialProducts }: HomeContentProps) {
                       key={brand}
                       label={`Brend: ${brand}`}
                       onRemove={() => {
-                        const newBrands = filters.brands?.filter((b) => b !== brand);
+                        const newBrands = filters.brands?.filter(
+                          (b) => b !== brand
+                        );
                         setFilters({ ...filters, brands: newBrands });
                       }}
                     />

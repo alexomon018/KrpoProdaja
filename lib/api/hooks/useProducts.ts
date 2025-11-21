@@ -21,7 +21,7 @@ export function useProducts(filters?: ProductFilters) {
   });
 }
 
-export function useProduct(id: number) {
+export function useProduct(id: string) {
   return useQuery({
     queryKey: ['products', id],
     queryFn: () => productsService.getProduct(id),
@@ -44,7 +44,7 @@ export function useUpdateProduct() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: number; data: UpdateProductRequest }) =>
+    mutationFn: ({ id, data }: { id: string; data: UpdateProductRequest }) =>
       productsService.updateProduct(id, data),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['products'] });
@@ -57,7 +57,7 @@ export function useDeleteProduct() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: number) => productsService.deleteProduct(id),
+    mutationFn: (id: string) => productsService.deleteProduct(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] });
     },
@@ -68,7 +68,7 @@ export function useUpdateProductStatus() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: number; data: UpdateProductStatusRequest }) =>
+    mutationFn: ({ id, data }: { id: string; data: UpdateProductStatusRequest }) =>
       productsService.updateProductStatus(id, data),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['products'] });
@@ -77,7 +77,7 @@ export function useUpdateProductStatus() {
   });
 }
 
-export function useSimilarProducts(id: number, limit = 10) {
+export function useSimilarProducts(id: string, limit = 10) {
   return useQuery({
     queryKey: ['products', id, 'similar', limit],
     queryFn: () => productsService.getSimilarProducts(id, limit),

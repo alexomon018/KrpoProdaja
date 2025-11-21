@@ -1,9 +1,20 @@
+import { HydrationBoundary, dehydrate } from '@tanstack/react-query';
 import { HomeContent } from "@/components/organisms/HomePage/HomeContent";
-import { mockProducts } from "@/lib/mockData";
+import { getQueryClient } from '@/lib/get-query-client';
+import { productsService } from '@/lib/api/services/products';
 
-export default function HomePage() {
-  // Server component - can do data fetching here
-  const products = mockProducts;
+export default async function HomePage() {
+  const queryClient = getQueryClient();
 
-  return <HomeContent initialProducts={products} />;
+  // Fetch products on the server and prime the query
+  const productsData = await productsService.getProducts();
+
+  // Set the query data with the exact query key that useProducts uses
+  queryClient.setQueryData(['products', undefined], productsData);
+
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <HomeContent />
+    </HydrationBoundary>
+  );
 }

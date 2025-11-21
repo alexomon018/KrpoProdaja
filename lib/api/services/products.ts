@@ -8,6 +8,7 @@ import type {
   ApiProduct,
   ProductListResponse,
   CreateProductRequest,
+  CreateProductResponse,
   UpdateProductRequest,
   UpdateProductStatusRequest,
   ProductFilters,
@@ -39,7 +40,7 @@ export const productsService = {
    * Get a single product by ID
    * GET /api/products/:id
    */
-  async getProduct(id: number): Promise<ApiProduct> {
+  async getProduct(id: string): Promise<ApiProduct> {
     return apiClient.get<ApiProduct>(`/products/${id}`);
   },
 
@@ -48,8 +49,8 @@ export const productsService = {
    * POST /api/products
    * Requires authentication
    */
-  async createProduct(data: CreateProductRequest): Promise<ApiProduct> {
-    return apiClient.post<ApiProduct>('/products', data, { requiresAuth: true });
+  async createProduct(data: CreateProductRequest): Promise<CreateProductResponse> {
+    return apiClient.post<CreateProductResponse>('/products', data, { requiresAuth: true });
   },
 
   /**
@@ -57,7 +58,7 @@ export const productsService = {
    * PUT /api/products/:id
    * Requires authentication (owner only)
    */
-  async updateProduct(id: number, data: UpdateProductRequest): Promise<ApiProduct> {
+  async updateProduct(id: string, data: UpdateProductRequest): Promise<ApiProduct> {
     return apiClient.put<ApiProduct>(`/products/${id}`, data, { requiresAuth: true });
   },
 
@@ -66,7 +67,7 @@ export const productsService = {
    * DELETE /api/products/:id
    * Requires authentication (owner only)
    */
-  async deleteProduct(id: number): Promise<void> {
+  async deleteProduct(id: string): Promise<void> {
     return apiClient.delete<void>(`/products/${id}`, { requiresAuth: true });
   },
 
@@ -76,7 +77,7 @@ export const productsService = {
    * Requires authentication (owner only)
    */
   async updateProductStatus(
-    id: number,
+    id: string,
     data: UpdateProductStatusRequest
   ): Promise<ApiProduct> {
     return apiClient.patch<ApiProduct>(`/products/${id}/status`, data, {
@@ -88,7 +89,7 @@ export const productsService = {
    * Get similar products
    * GET /api/products/:id/similar
    */
-  async getSimilarProducts(id: number, limit = 10): Promise<ApiProduct[]> {
+  async getSimilarProducts(id: string, limit = 10): Promise<ApiProduct[]> {
     return apiClient.get<ApiProduct[]>(`/products/${id}/similar?limit=${limit}`);
   },
 };

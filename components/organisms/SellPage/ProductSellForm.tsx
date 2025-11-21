@@ -2,9 +2,15 @@
 
 import * as React from "react";
 import { useForm, FormProvider } from "react-hook-form";
+import { useRouter, useSearchParams } from "next/navigation";
 import { BottomNavigation } from "@organisms";
 import { FormInput, Button, Typography, Container } from "@atoms";
+import { ImageUpload } from "@molecules";
+import { uploadService } from "@lib/api";
+import { useCreateProduct } from "@lib/api/hooks/useProducts";
+import { useRequireAuth } from "@/lib/auth/context";
 import type { SizeType, ConditionType } from "@lib/types";
+import type { ProductCondition } from "@lib/api";
 
 interface ProductFormData {
   title: string;
@@ -20,18 +26,119 @@ interface ProductFormData {
 }
 
 export function ProductSellForm() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { requireAuth } = useRequireAuth();
+  const [imageUrls, setImageUrls] = React.useState<string[]>([]);
+  const [imageFiles, setImageFiles] = React.useState<File[]>([]);
+  const [formError, setFormError] = React.useState<string | null>(null);
+
+  // Extract query parameters for pre-filling form
+  const titleParam = searchParams.get("title");
+  const priceParam = searchParams.get("price");
+  const brandParam = searchParams.get("brand");
+  const locationParam = searchParams.get("location");
+
   const methods = useForm<ProductFormData>({
     defaultValues: {
-      title: "",
+      title: titleParam || "",
       description: "",
-      price: 0,
-      location: "Beograd",
+      price: priceParam ? Number(priceParam) : 0,
+      brand: brandParam || "",
+      location: locationParam || "Beograd",
     },
+    mode: "onBlur",
   });
 
-  const onSubmit = (data: ProductFormData) => {
-    console.log("Form submitted:", data);
-    // TODO: Handle form submission
+  const createProductMutation = useCreateProduct();
+
+  // Map local condition types to API condition types
+  const mapConditionToApi = (condition: ConditionType): ProductCondition => {
+    const mapping: Record<ConditionType, ProductCondition> = {
+      new: "new",
+      "very-good": "very-good",
+      good: "good",
+      satisfactory: "satisfactory",
+    };
+    return mapping[condition];
+  };
+
+  const onSubmit = async (data: ProductFormData) => {
+    // Check if user is authenticated before proceeding
+    // If not authenticated, requireAuth will show the auth modal and return false
+    requireAuth(async () => {
+      await handleProductSubmission(data);
+    });
+  };
+
+  const handleProductSubmission = async (data: ProductFormData) => {
+    setFormError(null);
+
+    // Validate that at least one image is selected
+    if (imageFiles.length === 0 && imageUrls.length === 0) {
+      setFormError("Molimo dodajte bar jednu sliku proizvoda");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    try {
+      // Upload images first if there are any files
+      let uploadedImageUrls = [...imageUrls];
+
+      if (imageFiles.length > 0) {
+        console.log("Uploading images:", imageFiles.length);
+        uploadedImageUrls = await uploadService.uploadImages(imageFiles);
+        console.log("Upload result:", uploadedImageUrls);
+
+        // Filter out any null/undefined URLs
+        uploadedImageUrls = uploadedImageUrls.filter(
+          (url) => url != null && url !== ""
+        );
+
+        if (uploadedImageUrls.length === 0) {
+          throw new Error(
+            "Upload nije uspeo - nisu primljene URL adrese slika"
+          );
+        }
+      }
+
+      // Create product with uploaded image URLs
+      // TODO: Replace with actual category selection
+      // Using a placeholder UUID - you'll need to get a real category ID from your backend
+      const PLACEHOLDER_CATEGORY_ID = "69d0c42a-2d5a-464b-870d-29f60707bec7";
+
+      const productData = {
+        title: data.title,
+        description: data.description || undefined,
+        price: Number(data.price),
+        categoryId: PLACEHOLDER_CATEGORY_ID,
+        condition: mapConditionToApi(data.condition),
+        size: data.size,
+        brand: data.brand || undefined,
+        color: data.color || undefined,
+        location: data.location,
+        images: uploadedImageUrls,
+      };
+
+      const response = await createProductMutation.mutateAsync(productData);
+
+      if (response.product?.id) {
+        router.push(`/products/${response.product.id}`);
+      } else {
+        console.error("Product ID is undefined in response:", response);
+        setFormError(
+          "Proizvod je kreiran, ali ID nije pronađen u odgovoru servera."
+        );
+      }
+    } catch (error) {
+      console.error("Failed to create product:", error);
+      setFormError(
+        error instanceof Error
+          ? error.message
+          : "Greška pri kreiranju proizvoda. Pokušajte ponovo."
+      );
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
   const availableSizes: SizeType[] = ["XS", "S", "M", "L", "XL", "XXL", "XXXL"];
@@ -58,11 +165,29 @@ export function ProductSellForm() {
             </Typography>
           </div>
 
+          {/* Error Message */}
+          {formError && (
+            <div className="mb-6 bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg">
+              <Typography variant="body">{formError}</Typography>
+            </div>
+          )}
+
           <FormProvider {...methods}>
             <form
               onSubmit={methods.handleSubmit(onSubmit)}
               className="space-y-6 md:space-y-8"
             >
+              {/* Step 0: Images */}
+              <div className="bg-surface rounded-xl p-6 md:p-8 border border-border shadow-sm">
+                <ImageUpload
+                  variant="labeled"
+                  maxFiles={8}
+                  maxSizeMB={5}
+                  onFilesChange={setImageFiles}
+                  disabled={createProductMutation.isPending}
+                />
+              </div>
+
               {/* Step 1: Basic Information */}
               <div className="bg-surface rounded-xl p-6 md:p-8 border border-border shadow-sm">
                 <Typography variant="h2" className="mb-6">
@@ -75,6 +200,13 @@ export function ProductSellForm() {
                     label="Naziv proizvoda *"
                     placeholder="npr. Zara crna haljina"
                     required
+                    helperText="Najmanje 10 karaktera"
+                    validation={{
+                      minLength: {
+                        value: 10,
+                        message: "Naziv mora imati najmanje 10 karaktera",
+                      },
+                    }}
                   />
 
                   <div className="space-y-2">
@@ -219,14 +351,23 @@ export function ProductSellForm() {
                   fullWidth
                   size="lg"
                   className="sm:flex-1"
+                  disabled={createProductMutation.isPending}
                 >
-                  Objavi proizvod
+                  {createProductMutation.isPending
+                    ? "Objavljivanje..."
+                    : "Objavi proizvod"}
                 </Button>
                 <Button
                   type="button"
                   variant="secondary"
                   size="lg"
-                  onClick={() => methods.reset()}
+                  onClick={() => {
+                    methods.reset();
+                    setImageUrls([]);
+                    setImageFiles([]);
+                    setFormError(null);
+                  }}
+                  disabled={createProductMutation.isPending}
                   className="sm:w-auto"
                 >
                   Poništi
