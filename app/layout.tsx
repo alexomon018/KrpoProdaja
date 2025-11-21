@@ -3,7 +3,7 @@ import { Source_Sans_3, Lato } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@lib/ThemeContext";
 import { QueryProvider } from "@lib/QueryProvider";
-import { AuthProvider } from "@/lib/auth/context";
+import { AuthProvider } from "@/lib/auth/AuthProvider";
 import { AuthModalManager } from "@/components/organisms/AuthModal/AuthModalManager";
 import { getCurrentUser } from "@/lib/auth/server";
 import { GoogleOAuthProvider } from "@/components/providers/GoogleOAuthProvider";
@@ -41,7 +41,7 @@ export default async function RootLayout({
         <QueryProvider>
           <ThemeProvider>
             <GoogleOAuthProvider>
-              <AuthProvider initialUser={user ? user.user : null}>
+              <AuthProvider initialUser={user}>
                 {children}
                 <AuthModalManager />
               </AuthProvider>

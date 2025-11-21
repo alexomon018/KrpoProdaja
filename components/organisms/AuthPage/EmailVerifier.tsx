@@ -4,8 +4,11 @@ import { useState, useEffect, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { EmailVerification } from "@/components/molecules/AuthForm/EmailVerification";
 import { Container } from "@/components/atoms/Container/Container";
-import { verifyEmailAction, resendVerificationEmailAction } from "@/lib/auth/actions";
-import { useAuth } from "@/lib/auth/context";
+import {
+  verifyEmailAction,
+  resendVerificationEmailAction,
+} from "@/lib/auth/actions";
+import { useAuth } from "@/lib/auth/AuthProvider";
 
 export function EmailVerifier() {
   const router = useRouter();
@@ -27,7 +30,9 @@ export function EmailVerifier() {
       const result = await resendVerificationEmailAction(email);
 
       if (!result.success) {
-        setError(result.error || "Greška pri slanju email-a. Molimo pokušajte ponovo.");
+        setError(
+          result.error || "Greška pri slanju email-a. Molimo pokušajte ponovo."
+        );
       }
     });
   };
@@ -51,7 +56,9 @@ export function EmailVerifier() {
           }
           setSuccess(true);
         } else {
-          setError(result.error || "Verifikacija nije uspela. Link je možda istekao.");
+          setError(
+            result.error || "Verifikacija nije uspela. Link je možda istekao."
+          );
         }
       });
     }

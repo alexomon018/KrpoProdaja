@@ -1,6 +1,12 @@
 "use client";
 
-import React, { createContext, useContext, useState, useCallback } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useEffect,
+} from "react";
 import { useRouter } from "next/navigation";
 import { getCurrentUser } from "./server";
 import type { ApiUser } from "@/lib/api/types";
@@ -36,7 +42,10 @@ export function AuthProvider({
   initialUser = null,
 }: AuthProviderProps) {
   const router = useRouter();
-  const [user, setUser] = useState<ApiUser | null>(initialUser);
+
+  // Use state only for client-side mutations (login, logout, refresh)
+  // Prefer initialUser from server when available
+  const [clientUser, setClientUser] = useState<ApiUser | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [authModalState, setAuthModalState] = useState({
     isOpen: false,
@@ -44,14 +53,17 @@ export function AuthProvider({
     redirectAfterAuth: undefined as string | undefined,
   });
 
+  // Use initialUser (from server) if available, otherwise fall back to clientUser (from client-side mutations)
+  const user = initialUser || clientUser;
+
   const refreshUser = useCallback(async () => {
     setIsLoading(true);
     try {
       const currentUser = await getCurrentUser();
-      setUser(currentUser);
+      setClientUser(currentUser);
     } catch (error) {
       console.error("Failed to refresh user:", error);
-      setUser(null);
+      setClientUser(null);
     } finally {
       setIsLoading(false);
     }
@@ -60,7 +72,7 @@ export function AuthProvider({
   const logout = useCallback(async () => {
     const { logoutAction } = await import("./actions");
     await logoutAction();
-    setUser(null);
+    setClientUser(null);
     router.push("/");
     router.refresh();
   }, [router]);
@@ -87,7 +99,7 @@ export function AuthProvider({
     user,
     isLoading,
     isAuthenticated: !!user,
-    setUser,
+    setUser: setClientUser,
     refreshUser,
     logout,
     showAuthModal,

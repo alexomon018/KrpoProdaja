@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/lib/auth/context";
+import { useAuth } from "@/lib/auth/AuthProvider";
 import { useUpdateCurrentUser } from "@/lib/api/hooks";
 import {
   ProfileEditForm,
@@ -62,7 +62,9 @@ export function ProfileEditor() {
     ? {
         name:
           currentUser.name ||
-          `${currentUser.firstName || ""} ${currentUser.lastName || ""}`.trim() ||
+          `${currentUser.firstName || ""} ${
+            currentUser.lastName || ""
+          }`.trim() ||
           currentUser.email ||
           "",
         email: currentUser.email,

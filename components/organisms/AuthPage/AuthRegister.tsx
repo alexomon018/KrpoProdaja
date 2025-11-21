@@ -2,10 +2,17 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { RegisterForm, RegisterFormData } from "@/components/molecules/AuthForm/RegisterForm";
+import {
+  RegisterForm,
+  RegisterFormData,
+} from "@/components/molecules/AuthForm/RegisterForm";
 import { Container } from "@/components/atoms/Container/Container";
-import { registerAction, googleAuthAction, facebookAuthAction } from "@/lib/auth";
-import { useAuth } from "@/lib/auth/context";
+import {
+  registerAction,
+  googleAuthAction,
+  facebookAuthAction,
+} from "@/lib/auth";
+import { useAuth } from "@/lib/auth/AuthProvider";
 
 export function AuthRegister() {
   const router = useRouter();
@@ -27,7 +34,9 @@ export function AuthRegister() {
         // Redirect to email verification page
         router.push(`/verify-email?email=${encodeURIComponent(data.email)}`);
       } else {
-        setError(result.error || "Greška pri registraciji. Molimo pokušajte ponovo.");
+        setError(
+          result.error || "Greška pri registraciji. Molimo pokušajte ponovo."
+        );
       }
     });
   };
@@ -46,7 +55,8 @@ export function AuthRegister() {
         router.push("/");
       } else {
         setError(
-          result.error || "Google registracija nije uspela. Molimo pokušajte ponovo."
+          result.error ||
+            "Google registracija nije uspela. Molimo pokušajte ponovo."
         );
       }
     });
@@ -66,7 +76,8 @@ export function AuthRegister() {
         router.push("/");
       } else {
         setError(
-          result.error || "Facebook registracija nije uspela. Molimo pokušajte ponovo."
+          result.error ||
+            "Facebook registracija nije uspela. Molimo pokušajte ponovo."
         );
       }
     });

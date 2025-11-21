@@ -1,9 +1,11 @@
 import { forwardRef } from "react";
 import cn from "@/lib/utils";
-import { Avatar, Button, Typography } from "@/components/atoms";
+import { Button, Typography } from "@/components/atoms";
+import { UserAvatar } from "@/components/atoms/Avatar/Avatar";
 import { RatingDisplay } from "../ReviewCard/ReviewCard";
 import type { UserType } from "@/lib/types";
 import { MessageCircle, Clock } from "@/components/atoms/Icon/Icon";
+import { getUserDisplayName } from "@/lib/utils/avatar";
 
 export interface SellerInfoProps extends React.HTMLAttributes<HTMLDivElement> {
   seller: UserType;
@@ -41,6 +43,8 @@ const SellerInfo = forwardRef<HTMLDivElement, SellerInfoProps>(
     },
     ref
   ) => {
+    const displayName = getUserDisplayName(seller);
+
     if (compact) {
       return (
         <button
@@ -50,13 +54,11 @@ const SellerInfo = forwardRef<HTMLDivElement, SellerInfoProps>(
             className
           )}
         >
-          <Avatar
-            src={seller.avatar}
-            alt={seller.email}
-            fallback={seller.email?.[0]?.toUpperCase() || "?"}
+          <UserAvatar
+            user={seller}
             size="sm"
           />
-          <Typography variant="caption">{seller.email}</Typography>
+          <Typography variant="caption">{displayName}</Typography>
         </button>
       );
     }
@@ -74,10 +76,8 @@ const SellerInfo = forwardRef<HTMLDivElement, SellerInfoProps>(
         {/* Seller Header */}
         <div className="flex items-start gap-3 sm:gap-4 mb-4 sm:mb-6">
           <button onClick={onProfileClick} className="shrink-0">
-            <Avatar
-              src={seller.avatar}
-              alt={seller.email}
-              fallback={seller.email?.[0]?.toUpperCase() || "?"}
+            <UserAvatar
+              user={seller}
               size="lg"
             />
           </button>
@@ -88,7 +88,7 @@ const SellerInfo = forwardRef<HTMLDivElement, SellerInfoProps>(
               className="hover:underline focus:outline-none focus:underline text-left"
             >
               <Typography variant="h3" className="mb-1">
-                {seller.email}
+                {displayName}
               </Typography>
             </button>
 

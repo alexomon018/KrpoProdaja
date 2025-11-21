@@ -8,6 +8,7 @@ import {
   AvatarImage,
   AvatarFallback,
 } from "@/components/ui/avatar";
+import { getUserAvatarData } from "@/lib/utils/avatar";
 
 /**
  * Extended avatar size variants for KrpoProdaja marketplace
@@ -34,6 +35,8 @@ export interface AvatarProps
   src?: string;
   alt?: string;
   fallback?: string;
+  backgroundColor?: string;
+  textColor?: string;
 }
 
 /**
@@ -45,25 +48,12 @@ export interface AvatarProps
  * @example
  * ```tsx
  * <Avatar src="/user.jpg" alt="Marija K." size="md" />
- * <Avatar fallback="MK" size="lg" />
+ * <Avatar fallback="MK" size="lg" backgroundColor="#E57373" textColor="#FFFFFF" />
  * ```
  */
 const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
-  ({ className, size, src, alt, fallback, ...props }, ref) => {
+  ({ className, size, src, alt, fallback, backgroundColor, textColor, ...props }, ref) => {
     const [imageError, setImageError] = useState(false);
-
-    // Generate initials from alt text if no fallback provided
-    const getInitials = (name?: string) => {
-      if (!name) return "?";
-      return name
-        .split(" ")
-        .map((word) => word[0])
-        .join("")
-        .toUpperCase()
-        .slice(0, 2);
-    };
-
-    const displayFallback = fallback || getInitials(alt);
 
     return (
       <ShadcnAvatar
@@ -81,8 +71,14 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
             }}
           />
         )}
-        <AvatarFallback className="bg-primary/10 text-primary font-semibold">
-          {displayFallback}
+        <AvatarFallback
+          className="font-semibold"
+          style={{
+            backgroundColor: backgroundColor || 'hsl(var(--primary) / 0.1)',
+            color: textColor || 'hsl(var(--primary))',
+          }}
+        >
+          {fallback || '?'}
         </AvatarFallback>
       </ShadcnAvatar>
     );
@@ -91,4 +87,49 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
 
 Avatar.displayName = "Avatar";
 
-export { Avatar, avatarVariants };
+/**
+ * User Avatar Component - Smart avatar that automatically determines display from user data
+ *
+ * Priority:
+ *   1. Avatar image URL (if provided)
+ *   2. Initials from first name + last name (if both provided)
+ *   3. Initials from email address
+ *
+ * @example
+ * ```tsx
+ * <UserAvatar user={{ email: "john.doe@example.com", firstName: "John", lastName: "Doe" }} size="md" />
+ * <UserAvatar user={{ email: "alice@example.com" }} size="lg" />
+ * ```
+ */
+export interface UserAvatarProps
+  extends Omit<AvatarProps, 'src' | 'alt' | 'fallback' | 'backgroundColor' | 'textColor'> {
+  user: {
+    avatar?: string;
+    firstName?: string;
+    lastName?: string;
+    email: string;
+  };
+}
+
+const UserAvatar = forwardRef<HTMLDivElement, UserAvatarProps>(
+  ({ user, ...props }, ref) => {
+    const avatarData = getUserAvatarData(user);
+
+    return (
+      <Avatar
+        key={user.avatar || user.email}
+        ref={ref}
+        src={avatarData.type === 'image' ? avatarData.value : undefined}
+        fallback={avatarData.type === 'initials' ? avatarData.value : undefined}
+        backgroundColor={avatarData.backgroundColor}
+        textColor={avatarData.textColor}
+        alt={user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.email}
+        {...props}
+      />
+    );
+  }
+);
+
+UserAvatar.displayName = "UserAvatar";
+
+export { Avatar, UserAvatar, avatarVariants };

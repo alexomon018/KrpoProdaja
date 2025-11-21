@@ -8,7 +8,7 @@ import { FormInput, Button, Typography, Container } from "@atoms";
 import { ImageUpload } from "@molecules";
 import { uploadService } from "@lib/api";
 import { useCreateProduct } from "@lib/api/hooks/useProducts";
-import { useRequireAuth } from "@/lib/auth/context";
+import { useRequireAuth } from "@/lib/auth/AuthProvider";
 import type { SizeType, ConditionType } from "@lib/types";
 import type { ProductCondition } from "@lib/api";
 

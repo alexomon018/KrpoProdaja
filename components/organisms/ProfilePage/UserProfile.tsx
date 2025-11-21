@@ -6,7 +6,7 @@ import {
   ProfileData,
 } from "@/components/organisms/ProfileView/ProfileView";
 import { Container } from "@/components/atoms/Container/Container";
-import { useAuth } from "@/lib/auth/context";
+import { useAuth } from "@/lib/auth/AuthProvider";
 
 export function UserProfile() {
   const router = useRouter();
@@ -65,14 +65,16 @@ export function UserProfile() {
   // Map user from context to ProfileData format
   const profile: ProfileData = {
     id: user.id,
-    name: `${user.firstName} ${user.lastName}` || user.email,
+    name: `${user.firstName || ""} ${user.lastName || ""}`.trim() || user.email,
     email: user.email,
-    phone: user.phoneNumber,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    phone: user.phoneNumber || user.phone,
     avatar: user.avatar,
     bio: user.bio,
     location: user.location,
     memberSince: user.createdAt,
-    verified: true,
+    verified: user.verified || false,
     rating: 0, // TODO: Add rating to user API
     totalSales: 0, // TODO: Add stats to user API
     activeListing: 0, // TODO: Add stats to user API

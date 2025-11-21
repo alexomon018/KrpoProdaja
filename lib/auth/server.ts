@@ -32,8 +32,17 @@ export async function getCurrentUser() {
       return null;
     }
 
-    const user = await response.json();
-    return user;
+    const data = await response.json();
+
+    // The API can return either:
+    // 1. Direct user object: { id, email, firstName, ... }
+    // 2. Nested structure: { user: {...}, stats: {...} }
+    // Handle both cases
+    if (data.user) {
+      return data.user;
+    }
+
+    return data;
   } catch (error) {
     return null;
   }

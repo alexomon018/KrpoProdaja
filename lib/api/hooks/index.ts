@@ -8,9 +8,6 @@
  * - useSearch.ts: Search, categories, and favorites hooks
  */
 
-// Auth hooks
-export { useRegister, useLogin, useLogout } from "./useAuth";
-
 // Products hooks
 export {
   useProducts,

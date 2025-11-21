@@ -38,6 +38,8 @@ export type UserType = {
   id: string;
   email: string;
   avatar?: string;
+  firstName?: string;
+  lastName?: string;
   rating?: number;
   reviewCount?: number;
   responseTime?: string;
