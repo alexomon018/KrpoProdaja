@@ -8,8 +8,6 @@
 export interface RegisterRequest {
   email: string;
   password: string;
-  username: string;
-  fullName?: string;
   firstName?: string;
   lastName?: string;
   phone?: string;
@@ -35,7 +33,6 @@ export interface AuthResponse {
 export interface ApiUser {
   id: string;  // UUID from backend
   email: string;
-  username: string;
   firstName?: string;
   lastName?: string;
   name?: string;
@@ -55,7 +52,6 @@ export interface ApiUser {
 
 export interface UpdateUserRequest {
   email?: string;
-  username?: string;
   firstName?: string;
   lastName?: string;
   // Extended fields (may not be supported by backend yet)

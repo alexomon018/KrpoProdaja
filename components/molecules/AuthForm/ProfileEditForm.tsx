@@ -101,7 +101,7 @@ export function ProfileEditForm({
         <h2 className="text-xl font-bold text-primary mb-6">Profilna slika</h2>
         <AvatarUpload
           currentAvatar={currentAvatar}
-          userName={initialData?.name}
+          userEmail={initialData?.email}
           onUpload={(file) => {
             methods.setValue("avatar", file);
             onAvatarUpload?.(file);

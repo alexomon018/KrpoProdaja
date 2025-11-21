@@ -8,7 +8,7 @@ import type { ProductType, UserType, ReviewType, ReviewSummaryType } from "./typ
 export const mockUsers: UserType[] = [
   {
     id: "1",
-    username: "Marija K.",
+    email: "marija.k@example.com",
     avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
     rating: 4.9,
     reviewCount: 127,
@@ -19,7 +19,7 @@ export const mockUsers: UserType[] = [
   },
   {
     id: "2",
-    username: "Stefan M.",
+    email: "stefan.m@example.com",
     avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
     rating: 4.7,
     reviewCount: 83,
@@ -30,7 +30,7 @@ export const mockUsers: UserType[] = [
   },
   {
     id: "3",
-    username: "Ana P.",
+    email: "ana.p@example.com",
     avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop",
     rating: 5.0,
     reviewCount: 45,
@@ -41,7 +41,7 @@ export const mockUsers: UserType[] = [
   },
   {
     id: "4",
-    username: "Nikola D.",
+    email: "nikola.d@example.com",
     rating: 4.8,
     reviewCount: 212,
     responseTime: "4h",

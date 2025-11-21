@@ -21,7 +21,6 @@ export function AuthRegister() {
       const result = await registerAction({
         email: data.email,
         password: data.password,
-        username: data.email.split('@')[0], // Generate username from email
       });
 
       if (result.success) {

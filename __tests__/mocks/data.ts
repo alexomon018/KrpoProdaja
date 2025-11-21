@@ -2,7 +2,7 @@ import { ProductType, UserType, ReviewType } from '@/lib/types';
 
 export const mockUser: UserType = {
   id: '1',
-  username: 'testuser',
+  email: 'testuser@example.com',
   avatar: '/test-avatar.jpg',
   rating: 4.5,
   reviewCount: 10,
@@ -13,7 +13,7 @@ export const mockUser: UserType = {
 
 export const mockReviewer: UserType = {
   id: '2',
-  username: 'reviewer',
+  email: 'reviewer@example.com',
   avatar: '/reviewer-avatar.jpg',
   rating: 5,
   reviewCount: 15,

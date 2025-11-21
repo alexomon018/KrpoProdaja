@@ -4,7 +4,7 @@ import type { ReviewType, ReviewSummaryType, UserType } from "@/lib/types";
 
 const mockUser: UserType = {
   id: "1",
-  username: "testuser",
+  email: "testuser@example.com",
   memberSince: new Date("2020-01-01"),
 };
 

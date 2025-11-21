@@ -63,7 +63,7 @@ export function ProfileEditor() {
         name:
           currentUser.name ||
           `${currentUser.firstName || ""} ${currentUser.lastName || ""}`.trim() ||
-          currentUser.username ||
+          currentUser.email ||
           "",
         email: currentUser.email,
         phone: currentUser.phone || currentUser.phoneNumber || "",

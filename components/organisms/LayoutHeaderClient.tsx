@@ -19,7 +19,7 @@ export function LayoutHeaderClient() {
   // Map API user to Header user format
   const headerUser = user
     ? {
-        username: user.username,
+        email: user.email,
         avatar: user.avatar,
       }
     : undefined;

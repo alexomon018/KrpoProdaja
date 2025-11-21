@@ -30,7 +30,8 @@ const ReviewCard = forwardRef<HTMLDivElement, ReviewCardProps>(
         {/* Reviewer Avatar */}
         <Avatar
           src={review.reviewer.avatar}
-          alt={review.reviewer.username}
+          alt={review.reviewer.email}
+          fallback={review.reviewer.email?.[0]?.toUpperCase() || "?"}
           size="md"
         />
 
@@ -39,7 +40,7 @@ const ReviewCard = forwardRef<HTMLDivElement, ReviewCardProps>(
           {/* Reviewer Name and Date */}
           <div className="flex items-center justify-between gap-2 mb-1">
             <Typography variant="bodySmall" className="font-semibold">
-              {review.reviewer.username}
+              {review.reviewer.email}
             </Typography>
             <Typography variant="caption">
               {formatRelativeTime(review.createdAt)}

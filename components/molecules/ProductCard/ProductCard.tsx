@@ -104,12 +104,12 @@ const ProductCard = forwardRef<HTMLDivElement, ProductCardProps>(
             <button
               onClick={handleSellerClick}
               className="absolute bottom-2 left-2 hover:opacity-80 transition-opacity focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-full"
-              aria-label={`Vidi profil prodavca ${product.seller.username}`}
+              aria-label={`Vidi profil prodavca ${product.seller.email}`}
             >
               <Avatar
                 src={product.seller.avatar}
-                alt={product.seller.username}
-                fallback={product.seller.username}
+                alt={product.seller.email}
+                fallback={product.seller.email?.[0]?.toUpperCase() || "?"}
                 size="sm"
               />
             </button>

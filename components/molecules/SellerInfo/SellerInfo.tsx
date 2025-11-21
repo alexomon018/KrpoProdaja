@@ -52,11 +52,11 @@ const SellerInfo = forwardRef<HTMLDivElement, SellerInfoProps>(
         >
           <Avatar
             src={seller.avatar}
-            alt={seller.username}
-            fallback={seller.username}
+            alt={seller.email}
+            fallback={seller.email?.[0]?.toUpperCase() || "?"}
             size="sm"
           />
-          <Typography variant="caption">{seller.username}</Typography>
+          <Typography variant="caption">{seller.email}</Typography>
         </button>
       );
     }
@@ -76,8 +76,8 @@ const SellerInfo = forwardRef<HTMLDivElement, SellerInfoProps>(
           <button onClick={onProfileClick} className="shrink-0">
             <Avatar
               src={seller.avatar}
-              alt={seller.username}
-              fallback={seller.username}
+              alt={seller.email}
+              fallback={seller.email?.[0]?.toUpperCase() || "?"}
               size="lg"
             />
           </button>
@@ -88,7 +88,7 @@ const SellerInfo = forwardRef<HTMLDivElement, SellerInfoProps>(
               className="hover:underline focus:outline-none focus:underline text-left"
             >
               <Typography variant="h3" className="mb-1">
-                {seller.username}
+                {seller.email}
               </Typography>
             </button>
 

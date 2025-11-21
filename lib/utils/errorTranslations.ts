@@ -28,7 +28,6 @@ const errorTranslations: Record<string, string> = {
   "Email already in use": "Ova email adresa je već u upotrebi",
   "User already exists": "Korisnik sa ovom email adresom već postoji",
   "Email is already registered": "Email adresa je već registrovana",
-  "Username already taken": "Korisničko ime je već zauzeto",
   "Registration failed": "Registracija nije uspela. Molimo pokušajte ponovo.",
 
   // Password validation errors (from backend)
@@ -139,9 +138,6 @@ export function translateError(
   if (lowerMessage.includes("already exists") || lowerMessage.includes("already in use")) {
     if (lowerMessage.includes("email")) {
       return errorTranslations["Email already in use"];
-    }
-    if (lowerMessage.includes("username")) {
-      return errorTranslations["Username already taken"];
     }
     return "Podaci su već u upotrebi";
   }

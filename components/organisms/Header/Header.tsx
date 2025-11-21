@@ -31,7 +31,7 @@ export interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
    * Current user (if logged in)
    */
   user?: {
-    username: string;
+    email: string;
     avatar?: string;
     firstName?: string;
     lastName?: string;
@@ -160,7 +160,8 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
                 <Link href="/profile">
                   <Avatar
                     src={user.avatar}
-                    alt={user.name || user.fullName || `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.username}
+                    alt={user.name || user.fullName || `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.email}
+                    fallback={user.email?.[0]?.toUpperCase() || "?"}
                     size="md"
                   />
                 </Link>

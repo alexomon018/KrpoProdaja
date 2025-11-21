@@ -105,18 +105,6 @@ export const phoneSchema = yup
   .nullable()
   .optional();
 
-/**
- * Username validation schema
- */
-export const usernameSchema = yup
-  .string()
-  .required("Korisničko ime je obavezno")
-  .min(3, "Korisničko ime mora imati najmanje 3 karaktera")
-  .max(20, "Korisničko ime može imati maksimalno 20 karaktera")
-  .matches(
-    /^[a-zA-Z0-9._]+$/,
-    "Korisničko ime može sadržati samo slova, brojeve, tačku i donju crtu"
-  );
 
 /**
  * Terms acceptance validation schema

@@ -65,7 +65,7 @@ export function UserProfile() {
   // Map user from context to ProfileData format
   const profile: ProfileData = {
     id: user.id,
-    name: `${user.firstName} ${user.lastName}` || user.username,
+    name: `${user.firstName} ${user.lastName}` || user.email,
     email: user.email,
     phone: user.phoneNumber,
     avatar: user.avatar,

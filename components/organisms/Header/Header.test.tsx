@@ -41,7 +41,7 @@ describe('Header', () => {
   });
 
   it('shows user avatar when user is provided', () => {
-    const user = { username: 'testuser', avatar: '/avatar.jpg' };
+    const user = { email: 'testuser@example.com', avatar: '/avatar.jpg' };
     render(<Header user={user} />);
     expect(screen.getByRole('img', { name: /testuser/i })).toBeInTheDocument();
   });
