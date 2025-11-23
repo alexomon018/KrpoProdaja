@@ -155,6 +155,7 @@ export function ProfileEditor() {
         loading={loading}
         error={error}
         success={success}
+        isPhoneVerified={currentUser?.verifiedSeller ?? false}
       />
 
       <PhoneVerificationModal

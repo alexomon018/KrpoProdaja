@@ -74,7 +74,7 @@ export function UserProfile() {
     bio: user.bio,
     location: user.location,
     memberSince: user.createdAt,
-    verified: user.verified || false,
+    verified: user?.verifiedSeller ?? false,
     rating: 0, // TODO: Add rating to user API
     totalSales: 0, // TODO: Add stats to user API
     activeListing: 0, // TODO: Add stats to user API
