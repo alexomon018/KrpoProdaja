@@ -8,7 +8,7 @@ import {
 } from "@/components/molecules/AuthForm/LoginForm";
 import { Container } from "@/components/atoms/Container/Container";
 import { loginAction, googleAuthAction, facebookAuthAction } from "@/lib/auth";
-import { useAuth } from "@/lib/auth/context";
+import { useAuth } from "@/lib/auth/AuthProvider";
 
 export function AuthLogin() {
   const router = useRouter();
@@ -54,7 +54,8 @@ export function AuthLogin() {
         router.push("/");
       } else {
         setError(
-          result.error || "Google prijavljivanje nije uspelo. Molimo pokušajte ponovo."
+          result.error ||
+            "Google prijavljivanje nije uspelo. Molimo pokušajte ponovo."
         );
       }
     });
@@ -74,7 +75,8 @@ export function AuthLogin() {
         router.push("/");
       } else {
         setError(
-          result.error || "Facebook prijavljivanje nije uspelo. Molimo pokušajte ponovo."
+          result.error ||
+            "Facebook prijavljivanje nije uspelo. Molimo pokušajte ponovo."
         );
       }
     });

@@ -1,35 +1,46 @@
-'use client';
+"use client";
 
-import { useState, useTransition } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from '@/components/ui/dialog';
-import { LoginForm, LoginFormData } from '@/components/molecules/AuthForm/LoginForm';
-import { RegisterForm, RegisterFormData } from '@/components/molecules/AuthForm/RegisterForm';
-import { loginAction, registerAction, googleAuthAction, facebookAuthAction } from '@/lib/auth';
-import { useAuth } from '@/lib/auth/context';
+} from "@/components/ui/dialog";
+import {
+  LoginForm,
+  LoginFormData,
+} from "@/components/molecules/AuthForm/LoginForm";
+import {
+  RegisterForm,
+  RegisterFormData,
+} from "@/components/molecules/AuthForm/RegisterForm";
+import {
+  loginAction,
+  registerAction,
+  googleAuthAction,
+  facebookAuthAction,
+} from "@/lib/auth";
+import { useAuth } from "@/lib/auth/AuthProvider";
 
 interface AuthModalProps {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
-  defaultMode?: 'login' | 'register';
+  defaultMode?: "login" | "register";
   redirectAfterAuth?: string;
 }
 
 export function AuthModal({
   open: controlledOpen,
   onOpenChange: controlledOnOpenChange,
-  defaultMode = 'login',
+  defaultMode = "login",
   redirectAfterAuth,
 }: AuthModalProps) {
   const router = useRouter();
   const { setUser, closeAuthModal } = useAuth();
-  const [mode, setMode] = useState<'login' | 'register'>(defaultMode);
+  const [mode, setMode] = useState<"login" | "register">(defaultMode);
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>();
 
@@ -62,7 +73,7 @@ export function AuthModal({
       } else {
         setError(
           result.error ||
-            'Email ili lozinka nisu ispravni. Molimo pokušajte ponovo.'
+            "Email ili lozinka nisu ispravni. Molimo pokušajte ponovo."
         );
       }
     });
@@ -76,8 +87,6 @@ export function AuthModal({
       const result = await registerAction({
         email: data.email,
         password: data.password,
-        username: data.email.split('@')[0], // Generate username from email
-        fullName: data.name,
       });
 
       if (result.success && result.data) {
@@ -98,7 +107,9 @@ export function AuthModal({
           router.refresh();
         }
       } else {
-        setError(result.error || 'Greška pri registraciji. Molimo pokušajte ponovo.');
+        setError(
+          result.error || "Greška pri registraciji. Molimo pokušajte ponovo."
+        );
       }
     });
   };
@@ -128,7 +139,8 @@ export function AuthModal({
         }
       } else {
         setError(
-          result.error || 'Google prijavljivanje nije uspelo. Molimo pokušajte ponovo.'
+          result.error ||
+            "Google prijavljivanje nije uspelo. Molimo pokušajte ponovo."
         );
       }
     });
@@ -159,7 +171,8 @@ export function AuthModal({
         }
       } else {
         setError(
-          result.error || 'Facebook prijavljivanje nije uspelo. Molimo pokušajte ponovo.'
+          result.error ||
+            "Facebook prijavljivanje nije uspelo. Molimo pokušajte ponovo."
         );
       }
     });
@@ -170,7 +183,7 @@ export function AuthModal({
   };
 
   const toggleMode = () => {
-    setMode(mode === 'login' ? 'register' : 'login');
+    setMode(mode === "login" ? "register" : "login");
     setError(undefined);
   };
 
@@ -195,16 +208,16 @@ export function AuthModal({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>
-            {mode === 'login' ? 'Prijavite se' : 'Registrujte se'}
+            {mode === "login" ? "Prijavite se" : "Registrujte se"}
           </DialogTitle>
           <DialogDescription>
-            {mode === 'login'
-              ? 'Unesite svoje podatke za pristup nalogu.'
-              : 'Kreirajte nalog da biste nastavili.'}
+            {mode === "login"
+              ? "Unesite svoje podatke za pristup nalogu."
+              : "Kreirajte nalog da biste nastavili."}
           </DialogDescription>
         </DialogHeader>
 
-        {mode === 'login' ? (
+        {mode === "login" ? (
           <LoginForm
             onSubmit={handleLogin}
             onGoogleSuccess={handleGoogleSuccess}

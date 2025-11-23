@@ -18,8 +18,8 @@ function mapApiProductToProductType(apiProduct: ApiProduct): ProductType {
   const sellerData = apiProduct.seller || apiProduct.user;
   const sellerId =
     sellerData?.id || apiProduct.userId?.toString() || "unknown";
-  const sellerUsername =
-    sellerData?.username || `User ${apiProduct.userId || "Unknown"}`;
+  const sellerEmail =
+    sellerData?.email || `user${apiProduct.userId || "unknown"}@placeholder.com`;
 
   return {
     id: apiProduct.id.toString(),
@@ -33,7 +33,7 @@ function mapApiProductToProductType(apiProduct: ApiProduct): ProductType {
     location: apiProduct.location || "",
     seller: {
       id: sellerId,
-      username: sellerUsername,
+      email: sellerEmail,
       avatar: sellerData?.avatar,
       memberSince: new Date(sellerData?.createdAt || apiProduct.createdAt),
     },

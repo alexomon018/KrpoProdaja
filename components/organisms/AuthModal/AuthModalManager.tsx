@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useAuth } from '@/lib/auth/context';
-import { AuthModal } from './AuthModal';
+import { useAuth } from "@/lib/auth/AuthProvider";
+import { AuthModal } from "./AuthModal";
 
 /**
  * AuthModalManager - Global auth modal that integrates with AuthContext

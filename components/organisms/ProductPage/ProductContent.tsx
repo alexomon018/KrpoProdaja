@@ -85,8 +85,8 @@ export function ProductContent({ productId }: ProductContentProps) {
     material: apiProduct.material,
     seller: {
       id: sellerData?.id || apiProduct.userId?.toString() || "unknown",
-      username:
-        sellerData?.username || `User ${apiProduct.userId || "Unknown"}`,
+      email:
+        sellerData?.email || `user${apiProduct.userId || "unknown"}@placeholder.com`,
       avatar: sellerData?.avatar,
       memberSince: new Date(sellerData?.createdAt || apiProduct.createdAt),
     },

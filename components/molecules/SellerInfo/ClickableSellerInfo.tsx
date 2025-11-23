@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { SellerInfo } from "./SellerInfo";
-import { useRequireAuth } from "@/lib/auth/context";
+import { useRequireAuth } from "@/lib/auth/AuthProvider";
 import type { UserType } from "@/lib/types";
 
 export interface ClickableSellerInfoProps {

@@ -3,9 +3,9 @@ import { ReviewCard, RatingDisplay } from './ReviewCard';
 import { mockReview } from '@/__tests__/mocks/data';
 
 describe('ReviewCard', () => {
-  it('renders reviewer username', () => {
+  it('renders reviewer email', () => {
     render(<ReviewCard review={mockReview} />);
-    expect(screen.getByText(mockReview.reviewer.username)).toBeInTheDocument();
+    expect(screen.getByText(mockReview.reviewer.email)).toBeInTheDocument();
   });
 
   it('renders review comment', () => {

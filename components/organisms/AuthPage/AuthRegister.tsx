@@ -2,10 +2,17 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { RegisterForm, RegisterFormData } from "@/components/molecules/AuthForm/RegisterForm";
+import {
+  RegisterForm,
+  RegisterFormData,
+} from "@/components/molecules/AuthForm/RegisterForm";
 import { Container } from "@/components/atoms/Container/Container";
-import { registerAction, googleAuthAction, facebookAuthAction } from "@/lib/auth";
-import { useAuth } from "@/lib/auth/context";
+import {
+  registerAction,
+  googleAuthAction,
+  facebookAuthAction,
+} from "@/lib/auth";
+import { useAuth } from "@/lib/auth/AuthProvider";
 
 export function AuthRegister() {
   const router = useRouter();
@@ -17,22 +24,19 @@ export function AuthRegister() {
     setError(undefined);
 
     startTransition(async () => {
-      // Map form data to API request format
+      // Map form data to API request format - only email and password
       const result = await registerAction({
         email: data.email,
         password: data.password,
-        username: data.email.split('@')[0], // Generate username from email
-        fullName: data.name,
       });
 
-      if (result.success && result.data) {
-        // Update auth context with the user data from the response
-        setUser(result.data.user);
-
-        // Redirect to home page on success
-        router.push("/");
+      if (result.success) {
+        // Redirect to email verification page
+        router.push(`/verify-email?email=${encodeURIComponent(data.email)}`);
       } else {
-        setError(result.error || "Greška pri registraciji. Molimo pokušajte ponovo.");
+        setError(
+          result.error || "Greška pri registraciji. Molimo pokušajte ponovo."
+        );
       }
     });
   };
@@ -51,7 +55,8 @@ export function AuthRegister() {
         router.push("/");
       } else {
         setError(
-          result.error || "Google registracija nije uspela. Molimo pokušajte ponovo."
+          result.error ||
+            "Google registracija nije uspela. Molimo pokušajte ponovo."
         );
       }
     });
@@ -71,7 +76,8 @@ export function AuthRegister() {
         router.push("/");
       } else {
         setError(
-          result.error || "Facebook registracija nije uspela. Molimo pokušajte ponovo."
+          result.error ||
+            "Facebook registracija nije uspela. Molimo pokušajte ponovo."
         );
       }
     });

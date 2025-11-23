@@ -2,7 +2,7 @@
 
 import { Header } from "./Header/Header";
 import { usePathname } from "next/navigation";
-import { useAuth } from "@/lib/auth/context";
+import { useAuth } from "@/lib/auth/AuthProvider";
 
 export function LayoutHeaderClient() {
   const pathname = usePathname();
@@ -19,8 +19,10 @@ export function LayoutHeaderClient() {
   // Map API user to Header user format
   const headerUser = user
     ? {
-        username: user.username,
+        email: user.email,
         avatar: user.avatar,
+        firstName: user.firstName,
+        lastName: user.lastName,
       }
     : undefined;
 

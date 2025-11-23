@@ -113,28 +113,11 @@ export function RegisterForm({
           )}
 
           <FormInput
-            name="name"
-            type="text"
-            label="Ime i prezime"
-            placeholder="Marko Marković"
-            required
-            disabled={loading}
-          />
-
-          <FormInput
             name="email"
             type="email"
             label="Email adresa"
             placeholder="tvoj.email@primer.com"
             required
-            disabled={loading}
-          />
-
-          <FormInput
-            name="phone"
-            type="tel"
-            label="Broj telefona (opciono)"
-            placeholder="+381 60 123 4567"
             disabled={loading}
           />
 

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Avatar } from "@/components/atoms/Avatar/Avatar";
+import { UserAvatar } from "@/components/atoms/Avatar/Avatar";
 import { Button } from "@/components/atoms/Button/Button";
 import { Icon } from "@/components/atoms/Icon/Icon";
 
@@ -12,6 +12,8 @@ export interface ProfileData {
   email: string;
   phone?: string;
   avatar?: string;
+  firstName?: string;
+  lastName?: string;
   bio?: string;
   location?: string;
   memberSince: string;
@@ -61,9 +63,13 @@ export function ProfileView({
       <div className="bg-surface border border-border rounded-lg p-6">
         <div className="flex flex-col md:flex-row gap-6">
           <div className="shrink-0">
-            <Avatar
-              src={profile.avatar}
-              alt={profile.name}
+            <UserAvatar
+              user={{
+                avatar: profile.avatar,
+                firstName: profile.firstName,
+                lastName: profile.lastName,
+                email: profile.email,
+              }}
               size="2xl"
             />
           </div>

@@ -3,7 +3,7 @@
  * These helpers handle token validation and refresh in the middleware layer
  */
 
-import type { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api";

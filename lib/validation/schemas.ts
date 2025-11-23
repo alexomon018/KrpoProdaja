@@ -105,18 +105,6 @@ export const phoneSchema = yup
   .nullable()
   .optional();
 
-/**
- * Username validation schema
- */
-export const usernameSchema = yup
-  .string()
-  .required("Korisničko ime je obavezno")
-  .min(3, "Korisničko ime mora imati najmanje 3 karaktera")
-  .max(20, "Korisničko ime može imati maksimalno 20 karaktera")
-  .matches(
-    /^[a-zA-Z0-9._]+$/,
-    "Korisničko ime može sadržati samo slova, brojeve, tačku i donju crtu"
-  );
 
 /**
  * Terms acceptance validation schema
@@ -136,25 +124,17 @@ export const termsSchema = yup
 export const loginFormSchema = yup.object({
   email: emailSchema,
   password: yup.string().required("Lozinka je obavezna"),
-  rememberMe: yup.boolean().notRequired().default(false),
+  rememberMe: yup.boolean().optional().default(false),
 });
 
-export type LoginFormData = {
-  email: string;
-  password: string;
-  rememberMe?: boolean;
-};
+export type LoginFormData = yup.InferType<typeof loginFormSchema>;
 
 /**
  * Register form validation schema
+ * Email is the single source of truth - no name or phone required
  */
 export const registerFormSchema = yup.object({
-  name: nameSchema,
   email: emailSchema,
-  phone: yup.string().matches(
-    /^(\+381|0)?[6-7][0-9]\s?\d{3}\s?\d{3,4}$/,
-    "Unesite ispravan broj telefona (npr. +381 60 123 4567 ili 060 123 4567)"
-  ).notRequired(),
   password: passwordSchema,
   confirmPassword: yup
     .string()
@@ -164,9 +144,7 @@ export const registerFormSchema = yup.object({
 });
 
 export type RegisterFormData = {
-  name: string;
   email: string;
-  phone?: string;
   password: string;
   confirmPassword: string;
   agreeToTerms: boolean;

@@ -1,34 +1,44 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useMutation } from "@tanstack/react-query";
 import { EmailVerification } from "@/components/molecules/AuthForm/EmailVerification";
 import { Container } from "@/components/atoms/Container/Container";
-
-// TODO: Replace with actual API call
-const resendVerificationEmail = async (email: string): Promise<void> => {
-  console.log("Resend verification to:", email);
-  // Simulate API call
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-};
+import {
+  verifyEmailAction,
+  resendVerificationEmailAction,
+} from "@/lib/auth/actions";
+import { useAuth } from "@/lib/auth/AuthProvider";
 
 export function EmailVerifier() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { setUser } = useAuth();
   const email = searchParams.get("email") || "";
   const [success, setSuccess] = useState(false);
-
-  const resendMutation = useMutation({
-    mutationFn: resendVerificationEmail,
-  });
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | undefined>();
 
   const handleResend = () => {
-    resendMutation.mutate(email);
+    if (!email) {
+      setError("Email adresa nije pronađena.");
+      return;
+    }
+
+    setError(undefined);
+    startTransition(async () => {
+      const result = await resendVerificationEmailAction(email);
+
+      if (!result.success) {
+        setError(
+          result.error || "Greška pri slanju email-a. Molimo pokušajte ponovo."
+        );
+      }
+    });
   };
 
   const handleVerified = () => {
-    // Redirect to home or profile setup
+    // Redirect to home page after successful verification
     router.push("/");
   };
 
@@ -36,14 +46,23 @@ export function EmailVerifier() {
   useEffect(() => {
     const token = searchParams.get("token");
     if (token) {
-      // TODO: Verify the token with backend
-      console.log("Verifying token:", token);
-      setSuccess(true);
-    }
-  }, [searchParams]);
+      startTransition(async () => {
+        const result = await verifyEmailAction(token);
 
-  const loading = resendMutation.isPending;
-  const error = resendMutation.error ? "Greška pri slanju email-a. Molimo pokušajte ponovo." : undefined;
+        if (result.success) {
+          // Update auth context with the user data if provided
+          if (result.data?.user) {
+            setUser(result.data.user);
+          }
+          setSuccess(true);
+        } else {
+          setError(
+            result.error || "Verifikacija nije uspela. Link je možda istekao."
+          );
+        }
+      });
+    }
+  }, [searchParams, setUser]);
 
   return (
     <Container className="py-8">
@@ -51,7 +70,7 @@ export function EmailVerifier() {
         email={email}
         onResend={handleResend}
         onVerified={handleVerified}
-        loading={loading}
+        loading={isPending}
         success={success}
         error={error}
       />

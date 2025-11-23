@@ -36,8 +36,10 @@ export type ProductType = {
 
 export type UserType = {
   id: string;
-  username: string;
+  email: string;
   avatar?: string;
+  firstName?: string;
+  lastName?: string;
   rating?: number;
   reviewCount?: number;
   responseTime?: string;

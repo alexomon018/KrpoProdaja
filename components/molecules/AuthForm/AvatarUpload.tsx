@@ -11,9 +11,9 @@ export interface AvatarUploadProps {
    */
   currentAvatar?: string;
   /**
-   * User's name for avatar fallback
+   * User's email for avatar fallback (source of truth)
    */
-  userName?: string;
+  userEmail?: string;
   /**
    * Callback when avatar is uploaded
    */
@@ -45,7 +45,7 @@ export interface AvatarUploadProps {
  * ```tsx
  * <AvatarUpload
  *   currentAvatar="/avatar.jpg"
- *   userName="Marko Marković"
+ *   userEmail="marko@example.com"
  *   onUpload={(file) => console.log(file)}
  *   onRemove={() => console.log("Remove avatar")}
  * />
@@ -53,7 +53,7 @@ export interface AvatarUploadProps {
  */
 export function AvatarUpload({
   currentAvatar,
-  userName,
+  userEmail,
   onUpload,
   onRemove,
   loading = false,
@@ -115,13 +115,19 @@ export function AvatarUpload({
     fileInputRef.current?.click();
   };
 
+  // Get first letter of email for fallback
+  const getEmailInitial = (email?: string) => {
+    if (!email) return "?";
+    return email[0].toUpperCase();
+  };
+
   return (
     <div className="flex flex-col items-center space-y-4">
       <div className="relative">
         <Avatar
           src={preview}
-          alt={userName}
-          fallback={userName}
+          alt={userEmail}
+          fallback={getEmailInitial(userEmail)}
           size="xl"
         />
 

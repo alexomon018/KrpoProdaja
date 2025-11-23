@@ -3,7 +3,8 @@
 import { forwardRef } from "react";
 import cn from "@lib/utils";
 import { SearchBar } from "@molecules";
-import { Button, Avatar, Typography } from "@atoms";
+import { Button, Typography } from "@atoms";
+import { UserAvatar } from "@/components/atoms/Avatar/Avatar";
 import {
   SlidersHorizontal,
   Bell,
@@ -31,7 +32,7 @@ export interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
    * Current user (if logged in)
    */
   user?: {
-    username: string;
+    email: string;
     avatar?: string;
     firstName?: string;
     lastName?: string;
@@ -158,9 +159,8 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
               {/* User Avatar or Login/Register */}
               {user ? (
                 <Link href="/profile">
-                  <Avatar
-                    src={user.avatar}
-                    alt={user.name || user.fullName || `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.username}
+                  <UserAvatar
+                    user={user}
                     size="md"
                   />
                 </Link>
