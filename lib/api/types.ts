@@ -275,3 +275,27 @@ export interface PaginationParams {
   page?: number;
   limit?: number;
 }
+
+// ==================== Phone Verification Types ====================
+
+export interface SendPhoneVerificationRequest {
+  phone: string; // E.164 format (e.g., +381601234567)
+}
+
+export interface SendPhoneVerificationResponse {
+  message: string;
+}
+
+export interface VerifyPhoneRequest {
+  code: string; // 6-digit code
+}
+
+export interface VerifyPhoneResponse {
+  message: string;
+  phoneVerified: boolean;
+  verifiedSeller: boolean;
+}
+
+export interface ResendPhoneVerificationResponse {
+  message: string;
+}

@@ -8,6 +8,7 @@ import {
   ProfileEditForm,
   ProfileFormData,
 } from "@/components/molecules/AuthForm/ProfileEditForm";
+import { PhoneVerificationModal } from "@/components/molecules/PhoneVerificationModal";
 import { Container } from "@/components/atoms/Container/Container";
 import { Typography } from "@/components/atoms/Typography/Typography";
 import type { UpdateUserRequest } from "@/lib/api/types";
@@ -25,10 +26,13 @@ const removeAvatar = async (): Promise<void> => {
 export function ProfileEditor() {
   const router = useRouter();
   const [avatarUrl, setAvatarUrl] = useState<string>();
+  const [showPhoneVerification, setShowPhoneVerification] = useState(false);
+  const [pendingPhoneNumber, setPendingPhoneNumber] = useState<string>("");
 
   // Get current user from auth context
   const authContext = useAuth();
   const currentUser = authContext?.user ?? null;
+  const refreshUser = authContext?.refreshUser;
   const isLoadingUser = authContext?.isLoading ?? false;
   const updateProfileMutation = useUpdateCurrentUser();
 
@@ -74,15 +78,38 @@ export function ProfileEditor() {
       }
     : undefined;
 
+  // Check if phone number has changed and needs verification
+  const isPhoneChanged = (newPhone?: string): boolean => {
+    const currentPhone = currentUser?.phone || currentUser?.phoneNumber || "";
+    const trimmedNew = (newPhone || "").trim();
+    return trimmedNew !== "" && trimmedNew !== currentPhone;
+  };
+
   const handleSubmit = (data: ProfileFormData) => {
     const apiData = transformFormData(data);
+    const phoneChanged = isPhoneChanged(data.phone);
+
     updateProfileMutation.mutate(apiData, {
       onSuccess: () => {
-        setTimeout(() => {
-          router.push("/profile");
-        }, 1500);
+        // If phone number changed, show verification modal
+        if (phoneChanged && data.phone) {
+          setPendingPhoneNumber(data.phone);
+          setShowPhoneVerification(true);
+        } else {
+          setTimeout(() => {
+            router.push("/profile");
+          }, 1500);
+        }
       },
     });
+  };
+
+  const handlePhoneVerified = () => {
+    // Refresh user data to get updated verification status
+    refreshUser?.();
+    setTimeout(() => {
+      router.push("/profile");
+    }, 1500);
   };
 
   const handleAvatarUpload = async (file: File) => {
@@ -128,6 +155,13 @@ export function ProfileEditor() {
         loading={loading}
         error={error}
         success={success}
+      />
+
+      <PhoneVerificationModal
+        open={showPhoneVerification}
+        onOpenChange={setShowPhoneVerification}
+        phoneNumber={pendingPhoneNumber}
+        onVerified={handlePhoneVerified}
       />
     </Container>
   );
