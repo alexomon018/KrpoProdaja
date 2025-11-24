@@ -25,6 +25,7 @@ const config: Config = {
     '/node_modules/',
     '/__tests__/utils/',
     '/__tests__/mocks/',
+    '<rootDir>/e2e/',
   ],
   collectCoverageFrom: [
     'components/**/*.{js,jsx,ts,tsx}',

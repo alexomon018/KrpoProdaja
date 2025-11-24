@@ -7,7 +7,8 @@ describe('ImageCarousel', () => {
 
   it('renders first image', () => {
     render(<ImageCarousel images={mockImages} alt="Product" />);
-    expect(screen.getByRole('img')).toBeInTheDocument();
+    // Carousel renders multiple images (main and thumbnails), check at least one exists
+    expect(screen.getAllByRole('img').length).toBeGreaterThan(0);
   });
 
   it('shows image counter', () => {
@@ -18,7 +19,8 @@ describe('ImageCarousel', () => {
 
   it('hides counter when showCounter is false', () => {
     render(<ImageCarousel images={mockImages} alt="Product" showCounter={false} />);
-    expect(screen.getByRole('img')).toBeInTheDocument();
+    // Carousel renders multiple images (main and thumbnails), check at least one exists
+    expect(screen.getAllByRole('img').length).toBeGreaterThan(0);
   });
 
   it('navigates to next image on next button click', async () => {

@@ -11,7 +11,10 @@ describe('SellerInfo', () => {
 
   it('renders seller avatar', () => {
     render(<SellerInfo seller={mockUser} />);
-    expect(screen.getByRole('img')).toBeInTheDocument();
+    // Avatar uses initials fallback in test environment (no image element)
+    // Check that the avatar container is rendered
+    const avatarContainer = document.querySelector('.rounded-full');
+    expect(avatarContainer).toBeInTheDocument();
   });
 
   it('displays seller rating', () => {
