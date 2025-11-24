@@ -25,6 +25,9 @@ export {
   useUserProfile,
   useUserProducts,
   useChangePassword,
+  useSendPhoneVerification,
+  useVerifyPhone,
+  useResendPhoneVerification,
 } from "./useUsers";
 
 // Search & discovery hooks

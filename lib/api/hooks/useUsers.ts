@@ -11,6 +11,8 @@ import type {
   UpdateUserRequest,
   ChangePasswordRequest,
   PaginationParams,
+  SendPhoneVerificationRequest,
+  VerifyPhoneRequest,
 } from "../types";
 
 export function useUpdateCurrentUser() {
@@ -45,5 +47,29 @@ export function useChangePassword() {
   return useMutation({
     mutationFn: (data: ChangePasswordRequest) =>
       usersService.changePassword(data),
+  });
+}
+
+export function useSendPhoneVerification() {
+  return useMutation({
+    mutationFn: (data: SendPhoneVerificationRequest) =>
+      usersService.sendPhoneVerification(data),
+  });
+}
+
+export function useVerifyPhone() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: VerifyPhoneRequest) => usersService.verifyPhone(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["currentUser"] });
+    },
+  });
+}
+
+export function useResendPhoneVerification() {
+  return useMutation({
+    mutationFn: () => usersService.resendPhoneVerification(),
   });
 }

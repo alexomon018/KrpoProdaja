@@ -1,9 +1,11 @@
 "use client";
 
 import * as React from "react";
-import { useForm, FormProvider } from "react-hook-form";
+import { useForm, FormProvider, Controller } from "react-hook-form";
+import { CheckCircle } from "lucide-react";
 import { Button } from "@/components/atoms/Button/Button";
 import { FormInput } from "@/components/atoms/FormInput/FormInput";
+import { PhoneInput } from "@/components/ui/phone-input";
 import { AvatarUpload } from "./AvatarUpload";
 
 export interface ProfileFormData {
@@ -48,6 +50,10 @@ export interface ProfileEditFormProps {
    * Success message
    */
   success?: boolean;
+  /**
+   * Whether the phone number is already verified
+   */
+  isPhoneVerified?: boolean;
 }
 
 /**
@@ -74,6 +80,7 @@ export function ProfileEditForm({
   loading = false,
   error,
   success = false,
+  isPhoneVerified = false,
 }: ProfileEditFormProps) {
   const methods = useForm<ProfileFormData>({
     defaultValues: initialData,
@@ -136,13 +143,37 @@ export function ProfileEditForm({
               disabled={loading}
             />
 
-            <FormInput
-              name="phone"
-              type="tel"
-              label="Broj telefona"
-              placeholder={initialData?.phone || "Broj telefona"}
-              disabled={loading}
-            />
+            <div>
+              <label className="block text-sm font-medium text-secondary mb-2">
+                Broj telefona
+              </label>
+              <Controller
+                name="phone"
+                control={methods.control}
+                render={({ field }) => (
+                  <PhoneInput
+                    value={field.value}
+                    onChange={field.onChange}
+                    defaultCountry="RS"
+                    placeholder="Broj telefona"
+                    disabled={loading || isPhoneVerified}
+                  />
+                )}
+              />
+              {isPhoneVerified ? (
+                <p className="mt-2 text-sm text-semantic-success flex items-center gap-1">
+                  <CheckCircle className="w-4 h-4" />
+                  Broj telefona je verifikovan. Kontaktirajte podršku ako želite
+                  da ga promenite.
+                </p>
+              ) : (
+                <p className="mt-2 text-sm text-tertiary">
+                  Unesite broj mobilnog, verifikujte ga i istaknite se kao
+                  pouzdan korisnik. Verifikovani korisnici dobijaju plavu oznaku
+                  pored imena.
+                </p>
+              )}
+            </div>
           </div>
 
           <div className="bg-surface border border-border rounded-lg p-6 space-y-4">
@@ -159,7 +190,7 @@ export function ProfileEditForm({
                 placeholder={initialData?.bio || "Biografija"}
                 rows={4}
                 disabled={loading}
-                className="w-full px-3 py-2 bg-surface text-primary border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none placeholder:text-tertiary disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full px-3 py-2 bg-surface text-foreground border border-input rounded-lg focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring resize-none placeholder:text-muted-foreground disabled:opacity-50 disabled:cursor-not-allowed"
               />
             </div>
 

@@ -11,6 +11,11 @@ import type {
   UserProfileResponse,
   ProductListResponse,
   PaginationParams,
+  SendPhoneVerificationRequest,
+  SendPhoneVerificationResponse,
+  VerifyPhoneRequest,
+  VerifyPhoneResponse,
+  ResendPhoneVerificationResponse,
 } from "../types";
 
 export const usersService = {
@@ -65,5 +70,46 @@ export const usersService = {
       : `/users/${userId}/products`;
 
     return apiClient.get<ProductListResponse>(endpoint);
+  },
+
+  /**
+   * Send phone verification SMS
+   * POST /api/users/phone/send-verification
+   * Requires authentication
+   * Rate limited to 5 requests per hour
+   */
+  async sendPhoneVerification(
+    data: SendPhoneVerificationRequest
+  ): Promise<SendPhoneVerificationResponse> {
+    return apiClient.post<SendPhoneVerificationResponse>(
+      "/users/phone/send-verification",
+      data,
+      { requiresAuth: true }
+    );
+  },
+
+  /**
+   * Verify phone with 6-digit code
+   * POST /api/users/phone/verify
+   * Requires authentication
+   */
+  async verifyPhone(data: VerifyPhoneRequest): Promise<VerifyPhoneResponse> {
+    return apiClient.post<VerifyPhoneResponse>("/users/phone/verify", data, {
+      requiresAuth: true,
+    });
+  },
+
+  /**
+   * Resend phone verification SMS
+   * POST /api/users/phone/resend-verification
+   * Requires authentication
+   * Rate limited to 5 requests per hour
+   */
+  async resendPhoneVerification(): Promise<ResendPhoneVerificationResponse> {
+    return apiClient.post<ResendPhoneVerificationResponse>(
+      "/users/phone/resend-verification",
+      {},
+      { requiresAuth: true }
+    );
   },
 };
