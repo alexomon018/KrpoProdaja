@@ -40,6 +40,13 @@ const localStorageMock = {
 };
 global.localStorage = localStorageMock as any;
 
+// Mock ResizeObserver (needed for input-otp and other components)
+global.ResizeObserver = class ResizeObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+} as any;
+
 // Mock IntersectionObserver
 global.IntersectionObserver = class IntersectionObserver {
   constructor() {}
@@ -59,6 +66,10 @@ global.IntersectionObserver = class IntersectionObserver {
   rootMargin = '';
   thresholds = [];
 } as any;
+
+// Mock URL.createObjectURL and URL.revokeObjectURL
+global.URL.createObjectURL = jest.fn(() => 'blob:mock-url');
+global.URL.revokeObjectURL = jest.fn();
 
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
