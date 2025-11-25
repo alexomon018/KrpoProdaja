@@ -9,7 +9,7 @@ import type {
   SearchParams,
   SearchSuggestion,
   SearchSuggestionsParams,
-  ApiCategory,
+  CategoryListResponse,
   FavoritesResponse,
   FavoriteProduct,
   PaginationParams,
@@ -50,8 +50,8 @@ export const searchService = {
    * Get all categories
    * GET /api/categories
    */
-  async getCategories(): Promise<ApiCategory[]> {
-    return apiClient.get<ApiCategory[]>('/categories');
+  async getCategories(): Promise<CategoryListResponse> {
+    return apiClient.get<CategoryListResponse>('/categories');
   },
 
   /**

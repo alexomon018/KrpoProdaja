@@ -213,6 +213,10 @@ export interface ApiCategory {
   children?: ApiCategory[];
 }
 
+export interface CategoryListResponse {
+  categories: ApiCategory[];
+}
+
 // ==================== Search Types ====================
 
 export interface SearchParams {
@@ -309,4 +313,21 @@ export interface ApiBrand {
 
 export interface BrandListResponse {
   brands: ApiBrand[];
+}
+
+// ==================== City Types ====================
+
+export interface ApiCity {
+  name: string;
+  population: number;
+  latitude: number;
+  longitude: number;
+  adminName: string;
+}
+
+export interface CityListResponse {
+  country: string;
+  countryName: string;
+  count: number;
+  cities: ApiCity[];
 }

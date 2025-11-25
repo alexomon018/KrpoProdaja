@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState, useCallback } from 'react';
-import useEmblaCarousel from 'embla-carousel-react';
-import { X, ChevronLeft, ChevronRight, ZoomIn, ZoomOut } from 'lucide-react';
-import Image from 'next/image';
-import cn from '@/lib/utils';
-import { Button } from '@/components/atoms/Button/Button';
+import React, { useEffect, useState, useCallback } from "react";
+import useEmblaCarousel from "embla-carousel-react";
+import { X, ChevronLeft, ChevronRight, ZoomIn, ZoomOut } from "lucide-react";
+import Image from "next/image";
+import cn from "@/lib/utils";
+import { Button } from "@/components/atoms/Button/Button";
 
 export interface FullScreenImageModalProps {
   images: string[];
@@ -15,14 +15,17 @@ export interface FullScreenImageModalProps {
   alt?: string;
 }
 
-const FullScreenImageModal: React.FC<FullScreenImageModalProps> = ({
+export const FullScreenImageModal: React.FC<FullScreenImageModalProps> = ({
   images,
   initialIndex = 0,
   isOpen,
   onClose,
-  alt = 'Product image',
+  alt = "Product image",
 }) => {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false, startIndex: initialIndex });
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    loop: false,
+    startIndex: initialIndex,
+  });
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
@@ -62,12 +65,12 @@ const FullScreenImageModal: React.FC<FullScreenImageModalProps> = ({
   useEffect(() => {
     if (!emblaApi) return;
     onSelect();
-    emblaApi.on('select', onSelect);
-    emblaApi.on('reInit', onSelect);
+    emblaApi.on("select", onSelect);
+    emblaApi.on("reInit", onSelect);
 
     return () => {
-      emblaApi.off('select', onSelect);
-      emblaApi.off('reInit', onSelect);
+      emblaApi.off("select", onSelect);
+      emblaApi.off("reInit", onSelect);
     };
   }, [emblaApi, onSelect]);
 
@@ -79,12 +82,12 @@ const FullScreenImageModal: React.FC<FullScreenImageModalProps> = ({
 
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     }
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     };
   }, [isOpen]);
 
@@ -92,13 +95,13 @@ const FullScreenImageModal: React.FC<FullScreenImageModalProps> = ({
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!isOpen) return;
 
-      if (e.key === 'Escape') onClose();
-      if (e.key === 'ArrowLeft') scrollPrev();
-      if (e.key === 'ArrowRight') scrollNext();
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowLeft") scrollPrev();
+      if (e.key === "ArrowRight") scrollNext();
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, scrollPrev, scrollNext, onClose]);
 
   const handleZoomIn = () => {
@@ -245,10 +248,10 @@ const FullScreenImageModal: React.FC<FullScreenImageModalProps> = ({
                 scrollTo(index);
               }}
               className={cn(
-                'relative flex-shrink-0 w-16 h-16 rounded-md overflow-hidden border-2 transition-all',
+                "relative flex-shrink-0 w-16 h-16 rounded-md overflow-hidden border-2 transition-all",
                 currentIndex === index
-                  ? 'border-primary-500 opacity-100'
-                  : 'border-transparent opacity-50 hover:opacity-75'
+                  ? "border-primary-500 opacity-100"
+                  : "border-transparent opacity-50 hover:opacity-75"
               )}
             >
               <Image
@@ -266,6 +269,4 @@ const FullScreenImageModal: React.FC<FullScreenImageModalProps> = ({
   );
 };
 
-FullScreenImageModal.displayName = 'FullScreenImageModal';
-
-export { FullScreenImageModal };
+FullScreenImageModal.displayName = "FullScreenImageModal";

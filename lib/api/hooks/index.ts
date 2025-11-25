@@ -42,3 +42,6 @@ export {
 
 // Brand hooks
 export { useBrands } from "./useBrands";
+
+// City hooks
+export { useCities } from "./useCities";

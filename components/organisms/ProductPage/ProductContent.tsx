@@ -5,12 +5,12 @@ import { ProductDetailsHeader } from "@/components/organisms/ProductDetailsHeade
 import {
   ProductDescription,
   type ItemDetail,
-} from "@/components/molecules/ProductDescription";
-import { ProductMeta } from "@/components/molecules/ProductMeta";
+} from "@/components/molecules/ProductDescription/ProductDescription";
+import { ProductMeta } from "@/components/molecules/ProductMeta/ProductMeta";
 import {
   ShippingOptions,
   type ShippingOption,
-} from "@/components/molecules/ShippingOptions";
+} from "@/components/molecules/ShippingOptions/ShippingOptions";
 import { ClickableSellerInfo } from "@/components/molecules/SellerInfo/ClickableSellerInfo";
 import { SimilarItems } from "@/components/organisms/SimilarItems";
 import { ProductReviews } from "@/components/organisms/ProductReviews/ProductReviews";
@@ -86,7 +86,8 @@ export function ProductContent({ productId }: ProductContentProps) {
     seller: {
       id: sellerData?.id || apiProduct.userId?.toString() || "unknown",
       email:
-        sellerData?.email || `user${apiProduct.userId || "unknown"}@placeholder.com`,
+        sellerData?.email ||
+        `user${apiProduct.userId || "unknown"}@placeholder.com`,
       avatar: sellerData?.avatar,
       memberSince: new Date(sellerData?.createdAt || apiProduct.createdAt),
     },
