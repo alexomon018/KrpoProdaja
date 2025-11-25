@@ -39,3 +39,6 @@ export {
   useAddToFavorites,
   useRemoveFromFavorites,
 } from "./useSearch";
+
+// Brand hooks
+export { useBrands } from "./useBrands";

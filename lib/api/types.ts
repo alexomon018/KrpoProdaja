@@ -299,3 +299,14 @@ export interface VerifyPhoneResponse {
 export interface ResendPhoneVerificationResponse {
   message: string;
 }
+
+// ==================== Brand Types ====================
+
+export interface ApiBrand {
+  id: string; // UUID
+  name: string;
+}
+
+export interface BrandListResponse {
+  brands: ApiBrand[];
+}

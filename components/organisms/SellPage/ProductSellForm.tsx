@@ -1,13 +1,15 @@
 "use client";
 
 import * as React from "react";
-import { useForm, FormProvider } from "react-hook-form";
+import { useForm, FormProvider, Controller } from "react-hook-form";
 import { useRouter, useSearchParams } from "next/navigation";
 import { BottomNavigation } from "@organisms";
 import { FormInput, Button, Typography, Container } from "@atoms";
 import { ImageUpload } from "@molecules";
+import { BrandsCombobox } from "@/components/molecules/BrandsCombobox";
 import { uploadService } from "@lib/api";
 import { useCreateProduct } from "@lib/api/hooks/useProducts";
+import { useBrands } from "@lib/api/hooks";
 import { useRequireAuth } from "@/lib/auth/AuthProvider";
 import type { SizeType, ConditionType } from "@lib/types";
 import type { ProductCondition } from "@lib/api";
@@ -32,6 +34,10 @@ export function ProductSellForm() {
   const [imageUrls, setImageUrls] = React.useState<string[]>([]);
   const [imageFiles, setImageFiles] = React.useState<File[]>([]);
   const [formError, setFormError] = React.useState<string | null>(null);
+
+  // Fetch brands - will use server-side prefetched data
+  const { data: brandsResponse } = useBrands();
+  const brands = brandsResponse?.brands || [];
 
   // Extract query parameters for pre-filling form
   const titleParam = searchParams.get("title");
@@ -258,11 +264,25 @@ export function ProductSellForm() {
                 </Typography>
 
                 <div className="space-y-6">
-                  <FormInput
-                    name="brand"
-                    label="Brend"
-                    placeholder="npr. Zara, H&M, Nike"
-                  />
+                  {/* Brand Selection */}
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-primary">
+                      Brend
+                    </label>
+                    <Controller
+                      name="brand"
+                      control={methods.control}
+                      render={({ field }) => (
+                        <BrandsCombobox
+                          brands={brands}
+                          value={field.value || ""}
+                          onValueChange={field.onChange}
+                          placeholder="Izaberite brend..."
+                          emptyMessage="Brend nije pronađen."
+                        />
+                      )}
+                    />
+                  </div>
 
                   {/* Size Selection */}
                   <div className="space-y-2">
