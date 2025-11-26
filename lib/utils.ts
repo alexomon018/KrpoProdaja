@@ -47,3 +47,37 @@ export function formatRelativeTime(date: Date): string {
 
   return date.toLocaleDateString("sr-RS");
 }
+
+/**
+ * Format membership duration in Serbian
+ * Returns days if less than 30 days, months if less than a year, years otherwise
+ */
+export function formatMembershipDuration(memberSince: Date): {
+  value: number;
+  unit: string;
+} {
+  const now = new Date();
+  const diffInMs = now.getTime() - memberSince.getTime();
+  const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+
+  if (diffInDays < 30) {
+    return {
+      value: diffInDays,
+      unit: diffInDays === 1 ? "dan" : "dana",
+    };
+  }
+
+  const diffInMonths = Math.floor(diffInDays / 30);
+  if (diffInMonths < 12) {
+    return {
+      value: diffInMonths,
+      unit: diffInMonths === 1 ? "mesec" : diffInMonths < 5 ? "meseca" : "meseci",
+    };
+  }
+
+  const diffInYears = Math.floor(diffInDays / 365);
+  return {
+    value: diffInYears,
+    unit: diffInYears === 1 ? "god" : "god",
+  };
+}

@@ -40,6 +40,10 @@ export type UserType = {
   avatar?: string;
   firstName?: string;
   lastName?: string;
+  bio?: string;
+  location?: string;
+  verified?: boolean;
+  verifiedSeller?: boolean;
   rating?: number;
   reviewCount?: number;
   responseTime?: string;

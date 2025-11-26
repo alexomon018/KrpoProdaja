@@ -3,7 +3,7 @@
 import { forwardRef } from "react";
 import cn from "@lib/utils";
 import { SearchBar } from "@molecules";
-import { Button, Typography } from "@atoms";
+import { Button } from "@atoms";
 import { UserAvatar } from "@/components/atoms/Avatar/Avatar";
 import {
   SlidersHorizontal,
@@ -14,6 +14,7 @@ import {
 } from "@/components/atoms/Icon/Icon";
 import Link from "next/link";
 import { useTheme } from "@lib/ThemeContext";
+import Image from "next/image";
 
 export interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
   /**
@@ -92,15 +93,29 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
           {/* Top Row: Logo & User Actions */}
           <div className="flex items-center justify-between h-16 gap-4">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-2 shrink-0">
-              <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
-                <Typography variant="h3" className="text-white font-bold">
-                  KP
-                </Typography>
+            <Link href="/" className="flex items-center shrink-0">
+              {/* Desktop: Full Logo */}
+              <div className="hidden sm:block h-35">
+                <Image
+                  src="/KrpoProdajaLogo.svg"
+                  alt="Krpo Prodaja"
+                  width={280}
+                  height={100}
+                  className="h-full w-auto"
+                  priority
+                />
               </div>
-              <Typography variant="h3" className="hidden sm:block text-primary">
-                Krpo Prodaja
-              </Typography>
+              {/* Mobile: Small Logo */}
+              <div className="sm:hidden h-15">
+                <Image
+                  src="/KproProdajaSmallLogo.svg"
+                  alt="Krpo Prodaja"
+                  width={48}
+                  height={48}
+                  className="h-full w-auto"
+                  priority
+                />
+              </div>
             </Link>
 
             {/* Desktop: Full Search */}
@@ -159,10 +174,7 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
               {/* User Avatar or Login/Register */}
               {user ? (
                 <Link href="/profile">
-                  <UserAvatar
-                    user={user}
-                    size="md"
-                  />
+                  <UserAvatar user={user} size="md" />
                 </Link>
               ) : (
                 <div className="hidden md:flex items-center gap-2">

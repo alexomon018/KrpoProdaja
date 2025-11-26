@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import cn from "@/lib/utils";
+import cn, { formatMembershipDuration } from "@/lib/utils";
 import { Button, Typography } from "@/components/atoms";
 import { UserAvatar } from "@/components/atoms/Avatar/Avatar";
 import { RatingDisplay } from "../ReviewCard/ReviewCard";
@@ -44,6 +44,7 @@ const SellerInfo = forwardRef<HTMLDivElement, SellerInfoProps>(
     ref
   ) => {
     const displayName = getUserDisplayName(seller);
+    const membershipDuration = formatMembershipDuration(seller.memberSince);
 
     if (compact) {
       return (
@@ -129,9 +130,7 @@ const SellerInfo = forwardRef<HTMLDivElement, SellerInfoProps>(
           </div>
           <div className="text-center">
             <Typography variant="h3" className="text-lg sm:text-xl">
-              {new Date().getFullYear() -
-                seller.memberSince.getFullYear()}
-              god
+              {membershipDuration.value} {membershipDuration.unit}
             </Typography>
             <Typography variant="caption" className="text-xs sm:text-sm">Član</Typography>
           </div>

@@ -75,12 +75,7 @@ const ProductMeta = forwardRef<HTMLDivElement, ProductMetaProps>(
             <Share2 className="h-4 w-4" />
             Share
           </Button>
-          <Button
-            variant="primary"
-            size="sm"
-            onClick={handleReport}
-            className="gap-2 text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
-          >
+          <Button variant="primary" size="sm" onClick={handleReport}>
             <Flag className="h-4 w-4" />
             Report
           </Button>
