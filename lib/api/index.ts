@@ -16,6 +16,9 @@ export { productsService } from './services/products';
 export { usersService } from './services/users';
 export { searchService } from './services/search';
 export { uploadService } from './services/upload';
+export { brandsService } from './services/brands';
+export { categoriesService } from './services/categories';
+export { citiesService } from './services/cities';
 
 // React Query Hooks
 export * from './hooks';

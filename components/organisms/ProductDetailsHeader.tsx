@@ -2,10 +2,9 @@
 
 import { forwardRef, useState } from "react";
 import { Expand } from "lucide-react";
-import cn, { formatPrice } from "@/lib/utils";
+import cn from "@/lib/utils";
 import { ImageCarousel } from "@/components/molecules/ImageCarousel/ImageCarousel";
-import { ConditionBadge } from "@/components/atoms/ConditionBadge";
-import { FullScreenImageModal } from "@/components/molecules/FullScreenImageModal";
+import { FullScreenImageModal } from "@/components/molecules/FullScreenImageModal/FullScreenImageModal";
 
 export interface ProductDetailsHeaderProps
   extends React.HTMLAttributes<HTMLDivElement> {

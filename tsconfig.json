@@ -52,6 +52,12 @@
       ],
       "@/api/*": [
         "./lib/api/*"
+      ],
+      "@constants/*": [
+        "./constants/*"
+      ],
+      "@constants": [
+        "./constants/index.ts"
       ]
     }
   },

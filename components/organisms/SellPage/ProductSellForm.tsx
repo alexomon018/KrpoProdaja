@@ -1,16 +1,20 @@
 "use client";
 
 import * as React from "react";
-import { useForm, FormProvider, Controller } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 import { useRouter, useSearchParams } from "next/navigation";
 import { BottomNavigation } from "@organisms";
-import { FormInput, Button, Typography, Container } from "@atoms";
-import { ImageUpload } from "@molecules";
-import { BrandsCombobox } from "@/components/molecules/BrandsCombobox";
+import { Button, Typography, Container } from "@atoms";
 import { uploadService } from "@lib/api";
 import { useCreateProduct } from "@lib/api/hooks/useProducts";
-import { useBrands } from "@lib/api/hooks";
+import { useBrands, useCategories } from "@lib/api/hooks";
 import { useRequireAuth } from "@/lib/auth/AuthProvider";
+import { ProductImages } from "./ProductImages";
+import { ProductBasicInfo } from "./ProductBasicInfo";
+import { ProductPricing } from "./ProductPricing";
+import { ProductDetails } from "./ProductDetails";
+import { ProductLocation } from "./ProductLocation";
+import { CONDITION_OPTIONS } from "@constants";
 import type { SizeType, ConditionType } from "@lib/types";
 import type { ProductCondition } from "@lib/api";
 
@@ -19,10 +23,12 @@ interface ProductFormData {
   description: string;
   price: number;
   originalPrice?: number;
+  category?: string;
   brand?: string;
   size: SizeType;
-  condition: ConditionType;
-  color?: string;
+  condition?: string; // Stores the Serbian name from the combobox
+  color?: string; // Stores the Serbian name from the combobox
+  age?: string; // Stores the era/age from the combobox
   material?: string;
   location: string;
 }
@@ -35,13 +41,17 @@ export function ProductSellForm() {
   const [imageFiles, setImageFiles] = React.useState<File[]>([]);
   const [formError, setFormError] = React.useState<string | null>(null);
 
-  // Fetch brands - will use server-side prefetched data
+  // Fetch brands and categories - will use server-side prefetched data
   const { data: brandsResponse } = useBrands();
   const brands = brandsResponse?.brands || [];
+
+  const { data: categoriesResponse } = useCategories();
+  const categories = categoriesResponse?.categories || [];
 
   // Extract query parameters for pre-filling form
   const titleParam = searchParams.get("title");
   const priceParam = searchParams.get("price");
+  const categoryParam = searchParams.get("category");
   const brandParam = searchParams.get("brand");
   const locationParam = searchParams.get("location");
 
@@ -50,6 +60,7 @@ export function ProductSellForm() {
       title: titleParam || "",
       description: "",
       price: priceParam ? Number(priceParam) : 0,
+      category: categoryParam || "",
       brand: brandParam || "",
       location: locationParam || "Beograd",
     },
@@ -108,17 +119,34 @@ export function ProductSellForm() {
         }
       }
 
-      // Create product with uploaded image URLs
-      // TODO: Replace with actual category selection
-      // Using a placeholder UUID - you'll need to get a real category ID from your backend
-      const PLACEHOLDER_CATEGORY_ID = "69d0c42a-2d5a-464b-870d-29f60707bec7";
+      // Find the category ID from the selected category name
+      const selectedCategory = categories.find(
+        (cat) => cat.name.toLowerCase() === data.category?.toLowerCase()
+      );
+
+      if (!selectedCategory) {
+        setFormError("Molimo izaberite kategoriju proizvoda");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        return;
+      }
+
+      // Find the condition value from the selected condition name
+      const selectedCondition = CONDITION_OPTIONS.find(
+        (cond) => cond.name.toLowerCase() === data.condition?.toLowerCase()
+      );
+
+      if (!selectedCondition) {
+        setFormError("Molimo izaberite stanje proizvoda");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        return;
+      }
 
       const productData = {
         title: data.title,
         description: data.description || undefined,
         price: Number(data.price),
-        categoryId: PLACEHOLDER_CATEGORY_ID,
-        condition: mapConditionToApi(data.condition),
+        categoryId: selectedCategory.id,
+        condition: mapConditionToApi(selectedCondition.id as ConditionType),
         size: data.size,
         brand: data.brand || undefined,
         color: data.color || undefined,
@@ -146,14 +174,6 @@ export function ProductSellForm() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
-
-  const availableSizes: SizeType[] = ["XS", "S", "M", "L", "XL", "XXL", "XXXL"];
-  const availableConditions: { value: ConditionType; label: string }[] = [
-    { value: "new", label: "Novo sa etiketom" },
-    { value: "very-good", label: "Vrlo dobro" },
-    { value: "good", label: "Dobro" },
-    { value: "satisfactory", label: "Zadovoljavajuće" },
-  ];
 
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-8">
@@ -183,185 +203,23 @@ export function ProductSellForm() {
               onSubmit={methods.handleSubmit(onSubmit)}
               className="space-y-6 md:space-y-8"
             >
-              {/* Step 0: Images */}
-              <div className="bg-surface rounded-xl p-6 md:p-8 border border-border shadow-sm">
-                <ImageUpload
-                  variant="labeled"
-                  maxFiles={8}
-                  maxSizeMB={5}
-                  onFilesChange={setImageFiles}
-                  disabled={createProductMutation.isPending}
-                />
-              </div>
+              {/* Images Section */}
+              <ProductImages
+                onFilesChange={setImageFiles}
+                disabled={createProductMutation.isPending}
+              />
 
-              {/* Step 1: Basic Information */}
-              <div className="bg-surface rounded-xl p-6 md:p-8 border border-border shadow-sm">
-                <Typography variant="h2" className="mb-6">
-                  Osnovne informacije
-                </Typography>
+              {/* Basic Information Section */}
+              <ProductBasicInfo />
 
-                <div className="space-y-6">
-                  <FormInput
-                    name="title"
-                    label="Naziv proizvoda *"
-                    placeholder="npr. Zara crna haljina"
-                    required
-                    helperText="Najmanje 10 karaktera"
-                    validation={{
-                      minLength: {
-                        value: 10,
-                        message: "Naziv mora imati najmanje 10 karaktera",
-                      },
-                    }}
-                  />
+              {/* Pricing Section */}
+              <ProductPricing />
 
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium text-primary">
-                      Opis
-                    </label>
-                    <textarea
-                      {...methods.register("description")}
-                      placeholder="Opišite proizvod, stanje, veličinu..."
-                      className="flex min-h-[120px] w-full rounded-lg border border-border bg-surface px-3 py-2 text-base text-primary placeholder:text-tertiary focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
-                      rows={5}
-                    />
-                  </div>
-                </div>
-              </div>
+              {/* Details Section */}
+              <ProductDetails brands={brands} categories={categories} />
 
-              {/* Step 2: Price */}
-              <div className="bg-surface rounded-xl p-6 md:p-8 border border-border shadow-sm">
-                <Typography variant="h2" className="mb-6">
-                  Cena
-                </Typography>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <FormInput
-                    name="price"
-                    label="Prodajna cena *"
-                    type="number"
-                    placeholder="0"
-                    helperText="Cena u dinarima (RSD)"
-                    required
-                    endIcon={<span className="text-secondary">RSD</span>}
-                  />
-
-                  <FormInput
-                    name="originalPrice"
-                    label="Originalna cena"
-                    type="number"
-                    placeholder="0"
-                    helperText="Koliko je koštalo novo"
-                    endIcon={<span className="text-secondary">RSD</span>}
-                  />
-                </div>
-              </div>
-
-              {/* Step 3: Details */}
-              <div className="bg-surface rounded-xl p-6 md:p-8 border border-border shadow-sm">
-                <Typography variant="h2" className="mb-6">
-                  Detalji
-                </Typography>
-
-                <div className="space-y-6">
-                  {/* Brand Selection */}
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium text-primary">
-                      Brend
-                    </label>
-                    <Controller
-                      name="brand"
-                      control={methods.control}
-                      render={({ field }) => (
-                        <BrandsCombobox
-                          brands={brands}
-                          value={field.value || ""}
-                          onValueChange={field.onChange}
-                          placeholder="Izaberite brend..."
-                          emptyMessage="Brend nije pronađen."
-                        />
-                      )}
-                    />
-                  </div>
-
-                  {/* Size Selection */}
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium text-primary">
-                      Veličina *
-                    </label>
-                    <div className="flex flex-wrap gap-2">
-                      {availableSizes.map((size) => (
-                        <label key={size} className="cursor-pointer">
-                          <input
-                            type="radio"
-                            {...methods.register("size", { required: true })}
-                            value={size}
-                            className="peer sr-only"
-                          />
-                          <div className="px-4 py-2 rounded-lg border-2 border-border peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-primary font-semibold transition-colors hover:border-tertiary min-w-touch">
-                            {size}
-                          </div>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Condition Selection */}
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium text-primary">
-                      Stanje *
-                    </label>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                      {availableConditions.map((condition) => (
-                        <label key={condition.value} className="cursor-pointer">
-                          <input
-                            type="radio"
-                            {...methods.register("condition", {
-                              required: true,
-                            })}
-                            value={condition.value}
-                            className="peer sr-only"
-                          />
-                          <div className="p-3 rounded-lg border-2 border-border peer-checked:border-primary peer-checked:bg-primary/10 transition-colors hover:border-tertiary">
-                            <Typography
-                              variant="bodySmall"
-                              className="font-medium"
-                            >
-                              {condition.label}
-                            </Typography>
-                          </div>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-
-                  <FormInput
-                    name="color"
-                    label="Boja"
-                    placeholder="npr. Crna, Bela, Plava"
-                  />
-
-                  <FormInput
-                    name="material"
-                    label="Materijal"
-                    placeholder="npr. Pamuk 95%, Elastin 5%"
-                  />
-                </div>
-              </div>
-
-              {/* Step 4: Location */}
-              <div className="bg-surface rounded-xl p-6 md:p-8 border border-border shadow-sm">
-                <Typography variant="h2" className="mb-6">
-                  Lokacija
-                </Typography>
-
-                <FormInput
-                  name="location"
-                  label="Grad *"
-                  placeholder="Beograd"
-                  required
-                />
-              </div>
+              {/* Location Section */}
+              <ProductLocation />
 
               {/* Submit */}
               <div className="flex flex-col sm:flex-row gap-3 pt-4">
