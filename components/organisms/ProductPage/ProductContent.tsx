@@ -68,7 +68,12 @@ export function ProductContent({ productId }: ProductContentProps) {
     return <div>Loading...</div>;
   }
 
+  // Use seller data if available, otherwise fall back to user
   const sellerData = apiProduct.seller || apiProduct.user;
+
+  if (!sellerData) {
+    return <div>Seller information not available</div>;
+  }
 
   const product = {
     id: apiProduct.id.toString(),
@@ -84,12 +89,17 @@ export function ProductContent({ productId }: ProductContentProps) {
     color: apiProduct.color,
     material: apiProduct.material,
     seller: {
-      id: sellerData?.id || apiProduct.userId?.toString() || "unknown",
-      email:
-        sellerData?.email ||
-        `user${apiProduct.userId || "unknown"}@placeholder.com`,
-      avatar: sellerData?.avatar,
-      memberSince: new Date(sellerData?.createdAt || apiProduct.createdAt),
+      id: sellerData.id,
+      email: sellerData.email,
+      avatar: sellerData.avatar,
+      bio: sellerData.bio,
+      location: sellerData.location,
+      verified: sellerData.verified,
+      verifiedSeller: sellerData.verifiedSeller,
+      responseTime: sellerData.responseTime,
+      memberSince: new Date(sellerData.createdAt),
+      itemsForSale: "itemsOnSale" in sellerData ? sellerData.itemsOnSale : 0,
+      itemsSold: "itemsSold" in sellerData ? sellerData.itemsSold : 0,
     },
     createdAt: new Date(apiProduct.createdAt),
   };

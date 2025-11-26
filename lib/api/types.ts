@@ -50,6 +50,21 @@ export interface ApiUser {
   updatedAt?: string;
 }
 
+export interface ApiSeller {
+  id: string;
+  name?: string;
+  avatar?: string;
+  bio?: string;
+  location?: string;
+  verified?: boolean;
+  email: string;
+  verifiedSeller?: boolean;
+  responseTime?: string;
+  createdAt: string;
+  itemsOnSale: number;
+  itemsSold: number;
+}
+
 export interface UpdateUserRequest {
   email?: string;
   firstName?: string;
@@ -136,7 +151,7 @@ export interface ApiProduct {
   createdAt: string;
   updatedAt: string;
   user?: ApiUser;
-  seller?: ApiUser;  // API returns seller instead of user for product details
+  seller?: ApiSeller;  // API returns seller with stats for product details
   category?: ApiCategory;
   isFavorite?: boolean;
 }
