@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/lib/auth/AuthProvider";
+import { useAuth } from "@/providers/AuthProvider";
 import { useUpdateCurrentUser } from "@/lib/api/hooks";
 import {
   ProfileEditForm,

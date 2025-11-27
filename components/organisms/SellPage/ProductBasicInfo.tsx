@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormContext } from "react-hook-form";
-import { FormInput, Typography } from "@atoms";
+import { FormInput, Textarea, Typography } from "@atoms";
 
 export function ProductBasicInfo() {
   const { register } = useFormContext();
@@ -27,15 +27,13 @@ export function ProductBasicInfo() {
           }}
         />
 
-        <div className="space-y-2">
-          <label className="block text-sm font-medium text-primary">Opis</label>
-          <textarea
-            {...register("description")}
-            placeholder="Opišite proizvod, stanje, veličinu..."
-            className="flex min-h-[120px] w-full rounded-lg border border-border bg-surface px-3 py-2 text-base text-charchoal-100 placeholder:text-tertiary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring transition-colors"
-            rows={5}
-          />
-        </div>
+        <Textarea
+          {...register("description")}
+          label="Opis"
+          placeholder="Opišite proizvod, stanje, veličinu..."
+          className="min-h-[120px]"
+          rows={5}
+        />
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from "@/lib/auth/AuthProvider";
+import { useAuth } from "@/providers/AuthProvider";
 import { AuthModal } from "./AuthModal";
 
 /**

@@ -8,6 +8,7 @@ import {
 } from "@/components/organisms";
 import { FilterChip, FilterChipGroup } from "@/components/molecules";
 import { useProducts } from "@/lib/api/hooks/useProducts";
+import { useFilter } from "@/providers/FilterProvider";
 import type { FilterOptions } from "@/components/organisms";
 import type { ProductType, SizeType, ConditionType } from "@/lib/types";
 import type { ApiProduct } from "@/lib/api";
@@ -44,7 +45,7 @@ function mapApiProductToProductType(apiProduct: ApiProduct): ProductType {
 
 export function HomeContent() {
   const [filters, setFilters] = useState<FilterOptions>({});
-  const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
+  const { isFilterPanelOpen, closeFilterPanel } = useFilter();
 
   // Fetch products using React Query - will use prefetched data from server
   const { data: productsResponse } = useProducts();
@@ -158,7 +159,7 @@ export function HomeContent() {
       <FilterPanel
         mobile
         isOpen={isFilterPanelOpen}
-        onClose={() => setIsFilterPanelOpen(false)}
+        onClose={closeFilterPanel}
         filters={filters}
         onFiltersChange={handleFiltersChange}
       />

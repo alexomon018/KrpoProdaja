@@ -11,6 +11,12 @@ export type { ButtonProps } from "./Button/Button";
 export { Input } from "./Input/Input";
 export type { InputProps } from "./Input/Input";
 
+export { Checkbox } from "./Checkbox/Checkbox";
+export type { CheckboxProps } from "./Checkbox/Checkbox";
+
+export { Textarea } from "./Textarea/Textarea";
+export type { TextareaProps } from "./Textarea/Textarea";
+
 export { FormInput } from "./FormInput/FormInput";
 export type { FormInputProps } from "./FormInput/FormInput";
 

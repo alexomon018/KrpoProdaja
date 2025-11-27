@@ -5,6 +5,7 @@ import { useForm, FormProvider, Controller } from "react-hook-form";
 import { CheckCircle } from "lucide-react";
 import { Button } from "@/components/atoms/Button/Button";
 import { FormInput } from "@/components/atoms/FormInput/FormInput";
+import { Textarea } from "@/components/atoms/Textarea/Textarea";
 import { PhoneInput } from "@/components/ui/phone-input";
 import { AvatarUpload } from "./AvatarUpload";
 
@@ -181,18 +182,14 @@ export function ProfileEditForm({
               Dodatne informacije
             </h2>
 
-            <div>
-              <label className="block text-sm font-medium text-secondary mb-2">
-                Biografija
-              </label>
-              <textarea
-                {...methods.register("bio")}
-                placeholder={initialData?.bio || "Biografija"}
-                rows={4}
-                disabled={loading}
-                className="w-full px-3 py-2 bg-surface text-foreground border border-input rounded-lg focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring resize-none placeholder:text-muted-foreground disabled:opacity-50 disabled:cursor-not-allowed"
-              />
-            </div>
+            <Textarea
+              {...methods.register("bio")}
+              label="Biografija"
+              placeholder={initialData?.bio || "Biografija"}
+              rows={4}
+              disabled={loading}
+              className="resize-none"
+            />
 
             <FormInput
               name="location"

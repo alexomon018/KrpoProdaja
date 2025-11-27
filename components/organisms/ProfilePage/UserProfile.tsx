@@ -6,7 +6,7 @@ import {
   ProfileData,
 } from "@/components/organisms/ProfileView/ProfileView";
 import { Container } from "@/components/atoms/Container/Container";
-import { useAuth } from "@/lib/auth/AuthProvider";
+import { useAuth } from "@/providers/AuthProvider";
 
 export function UserProfile() {
   const router = useRouter();

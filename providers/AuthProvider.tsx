@@ -8,7 +8,7 @@ import React, {
   useEffect,
 } from "react";
 import { useRouter } from "next/navigation";
-import { getCurrentUser } from "./server";
+import { getCurrentUser } from "@/lib/auth/server";
 import type { ApiUser } from "@/lib/api/types";
 
 interface AuthContextType {
@@ -70,7 +70,7 @@ export function AuthProvider({
   }, []);
 
   const logout = useCallback(async () => {
-    const { logoutAction } = await import("./actions");
+    const { logoutAction } = await import("@/lib/auth/actions");
     await logoutAction();
     setClientUser(null);
     router.push("/");

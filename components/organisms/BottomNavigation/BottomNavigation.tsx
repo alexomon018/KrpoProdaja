@@ -2,7 +2,13 @@
 
 import { forwardRef } from "react";
 import cn from "@/lib/utils";
-import { Home, Search, Plus, MessageCircle, User } from "@/components/atoms/Icon/Icon";
+import {
+  Home,
+  Search,
+  Plus,
+  MessageCircle,
+  User,
+} from "@/components/atoms/Icon/Icon";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -12,7 +18,8 @@ export interface NavigationItem {
   icon: React.ReactNode;
 }
 
-export interface BottomNavigationProps extends React.HTMLAttributes<HTMLElement> {
+export interface BottomNavigationProps
+  extends React.HTMLAttributes<HTMLElement> {
   /**
    * Badge count for messages
    */
@@ -42,11 +49,6 @@ const BottomNavigation = forwardRef<HTMLElement, BottomNavigationProps>(
         label: "Početna",
         href: "/",
         icon: <Home size={24} />,
-      },
-      {
-        label: "Pretraga",
-        href: "/search",
-        icon: <Search size={24} />,
       },
       {
         label: "Prodaj",

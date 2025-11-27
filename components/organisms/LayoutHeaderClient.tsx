@@ -2,11 +2,13 @@
 
 import { Header } from "./Header/Header";
 import { usePathname } from "next/navigation";
-import { useAuth } from "@/lib/auth/AuthProvider";
+import { useAuth } from "@/providers/AuthProvider";
+import { useFilter } from "@/providers/FilterProvider";
 
 export function LayoutHeaderClient() {
   const pathname = usePathname();
   const { user } = useAuth();
+  const { openFilterPanel } = useFilter();
 
   const handleSearch = (query: string) => {
     console.log("Global search:", query);
@@ -32,7 +34,7 @@ export function LayoutHeaderClient() {
       user={headerUser}
       notificationCount={0}
       onSearch={handleSearch}
-      onFilterClick={isHomePage ? undefined : undefined}
+      onFilterClick={isHomePage ? openFilterPanel : undefined}
     />
   );
 }

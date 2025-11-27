@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import { render, RenderOptions } from '@testing-library/react';
-import { ThemeProvider } from '@/lib/ThemeContext';
+import { ThemeProvider } from '@/providers/ThemeProvider';
 import { FormProvider, UseFormReturn } from 'react-hook-form';
 
 interface AllTheProvidersProps {

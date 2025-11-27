@@ -8,7 +8,7 @@ import {
   verifyEmailAction,
   resendVerificationEmailAction,
 } from "@/lib/auth/actions";
-import { useAuth } from "@/lib/auth/AuthProvider";
+import { useAuth } from "@/providers/AuthProvider";
 
 export function EmailVerifier() {
   const router = useRouter();

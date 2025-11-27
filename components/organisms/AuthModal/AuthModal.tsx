@@ -23,7 +23,7 @@ import {
   googleAuthAction,
   facebookAuthAction,
 } from "@/lib/auth";
-import { useAuth } from "@/lib/auth/AuthProvider";
+import { useAuth } from "@/providers/AuthProvider";
 
 interface AuthModalProps {
   open?: boolean;

@@ -8,7 +8,7 @@ import {
 } from "@/components/molecules/AuthForm/LoginForm";
 import { Container } from "@/components/atoms/Container/Container";
 import { loginAction, googleAuthAction, facebookAuthAction } from "@/lib/auth";
-import { useAuth } from "@/lib/auth/AuthProvider";
+import { useAuth } from "@/providers/AuthProvider";
 
 export function AuthLogin() {
   const router = useRouter();
