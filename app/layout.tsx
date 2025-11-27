@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { Source_Sans_3, Lato } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@lib/ThemeContext";
-import { QueryProvider } from "@lib/QueryProvider";
-import { AuthProvider } from "@/lib/auth/AuthProvider";
+import { ThemeProvider } from "@/providers/ThemeProvider";
+import { QueryProvider } from "@/providers/QueryProvider";
+import { AuthProvider } from "@/providers/AuthProvider";
 import { AuthModalManager } from "@/components/organisms/AuthModal/AuthModalManager";
 import { getCurrentUser } from "@/lib/auth/server";
-import { GoogleOAuthProvider } from "@/components/providers/GoogleOAuthProvider";
-import { FacebookSDKProvider } from "@/components/providers/FacebookSDKProvider";
+import { GoogleOAuthProvider } from "@/providers/GoogleOAuthProvider";
+import { FacebookSDKProvider } from "@/providers/FacebookSDKProvider";
 
 const sourceSans = Source_Sans_3({
   subsets: ["latin"],

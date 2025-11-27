@@ -8,7 +8,7 @@ import { Button, Typography, Container } from "@atoms";
 import { uploadService } from "@lib/api";
 import { useCreateProduct } from "@lib/api/hooks/useProducts";
 import { useBrands, useCategories } from "@lib/api/hooks";
-import { useRequireAuth } from "@/lib/auth/AuthProvider";
+import { useRequireAuth } from "@/providers/AuthProvider";
 import { ProductImages } from "./ProductImages";
 import { ProductBasicInfo } from "./ProductBasicInfo";
 import { ProductPricing } from "./ProductPricing";

@@ -13,7 +13,7 @@ import {
   Sun,
 } from "@/components/atoms/Icon/Icon";
 import Link from "next/link";
-import { useTheme } from "@lib/ThemeContext";
+import { useTheme } from "@/providers/ThemeProvider";
 import Image from "next/image";
 
 export interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
@@ -190,17 +190,6 @@ const Header = forwardRef<HTMLElement, HeaderProps>(
                   </Link>
                 </div>
               )}
-
-              {/* Mobile: Menu */}
-              <button
-                className={cn(
-                  "p-2 hover:bg-background rounded-lg transition-colors",
-                  "md:hidden touch-target"
-                )}
-                aria-label="Meni"
-              >
-                <Menu size={24} />
-              </button>
             </div>
           </div>
 

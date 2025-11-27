@@ -2,7 +2,7 @@
 
 import { forwardRef } from "react";
 import cn from "@/lib/utils";
-import { Button, Input, Badge, Typography } from "@/components/atoms";
+import { Button, Input, Badge, Typography, Checkbox } from "@/components/atoms";
 import { X, SlidersHorizontal } from "@/components/atoms/Icon/Icon";
 import type { SizeType } from "@/lib/types";
 
@@ -209,13 +209,11 @@ const FilterPanel = forwardRef<HTMLDivElement, FilterPanelProps>(
             {availableBrands.map((brand) => (
               <label
                 key={brand}
-                className="flex items-center gap-2 cursor-pointer hover:bg-background p-2 rounded-lg transition-colors min-h-touch"
+                className="flex items-center gap-3 cursor-pointer hover:bg-background p-2 rounded-lg transition-colors min-h-touch"
               >
-                <input
-                  type="checkbox"
+                <Checkbox
                   checked={filters.brands?.includes(brand) || false}
-                  onChange={() => toggleBrand(brand)}
-                  className="w-5 h-5 rounded border-border text-primary focus:ring-primary"
+                  onCheckedChange={() => toggleBrand(brand)}
                 />
                 <Typography variant="bodySmall">{brand}</Typography>
               </label>
@@ -232,13 +230,11 @@ const FilterPanel = forwardRef<HTMLDivElement, FilterPanelProps>(
             {availableConditions.map((condition) => (
               <label
                 key={condition.value}
-                className="flex items-center gap-2 cursor-pointer hover:bg-background p-2 rounded-lg transition-colors min-h-touch"
+                className="flex items-center gap-3 cursor-pointer hover:bg-background p-2 rounded-lg transition-colors min-h-touch"
               >
-                <input
-                  type="checkbox"
+                <Checkbox
                   checked={filters.conditions?.includes(condition.value) || false}
-                  onChange={() => toggleCondition(condition.value)}
-                  className="w-5 h-5 rounded border-border text-primary focus:ring-primary"
+                  onCheckedChange={() => toggleCondition(condition.value)}
                 />
                 <Typography variant="bodySmall">{condition.label}</Typography>
               </label>

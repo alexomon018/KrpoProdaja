@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { LayoutHeaderClient } from "@/components/organisms/LayoutHeaderClient";
+import { FilterProvider } from "@/providers/FilterProvider";
 
 export const metadata: Metadata = {
   title: "Root - Krpo Prodaja",
@@ -12,9 +13,11 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="min-h-screen bg-background">
-      <LayoutHeaderClient />
-      {children}
-    </div>
+    <FilterProvider>
+      <div className="min-h-screen bg-background">
+        <LayoutHeaderClient />
+        {children}
+      </div>
+    </FilterProvider>
   );
 }

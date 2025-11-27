@@ -12,7 +12,7 @@ import {
   googleAuthAction,
   facebookAuthAction,
 } from "@/lib/auth";
-import { useAuth } from "@/lib/auth/AuthProvider";
+import { useAuth } from "@/providers/AuthProvider";
 
 export function AuthRegister() {
   const router = useRouter();
