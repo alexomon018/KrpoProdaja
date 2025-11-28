@@ -46,6 +46,7 @@ const config: Config = {
       none: "0",
       "2xs": ".25rem",
       xs: ".5rem",
+      base: ".75rem",
       sm: "1rem",
       md: "1.5rem",
       lg: "2rem",
@@ -64,17 +65,17 @@ const config: Config = {
       colors: {
         red: {
           100: "#CE492C",
-          90: "#DA7761",
-          80: "#E7A495",
-          75: "#E7A495",
-          70: "#E7A495",
+          90: "#D45C3D",
+          80: "#DA7761",
+          75: "#DD8370",
+          70: "#E18F7F",
           60: "#E7A495",
-          50: "#E7A495",
-          40: "#E7A495",
+          50: "#ECB9AB",
+          40: "#F0CCC2",
           30: "#F3D2CA",
-          25: "#F3D2CA",
-          20: "#F3D2CA",
-          10: "#F3D2CA",
+          25: "#F5DAD4",
+          20: "#F7E3DE",
+          10: "#FBF1EF",
         },
         charcoal: {
           100: "#2F2F2F",
@@ -247,7 +248,22 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }: { addUtilities: (utilities: Record<string, Record<string, string>>) => void }) {
+      addUtilities({
+        ".touch-target": {
+          minHeight: "44px",
+          minWidth: "44px",
+        },
+        ".safe-area-inset-bottom": {
+          paddingBottom: "env(safe-area-inset-bottom)",
+        },
+        ".safe-area-inset-top": {
+          paddingTop: "env(safe-area-inset-top)",
+        },
+      });
+    },
+  ],
 };
 
 export default config;

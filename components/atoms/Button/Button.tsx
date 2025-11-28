@@ -15,9 +15,9 @@ const buttonVariants = cva(
         primary:
           "bg-primary text-white dark:text-white hover:bg-primary-dark active:bg-primary-dark",
         secondary:
-          "border-2 border-primary text-primary bg-white dark:bg-gray-900 hover:bg-primary/10 active:bg-primary/20",
+          "border-2 border-primary text-primary bg-surface hover:bg-primary/10 active:bg-primary/20",
         ghost:
-          "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 active:bg-gray-200 dark:active:bg-gray-700 shadow-none hover:shadow-none",
+          "text-foreground-muted hover:bg-background active:bg-border/20 shadow-none hover:shadow-none",
         danger:
           "bg-semantic-error text-white dark:text-white hover:bg-semantic-error/90 active:bg-semantic-error/80",
         success:

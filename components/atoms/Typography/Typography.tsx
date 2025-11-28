@@ -8,17 +8,17 @@ import { cva, type VariantProps } from "class-variance-authority";
 const textVariants = cva("", {
   variants: {
     variant: {
-      h1: "text-3xl font-bold text-primary",
-      h2: "text-2xl font-bold text-primary",
-      h3: "text-xl font-semibold text-primary",
-      h4: "text-lg font-semibold text-primary",
-      body: "text-base text-primary",
-      bodyMedium: "text-md text-primary",
-      bodySmall: "text-sm text-secondary",
-      caption: "text-xs text-tertiary",
-      captionSmall: "text-2xs text-tertiary",
-      price: "text-xl font-bold text-primary",
-      priceLarge: "text-2xl font-bold text-primary",
+      h1: "text-3xl font-bold text-foreground",
+      h2: "text-2xl font-bold text-foreground",
+      h3: "text-xl font-semibold text-foreground",
+      h4: "text-lg font-semibold text-foreground",
+      body: "text-base text-foreground",
+      bodyMedium: "text-md text-foreground",
+      bodySmall: "text-sm text-foreground-muted",
+      caption: "text-xs text-foreground-subtle",
+      captionSmall: "text-2xs text-foreground-subtle",
+      price: "text-xl font-bold text-foreground",
+      priceLarge: "text-2xl font-bold text-foreground",
     },
   },
   defaultVariants: {
@@ -94,7 +94,7 @@ const Price = forwardRef<HTMLElement, PriceProps>(
           <Typography
             variant="bodySmall"
             as="span"
-            className="line-through text-tertiary"
+            className="line-through text-foreground-subtle"
           >
             {formatPrice(originalPrice)} {currency}
           </Typography>
