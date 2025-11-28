@@ -16,7 +16,9 @@ export default function Layout({
     <FilterProvider>
       <div className="min-h-screen bg-background">
         <LayoutHeaderClient />
-        {children}
+        <main className="pb-16 md:pb-0">
+          {children}
+        </main>
       </div>
     </FilterProvider>
   );

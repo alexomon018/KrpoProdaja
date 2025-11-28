@@ -85,8 +85,8 @@ const ProductCard = forwardRef<HTMLDivElement, ProductCardProps>(
             <button
               onClick={handleFavoriteClick}
               className={cn(
-                "absolute top-2 right-2 p-2 rounded-full bg-white/90 backdrop-blur-sm",
-                "touch-target transition-colors hover:bg-white",
+                "absolute top-2 right-2 p-2 rounded-full bg-surface/90 backdrop-blur-sm",
+                "touch-target transition-colors hover:bg-surface",
                 "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
               )}
               aria-label={isFavorited ? "Ukloni iz omiljenih" : "Dodaj u omiljene"}
@@ -95,7 +95,7 @@ const ProductCard = forwardRef<HTMLDivElement, ProductCardProps>(
                 size={20}
                 className={cn(
                   "transition-colors",
-                  isFavorited ? "fill-primary text-primary" : "text-secondary"
+                  isFavorited ? "fill-primary text-primary" : "text-foreground-muted"
                 )}
               />
             </button>
@@ -134,7 +134,7 @@ const ProductCard = forwardRef<HTMLDivElement, ProductCardProps>(
               {product.brand && (
                 <Badge variant="default">{product.brand}</Badge>
               )}
-              <Badge variant="default" className="text-tertiary">
+              <Badge variant="default" className="text-foreground-subtle">
                 {product.condition === "new"
                   ? "Novo"
                   : product.condition === "very-good"
@@ -147,7 +147,7 @@ const ProductCard = forwardRef<HTMLDivElement, ProductCardProps>(
 
             {/* Location */}
             <Typography variant="caption" className="flex items-center gap-1">
-              <span className="text-tertiary">{product.location}</span>
+              <span className="text-foreground-subtle">{product.location}</span>
             </Typography>
           </div>
         </Link>

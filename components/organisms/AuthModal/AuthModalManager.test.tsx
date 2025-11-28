@@ -18,10 +18,14 @@ jest.mock('./AuthModal', () => ({
 
 // Mock the auth context
 const mockCloseAuthModal = jest.fn();
-let mockAuthModalState = {
+let mockAuthModalState: {
+  isOpen: boolean;
+  mode: 'login' | 'register';
+  redirectAfterAuth: string | undefined;
+} = {
   isOpen: false,
-  mode: 'login' as const,
-  redirectAfterAuth: undefined as string | undefined,
+  mode: 'login',
+  redirectAfterAuth: undefined,
 };
 
 jest.mock('@/lib/auth/AuthProvider', () => ({

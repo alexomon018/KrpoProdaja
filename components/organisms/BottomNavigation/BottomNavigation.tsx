@@ -93,7 +93,7 @@ const BottomNavigation = forwardRef<HTMLElement, BottomNavigationProps>(
                   "transition-colors",
                   isActive
                     ? "text-primary"
-                    : "text-tertiary hover:text-secondary"
+                    : "text-foreground-subtle hover:text-foreground-muted"
                 )}
               >
                 <div className="relative">
@@ -106,7 +106,7 @@ const BottomNavigation = forwardRef<HTMLElement, BottomNavigationProps>(
                 </div>
                 <span
                   className={cn(
-                    "text-[10px] font-medium",
+                    "text-2xs font-medium",
                     isActive && "font-semibold"
                   )}
                 >
