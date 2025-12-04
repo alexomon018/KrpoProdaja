@@ -207,7 +207,7 @@ export const FullScreenImageModal: React.FC<FullScreenImageModalProps> = ({
 
       {/* Embla Carousel Container */}
       <div
-        className="relative w-full h-full flex items-center justify-center p-16"
+        className="relative w-full h-full flex items-center justify-center px-4 py-20 md:p-20"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="overflow-hidden w-full h-full" ref={emblaRef}>
@@ -215,20 +215,20 @@ export const FullScreenImageModal: React.FC<FullScreenImageModalProps> = ({
             {images.map((image, index) => (
               <div
                 key={index}
-                className="flex-[0_0_100%] min-w-0 flex items-center justify-center"
+                className="flex-[0_0_100%] min-w-0 h-full flex items-center justify-center"
               >
                 <div
-                  className="relative transition-transform duration-200"
+                  className="relative w-full h-full flex items-center justify-center transition-transform duration-200"
                   style={{ transform: `scale(${zoom})` }}
                 >
                   <Image
                     src={image}
                     alt={`${alt} ${index + 1}`}
-                    width={1200}
-                    height={1200}
-                    className="max-w-full max-h-full object-contain"
+                    fill
+                    className="object-contain"
                     quality={100}
                     priority={index === initialIndex}
+                    sizes="100vw"
                   />
                 </div>
               </div>

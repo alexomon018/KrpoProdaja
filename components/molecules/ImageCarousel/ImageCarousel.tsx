@@ -120,7 +120,7 @@ const ImageCarousel = forwardRef<HTMLDivElement, ImageCarouselProps>(
                     <ProductImage
                       src={image}
                       alt={`${alt} - ${index + 1}`}
-                      aspectRatio="square"
+                      aspectRatio="product"
                       priority={index === 0}
                     />
                   </button>

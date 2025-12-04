@@ -133,26 +133,24 @@ export function ProductContent({ productId }: ProductContentProps) {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
+      <div className="container mx-auto px-4 sm:px-6 md:px-8 py-6 sm:py-8 max-w-7xl">
         {/* Main Grid - Image Left, Info & Seller Right */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_minmax(400px,500px)] gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_minmax(400px,500px)] gap-6 sm:gap-8 lg:gap-12">
           {/* Left Column - Image Gallery */}
-          <div className="relative">
-            <div className="relative max-w-full">
-              <ProductDetailsHeader
-                title={product.title}
-                price={product.price}
-                images={product.images}
-                condition={product.condition}
-                size={product.size}
-                category={product.category}
-              />
-            </div>
+          <div className="relative w-full">
+            <ProductDetailsHeader
+              title={product.title}
+              price={product.price}
+              images={product.images}
+              condition={product.condition}
+              size={product.size}
+              category={product.category}
+            />
           </div>
 
           {/* Right Column - Product Info, Actions, and Seller */}
-          <div className="space-y-6">
-            <div className="lg:top-4 space-y-6">
+          <div className="space-y-4 sm:space-y-6">
+            <div className="lg:top-4 space-y-4 sm:space-y-6">
               {/* Category */}
               {product.category && (
                 <div className="text-sm text-gray-600 dark:text-gray-400">

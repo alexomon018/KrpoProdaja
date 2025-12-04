@@ -8,7 +8,7 @@ export interface ProductImageProps extends React.HTMLAttributes<HTMLDivElement> 
   /**
    * Aspect ratio - defaults to square (1:1) for product grids
    */
-  aspectRatio?: "square" | "portrait" | "landscape";
+  aspectRatio?: "square" | "portrait" | "landscape" | "product";
   /**
    * Priority loading for above-the-fold images
    */
@@ -59,13 +59,14 @@ const ProductImage = forwardRef<HTMLDivElement, ProductImageProps>(
       square: "aspect-square",
       portrait: "aspect-[3/4]",
       landscape: "aspect-[4/3]",
+      product: "aspect-[9/10]",
     };
 
     return (
       <div
         ref={ref}
         className={cn(
-          "relative overflow-hidden rounded-sm bg-background shadow-light hover:shadow-medium transition-shadow",
+          "relative overflow-hidden rounded-sm bg-background border border-gray-200 dark:border-gray-700 shadow-light hover:shadow-medium transition-shadow",
           !fill && aspectRatioClasses[aspectRatio],
           fill && "w-full h-full",
           className
@@ -77,7 +78,7 @@ const ProductImage = forwardRef<HTMLDivElement, ProductImageProps>(
             src={src}
             alt={alt}
             fill
-            className="object-cover transition-transform duration-300 hover:scale-105"
+            className="object-cover transition-transform duration-300"
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
             priority={priority}
             onError={() => setImageError(true)}

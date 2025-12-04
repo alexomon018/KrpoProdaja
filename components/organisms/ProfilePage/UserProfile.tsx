@@ -7,10 +7,22 @@ import {
 } from "@/components/organisms/ProfileView/ProfileView";
 import { Container } from "@/components/atoms/Container/Container";
 import { useAuth } from "@/providers/AuthProvider";
+import { useUserProfile } from "@/lib/api/hooks/useUsers";
 
-export function UserProfile() {
+interface UserProfileProps {
+  userId?: string;
+}
+
+export function UserProfile({ userId }: UserProfileProps) {
   const router = useRouter();
-  const { user, logout, isLoading } = useAuth();
+  const { user: currentUser, logout, isLoading: authLoading } = useAuth();
+
+  // Fetch user profile if userId is provided
+  const {
+    data: profileData,
+    isLoading: profileLoading,
+    error: profileError,
+  } = useUserProfile(userId || "");
 
   const handleLogout = async () => {
     try {
@@ -20,6 +32,11 @@ export function UserProfile() {
       console.error("Error logging out:", err);
     }
   };
+
+  // Determine which user data to display
+  const user = userId && profileData ? profileData.user : currentUser;
+  const isOwnProfile = !userId || (currentUser && currentUser.id === userId);
+  const isLoading = userId ? profileLoading : authLoading;
 
   if (isLoading) {
     return (
@@ -50,12 +67,24 @@ export function UserProfile() {
     );
   }
 
+  if (profileError) {
+    return (
+      <Container className="py-8">
+        <div className="text-center">
+          <p className="text-secondary">
+            Nije moguće učitati profil korisnika
+          </p>
+        </div>
+      </Container>
+    );
+  }
+
   if (!user) {
     return (
       <Container className="py-8">
         <div className="text-center">
           <p className="text-secondary">
-            Morate biti prijavljeni da vidite profil
+            {userId ? "Korisnik nije pronađen" : "Morate biti prijavljeni da vidite profil"}
           </p>
         </div>
       </Container>

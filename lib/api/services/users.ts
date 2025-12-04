@@ -46,9 +46,12 @@ export const usersService = {
   /**
    * Get public user profile by ID
    * GET /api/users/:userId
+   * Requires authentication
    */
-  async getUserProfile(userId: number): Promise<UserProfileResponse> {
-    return apiClient.get<UserProfileResponse>(`/users/${userId}`);
+  async getUserProfile(userId: string): Promise<UserProfileResponse> {
+    return apiClient.get<UserProfileResponse>(`/users/${userId}`, {
+      requiresAuth: true,
+    });
   },
 
   /**
@@ -56,7 +59,7 @@ export const usersService = {
    * GET /api/users/:userId/products
    */
   async getUserProducts(
-    userId: number,
+    userId: string,
     params?: PaginationParams
   ): Promise<ProductListResponse> {
     const query = new URLSearchParams();
