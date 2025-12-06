@@ -44,6 +44,8 @@ export interface ApiUser {
   verifiedSeller?: boolean;
   responseTime?: string;
   createdAt: string;
+  activeListings?: number;
+  soldItems?: number;
   // Legacy fields
   fullName?: string;
   phoneNumber?: string;
@@ -117,17 +119,11 @@ export interface ResendVerificationResponse {
 
 export interface UserProfileResponse {
   user: ApiUser;
-  stats: {
-    productsListed: number;
-    productsSold: number;
-    rating: number;
-    reviewCount: number;
-  };
 }
 
 // ==================== Product Types ====================
 
-export type ProductStatus = 'available' | 'reserved' | 'sold';
+export type ProductStatus = 'active' | 'reserved' | 'sold' | 'deleted';
 export type ProductCondition = 'new' | 'very-good' | 'good' | 'satisfactory';
 
 export interface ApiProduct {
@@ -191,6 +187,8 @@ export interface UpdateProductStatusRequest {
   status: ProductStatus;
 }
 
+export type ProductSortBy = 'newest' | 'oldest' | 'price-asc' | 'price-desc';
+
 export interface ProductFilters {
   categoryId?: string; // UUID
   minPrice?: number;
@@ -200,8 +198,20 @@ export interface ProductFilters {
   brand?: string;
   color?: string;
   location?: string;
-  status?: ProductStatus;
+  status?: ProductStatus | 'all';
   userId?: string; // UUID
+  sortBy?: ProductSortBy;
+  page?: number;
+  limit?: number;
+}
+
+export interface UserProductFilters {
+  status?: ProductStatus | 'all';
+  categoryId?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  condition?: ProductCondition;
+  sortBy?: ProductSortBy;
   page?: number;
   limit?: number;
 }

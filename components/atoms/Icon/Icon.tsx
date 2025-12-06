@@ -59,6 +59,7 @@ export {
   CheckCircle,
   CheckCircle2,
   ShieldCheck,
+  Loader2 as Loader,
 } from "lucide-react";
 
 /**

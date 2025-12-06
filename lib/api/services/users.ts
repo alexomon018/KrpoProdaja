@@ -10,7 +10,7 @@ import type {
   ChangePasswordRequest,
   UserProfileResponse,
   ProductListResponse,
-  PaginationParams,
+  UserProductFilters,
   SendPhoneVerificationRequest,
   SendPhoneVerificationResponse,
   VerifyPhoneRequest,
@@ -57,15 +57,22 @@ export const usersService = {
   /**
    * Get user's product listings
    * GET /api/users/:userId/products
+   * Supports filtering by status, category, price range, condition, and sorting
    */
   async getUserProducts(
     userId: string,
-    params?: PaginationParams
+    filters?: UserProductFilters
   ): Promise<ProductListResponse> {
     const query = new URLSearchParams();
 
-    if (params?.page) query.append("page", String(params.page));
-    if (params?.limit) query.append("limit", String(params.limit));
+    if (filters?.page) query.append("page", String(filters.page));
+    if (filters?.limit) query.append("limit", String(filters.limit));
+    if (filters?.status) query.append("status", filters.status);
+    if (filters?.categoryId) query.append("categoryId", filters.categoryId);
+    if (filters?.minPrice !== undefined) query.append("minPrice", String(filters.minPrice));
+    if (filters?.maxPrice !== undefined) query.append("maxPrice", String(filters.maxPrice));
+    if (filters?.condition) query.append("condition", filters.condition);
+    if (filters?.sortBy) query.append("sortBy", filters.sortBy);
 
     const queryString = query.toString();
     const endpoint = queryString

@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import { QueryProvider } from "@/providers/QueryProvider";
 import { AuthProvider } from "@/providers/AuthProvider";
+import { NuqsProvider } from "@/providers/NuqsProvider";
 import { AuthModalManager } from "@/components/organisms/AuthModal/AuthModalManager";
 import { getCurrentUser } from "@/lib/auth/server";
 import { GoogleOAuthProvider } from "@/providers/GoogleOAuthProvider";
@@ -50,16 +51,18 @@ export default async function RootLayout({
     <html lang="sr">
       <body className={`${sourceSans.variable} ${lato.variable}`}>
         <FacebookSDKProvider />
-        <QueryProvider>
-          <ThemeProvider>
-            <GoogleOAuthProvider>
-              <AuthProvider initialUser={user}>
-                {children}
-                <AuthModalManager />
-              </AuthProvider>
-            </GoogleOAuthProvider>
-          </ThemeProvider>
-        </QueryProvider>
+        <NuqsProvider>
+          <QueryProvider>
+            <ThemeProvider>
+              <GoogleOAuthProvider>
+                <AuthProvider initialUser={user}>
+                  {children}
+                  <AuthModalManager />
+                </AuthProvider>
+              </GoogleOAuthProvider>
+            </ThemeProvider>
+          </QueryProvider>
+        </NuqsProvider>
       </body>
     </html>
   );
