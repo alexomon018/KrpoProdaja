@@ -27,7 +27,7 @@ export function useUpdateCurrentUser() {
   });
 }
 
-export function useUserProfile(userId: number) {
+export function useUserProfile(userId: string) {
   return useQuery({
     queryKey: ["users", userId, "profile"],
     queryFn: () => usersService.getUserProfile(userId),
@@ -35,7 +35,7 @@ export function useUserProfile(userId: number) {
   });
 }
 
-export function useUserProducts(userId: number, params?: PaginationParams) {
+export function useUserProducts(userId: string, params?: PaginationParams) {
   return useQuery({
     queryKey: ["users", userId, "products", params],
     queryFn: () => usersService.getUserProducts(userId, params),
