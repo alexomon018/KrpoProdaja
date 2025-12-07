@@ -4,27 +4,27 @@ import { ConditionBadge } from './ConditionBadge';
 describe('ConditionBadge', () => {
   it('renders new condition correctly', () => {
     render(<ConditionBadge condition="new" />);
-    expect(screen.getByText('New')).toBeInTheDocument();
+    expect(screen.getByText('Novo')).toBeInTheDocument();
   });
 
   it('renders very-good condition correctly', () => {
     render(<ConditionBadge condition="very-good" />);
-    expect(screen.getByText('Very Good')).toBeInTheDocument();
+    expect(screen.getByText('Veoma dobro')).toBeInTheDocument();
   });
 
   it('renders good condition correctly', () => {
     render(<ConditionBadge condition="good" />);
-    expect(screen.getByText('Good')).toBeInTheDocument();
+    expect(screen.getByText('Dobro')).toBeInTheDocument();
   });
 
   it('renders satisfactory condition correctly', () => {
     render(<ConditionBadge condition="satisfactory" />);
-    expect(screen.getByText('Satisfactory')).toBeInTheDocument();
+    expect(screen.getByText('Zadovoljavajuće')).toBeInTheDocument();
   });
 
   it('applies custom className', () => {
     render(<ConditionBadge condition="new" className="custom-class" />);
-    const badge = screen.getByText('New');
+    const badge = screen.getByText('Novo');
     expect(badge).toHaveClass('custom-class');
   });
 

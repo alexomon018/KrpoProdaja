@@ -8,29 +8,29 @@ describe('ProductMeta', () => {
 
   it('renders view count', () => {
     render(<ProductMeta {...defaultProps} viewCount={1500} />);
-    expect(screen.getByText('1,500 views')).toBeInTheDocument();
+    expect(screen.getByText('1,500 pregleda')).toBeInTheDocument();
   });
 
   it('renders 0 views when no viewCount provided', () => {
     render(<ProductMeta {...defaultProps} />);
-    expect(screen.getByText('0 views')).toBeInTheDocument();
+    expect(screen.getByText('0 pregleda')).toBeInTheDocument();
   });
 
   it('renders Share button', () => {
     render(<ProductMeta {...defaultProps} />);
-    expect(screen.getByRole('button', { name: /share/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /podeli/i })).toBeInTheDocument();
   });
 
   it('renders Report button', () => {
     render(<ProductMeta {...defaultProps} />);
-    expect(screen.getByRole('button', { name: /report/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /prijavi/i })).toBeInTheDocument();
   });
 
   it('calls onShare when provided and Share button is clicked', () => {
     const mockOnShare = jest.fn();
     render(<ProductMeta {...defaultProps} onShare={mockOnShare} />);
 
-    fireEvent.click(screen.getByRole('button', { name: /share/i }));
+    fireEvent.click(screen.getByRole('button', { name: /podeli/i }));
     expect(mockOnShare).toHaveBeenCalledTimes(1);
   });
 
@@ -38,7 +38,7 @@ describe('ProductMeta', () => {
     const mockOnReport = jest.fn();
     render(<ProductMeta {...defaultProps} onReport={mockOnReport} />);
 
-    fireEvent.click(screen.getByRole('button', { name: /report/i }));
+    fireEvent.click(screen.getByRole('button', { name: /prijavi/i }));
     expect(mockOnReport).toHaveBeenCalledTimes(1);
   });
 
@@ -47,10 +47,10 @@ describe('ProductMeta', () => {
     const alertSpy = jest.spyOn(window, 'alert').mockImplementation();
 
     render(<ProductMeta {...defaultProps} />);
-    fireEvent.click(screen.getByRole('button', { name: /report/i }));
+    fireEvent.click(screen.getByRole('button', { name: /prijavi/i }));
 
     expect(consoleSpy).toHaveBeenCalledWith(`Report product ${defaultProps.productId}`);
-    expect(alertSpy).toHaveBeenCalledWith('Report functionality coming soon!');
+    expect(alertSpy).toHaveBeenCalledWith('Opcija za prijavljivanje uskoro!');
 
     consoleSpy.mockRestore();
     alertSpy.mockRestore();
@@ -62,12 +62,12 @@ describe('ProductMeta', () => {
     const alertSpy = jest.spyOn(window, 'alert').mockImplementation();
 
     render(<ProductMeta {...defaultProps} />);
-    fireEvent.click(screen.getByRole('button', { name: /share/i }));
+    fireEvent.click(screen.getByRole('button', { name: /podeli/i }));
 
     await waitFor(() => {
       expect(mockClipboard.writeText).toHaveBeenCalled();
     });
-    expect(alertSpy).toHaveBeenCalledWith('Link copied to clipboard!');
+    expect(alertSpy).toHaveBeenCalledWith('Link je kopiran!');
 
     alertSpy.mockRestore();
   });

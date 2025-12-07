@@ -24,8 +24,8 @@ const ProductMeta = forwardRef<HTMLDivElement, ProductMetaProps>(
       }
 
       const shareData = {
-        title: "Check out this item",
-        text: "I found this interesting item on Krpo Prodaja",
+        title: "Pogledaj ovaj artikal",
+        text: "Našao sam zanimljiv artikal na Krpo Prodaja",
         url: typeof window !== "undefined" ? window.location.href : "",
       };
 
@@ -35,7 +35,7 @@ const ProductMeta = forwardRef<HTMLDivElement, ProductMetaProps>(
         } else {
           // Fallback: Copy to clipboard
           await navigator.clipboard.writeText(shareData.url);
-          alert("Link copied to clipboard!");
+          alert("Link je kopiran!");
         }
       } catch (error) {
         console.error("Error sharing:", error);
@@ -48,7 +48,7 @@ const ProductMeta = forwardRef<HTMLDivElement, ProductMetaProps>(
       } else {
         console.log(`Report product ${productId}`);
         // TODO: Implement report modal
-        alert("Report functionality coming soon!");
+        alert("Opcija za prijavljivanje uskoro!");
       }
     };
 
@@ -61,7 +61,7 @@ const ProductMeta = forwardRef<HTMLDivElement, ProductMetaProps>(
         {/* View Count */}
         <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
           <Eye className="h-4 w-4" />
-          <span>{viewCount.toLocaleString()} views</span>
+          <span>{viewCount.toLocaleString()} pregleda</span>
         </div>
 
         {/* Actions */}
@@ -73,11 +73,11 @@ const ProductMeta = forwardRef<HTMLDivElement, ProductMetaProps>(
             className="gap-2"
           >
             <Share2 className="h-4 w-4" />
-            Share
+            Podeli
           </Button>
           <Button variant="primary" size="sm" onClick={handleReport}>
             <Flag className="h-4 w-4" />
-            Report
+            Prijavi
           </Button>
         </div>
       </div>

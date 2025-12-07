@@ -21,7 +21,7 @@ export const ProductDescription = forwardRef<
       {/* Description Section */}
       <div>
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-          Description
+          Opis
         </h2>
         <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">
           {description}
@@ -32,7 +32,7 @@ export const ProductDescription = forwardRef<
       {details.length > 0 && (
         <div>
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-            Item Details
+            Detalji artikla
           </h2>
           <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
             <table className="w-full">

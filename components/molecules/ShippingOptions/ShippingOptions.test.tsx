@@ -28,7 +28,7 @@ describe('ShippingOptions', () => {
 
   it('renders Shipping Options heading', () => {
     render(<ShippingOptions options={mockOptions} />);
-    expect(screen.getByRole('heading', { name: /shipping options/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /opcije dostave/i })).toBeInTheDocument();
   });
 
   it('renders all shipping options', () => {
@@ -49,7 +49,7 @@ describe('ShippingOptions', () => {
 
   it('displays "Free" for zero price options', () => {
     render(<ShippingOptions options={mockOptions} />);
-    expect(screen.getByText('Free')).toBeInTheDocument();
+    expect(screen.getByText('Besplatno')).toBeInTheDocument();
   });
 
   it('renders location when provided', () => {
@@ -64,7 +64,7 @@ describe('ShippingOptions', () => {
 
   it('renders empty state when no options provided', () => {
     render(<ShippingOptions options={[]} />);
-    expect(screen.getByText('No shipping options available')).toBeInTheDocument();
+    expect(screen.getByText('Nema dostupnih opcija dostave')).toBeInTheDocument();
   });
 
   it('renders default icon when icon type is not specified', () => {
