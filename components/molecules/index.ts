@@ -8,12 +8,12 @@
 export { ProductCard } from "./ProductCard/ProductCard";
 export type { ProductCardProps } from "./ProductCard/ProductCard";
 
-<<<<<<< Updated upstream
-=======
 export { ProductListItem, ProductListItemSkeleton } from "./ProductListItem";
 export type { ProductListItemProps } from "./ProductListItem";
 
->>>>>>> Stashed changes
+export { ProductListItem } from "./ProductListItem";
+export type { ProductListItemProps } from "./ProductListItem";
+
 export { SearchBar } from "./SearchBar/SearchBar";
 export type { SearchBarProps } from "./SearchBar/SearchBar";
 

@@ -1,10 +1,12 @@
 "use client";
 
-import * as React from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import cn from "@/lib/utils";
 import { UserAvatar } from "@/components/atoms/Avatar/Avatar";
 import { Button } from "@/components/atoms/Button/Button";
 import { Icon } from "@/components/atoms/Icon/Icon";
+import { UserProductsContent } from "../UserProductsPage/UserProductsContent";
 
 export interface ProfileData {
   id: string;
@@ -57,6 +59,23 @@ export function ProfileView({
   isOwnProfile = false,
   onLogout,
 }: ProfileViewProps) {
+  const [showProducts, setShowProducts] = useState(false);
+  const productsRef = useRef<HTMLDivElement>(null);
+
+  const handleToggleProducts = () => {
+    setShowProducts((prev) => !prev);
+  };
+
+  // Smooth scroll to products when expanded
+  useEffect(() => {
+    if (showProducts && productsRef.current) {
+      productsRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+      });
+    }
+  }, [showProducts]);
+
   return (
     <div className="w-full max-w-4xl mx-auto space-y-6">
       {/* Profile Header */}
@@ -82,7 +101,11 @@ export function ProfileView({
                     {profile.name}
                   </h1>
                   {profile.verified && (
-                    <Icon name="BadgeCheck" size={24} className="fill-blue-500 text-white" />
+                    <Icon
+                      name="BadgeCheck"
+                      size={24}
+                      className="fill-blue-500 text-white"
+                    />
                   )}
                 </div>
                 {profile.location && (
@@ -108,15 +131,14 @@ export function ProfileView({
               )}
             </div>
 
-            {profile.bio && (
-              <p className="text-secondary">{profile.bio}</p>
-            )}
+            {profile.bio && <p className="text-secondary">{profile.bio}</p>}
 
             <div className="flex flex-wrap gap-4 text-sm">
               <div className="flex items-center gap-2">
                 <Icon name="Calendar" size={16} className="text-tertiary" />
                 <span className="text-secondary">
-                  Član od {new Date(profile.memberSince).toLocaleDateString("sr-RS")}
+                  Član od{" "}
+                  {new Date(profile.memberSince).toLocaleDateString("sr-RS")}
                 </span>
               </div>
               {profile.rating !== undefined && (
@@ -157,7 +179,9 @@ export function ProfileView({
       {/* Contact Info (only for own profile) */}
       {isOwnProfile && (
         <div className="bg-surface border border-border rounded-lg p-6 space-y-4">
-          <h2 className="text-xl font-bold text-primary">Kontakt informacije</h2>
+          <h2 className="text-xl font-bold text-primary">
+            Kontakt informacije
+          </h2>
 
           <div className="space-y-3">
             <div className="flex items-center gap-3">
@@ -188,10 +212,62 @@ export function ProfileView({
             <Icon name="MessageCircle" size={20} />
             Pošalji poruku
           </Button>
-          <Button variant="secondary" fullWidth>
-            <Icon name="Eye" size={20} />
-            Vidi oglase
+          <Button
+            variant="secondary"
+            fullWidth
+            onClick={handleToggleProducts}
+            aria-expanded={showProducts}
+            aria-controls="user-products-section"
+            className={cn(
+              "transition-all duration-300 shadow-low hover:shadow-medium",
+              showProducts && "bg-primary/5 border-primary"
+            )}
+          >
+            <Icon
+              name={showProducts ? "ChevronUp" : "Eye"}
+              size={20}
+              className="transition-transform duration-300"
+            />
+            {showProducts ? "Sakrij oglase" : "Vidi oglase"}
+            {!showProducts &&
+              profile.activeListing &&
+              profile.activeListing > 0 && (
+                <span className="ml-2 px-2 py-0.5 rounded-full bg-primary text-white text-xs font-medium">
+                  {profile.activeListing}
+                </span>
+              )}
           </Button>
+        </div>
+      )}
+
+      {/* Expandable Products Section */}
+      {!isOwnProfile && (
+        <div
+          ref={productsRef}
+          id="user-products-section"
+          role="region"
+          aria-label="Korisnički oglasi"
+          className={cn(
+            "grid transition-all duration-500 ease-in-out",
+            showProducts ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+          )}
+        >
+          <div className="overflow-hidden">
+            <div
+              className={cn(
+                "transition-opacity duration-300 delay-100",
+                showProducts ? "opacity-100" : "opacity-0"
+              )}
+            >
+              {showProducts && (
+                <UserProductsContent
+                  userId={profile.id}
+                  showHeader={false}
+                  inline={true}
+                />
+              )}
+            </div>
+          </div>
         </div>
       )}
     </div>
