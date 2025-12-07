@@ -28,7 +28,7 @@ let mockAuthModalState: {
   redirectAfterAuth: undefined,
 };
 
-jest.mock('@/lib/auth/AuthProvider', () => ({
+jest.mock('@/providers/AuthProvider', () => ({
   useAuth: () => ({
     authModalState: mockAuthModalState,
     closeAuthModal: mockCloseAuthModal,

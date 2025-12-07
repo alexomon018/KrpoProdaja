@@ -16,7 +16,7 @@ const mockCloseAuthModal = jest.fn();
 const mockPush = jest.fn();
 const mockRefresh = jest.fn();
 
-jest.mock('@/lib/auth/AuthProvider', () => ({
+jest.mock('@/providers/AuthProvider', () => ({
   useAuth: () => ({
     setUser: mockSetUser,
     closeAuthModal: mockCloseAuthModal,

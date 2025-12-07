@@ -1,23 +1,22 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { useQueryStates, parseAsString, parseAsInteger } from "nuqs";
-import cn from "@/lib/utils";
 import { Container } from "@/components/atoms/Container/Container";
 import { Button } from "@/components/atoms/Button/Button";
-import { Icon, Loader } from "@/components/atoms/Icon/Icon";
+import { Icon } from "@/components/atoms/Icon/Icon";
 import {
   Typography,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
 } from "@/components/atoms";
-import { ProductListItem, ProductListItemSkeleton } from "@/components/molecules";
-import { useUserProducts, useUserProfile } from "@/lib/api/hooks/useUsers";
-import type { ApiProduct, UserProductFilters } from "@/lib/api/types";
+import { UserProductsFilters, UserProductsList } from "@/components/molecules";
+import { useUserProductsManagement } from "@/lib/api/hooks/useUserProductsManagement";
 
 interface UserProductsContentProps {
   userId: string;
@@ -39,65 +38,32 @@ export function UserProductsContent({
   inline = false,
 }: UserProductsContentProps) {
   const router = useRouter();
-  const loadMoreRef = useRef<HTMLDivElement>(null);
 
-  // URL query params using nuqs
-  const [queryParams, setQueryParams] = useQueryStates({
-    status: parseAsString.withDefault("active"),
-    categoryId: parseAsString,
-    minPrice: parseAsInteger,
-    maxPrice: parseAsInteger,
-    condition: parseAsString,
-    sortBy: parseAsString.withDefault("newest"),
-  });
-
-  // Build filters from query params
-  const filters: Omit<UserProductFilters, 'page' | 'limit'> = {
-    status: queryParams.status as UserProductFilters['status'],
-    categoryId: queryParams.categoryId || undefined,
-    minPrice: queryParams.minPrice || undefined,
-    maxPrice: queryParams.maxPrice || undefined,
-    condition: queryParams.condition as UserProductFilters['condition'],
-    sortBy: queryParams.sortBy as UserProductFilters['sortBy'],
-  };
-
-  const { data: profileData, isLoading: profileLoading } = useUserProfile(userId);
+  // Use custom hook for all logic
   const {
-    data,
+    user,
+    allProducts,
+    totalCount,
+    isOwnProducts,
     isLoading,
+    isInitialLoading,
     isFetchingNextPage,
     hasNextPage,
     fetchNextPage,
-  } = useUserProducts(userId, filters);
-
-  // Infinite scroll using Intersection Observer
-  useEffect(() => {
-    if (!loadMoreRef.current || !hasNextPage || isFetchingNextPage) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          fetchNextPage();
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    observer.observe(loadMoreRef.current);
-
-    return () => observer.disconnect();
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+    loadMoreRef,
+    queryParams,
+    setQueryParams,
+    deleteProduct,
+    handleDeleteClick,
+    handleDeleteConfirm,
+    handleStatusChange,
+    deleteDialogOpen,
+    setDeleteDialogOpen,
+  } = useUserProductsManagement({ userId });
 
   const handleBack = () => {
     router.back();
   };
-
-  // Only show full-page loader on initial load (no data at all)
-  const isInitialLoading = isLoading && !data;
-
-  const user = profileData?.user;
-  const allProducts: ApiProduct[] = data?.pages.flatMap((page) => page.data) || [];
-  const totalCount = data?.pages[0]?.pagination?.total ?? 0;
 
   const ContentWrapper = inline ? "div" : Container;
   const wrapperProps = inline
@@ -147,146 +113,57 @@ export function UserProductsContent({
       )}
 
       {/* Filters */}
-      <div className={inline ? "space-y-4" : "mb-6 space-y-4"}>
-        {/* Status Tabs */}
-        <div className={cn(
-          "flex gap-2 overflow-x-auto pb-2",
-          inline && "-mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide snap-x snap-mandatory"
-        )}>
-          <Button
-            variant={queryParams.status === "active" ? "primary" : "secondary"}
-            size="sm"
-            onClick={() => setQueryParams({ status: "active" })}
-            className={cn(inline && "shrink-0 snap-start transition-all duration-200 min-w-[100px] md:min-w-0")}
-          >
-            Aktivni
-          </Button>
-          <Button
-            variant={queryParams.status === "reserved" ? "primary" : "secondary"}
-            size="sm"
-            onClick={() => setQueryParams({ status: "reserved" })}
-            className={cn(inline && "shrink-0 snap-start transition-all duration-200 min-w-[100px] md:min-w-0")}
-          >
-            Rezervisani
-          </Button>
-          <Button
-            variant={queryParams.status === "sold" ? "primary" : "secondary"}
-            size="sm"
-            onClick={() => setQueryParams({ status: "sold" })}
-            className={cn(inline && "shrink-0 snap-start transition-all duration-200 min-w-[100px] md:min-w-0")}
-          >
-            Prodati
-          </Button>
-          <Button
-            variant={queryParams.status === "all" ? "primary" : "secondary"}
-            size="sm"
-            onClick={() => setQueryParams({ status: "all" })}
-            className={cn(inline && "shrink-0 snap-start transition-all duration-200 min-w-[100px] md:min-w-0")}
-          >
-            Svi
-          </Button>
-        </div>
-
-        {/* Sort Dropdown */}
-        <div className={cn(
-          "flex items-center gap-2",
-          inline && "flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 bg-background/50 rounded-lg p-3 border border-border/50"
-        )}>
-          {inline && (
-            <div className="flex items-center gap-2">
-              <Icon name="ArrowUpDown" size={16} className="text-tertiary" />
-              <Typography variant="bodySmall" className="text-secondary font-medium">
-                Sortiranje
-              </Typography>
-            </div>
-          )}
-          {!inline && (
-            <Typography variant="bodySmall" className="text-secondary shrink-0">
-              Sortiranje:
-            </Typography>
-          )}
-          <Select
-            value={queryParams.sortBy}
-            onValueChange={(value) => setQueryParams({ sortBy: value })}
-          >
-            <SelectTrigger className={cn(inline ? "w-full sm:w-[180px] h-10 bg-surface" : "w-[180px]")}>
-              <SelectValue placeholder="Izaberite..." />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="newest">Najnoviji</SelectItem>
-              <SelectItem value="oldest">Najstariji</SelectItem>
-              <SelectItem value="price-asc">Cena: Rastuća</SelectItem>
-              <SelectItem value="price-desc">Cena: Opadajuća</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
+      <UserProductsFilters
+        status={queryParams.status}
+        sortBy={queryParams.sortBy}
+        onStatusChange={(status) => setQueryParams({ status })}
+        onSortChange={(sortBy) => setQueryParams({ sortBy })}
+        inline={inline}
+      />
 
       {/* Products List */}
-      {isInitialLoading || isLoading ? (
-        // Show skeleton while loading (initial load or when switching tabs)
-        <div className="flex flex-col gap-4">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <ProductListItemSkeleton key={i} />
-          ))}
-        </div>
-      ) : allProducts.length === 0 ? (
-        inline ? (
-          <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
-            <div className="w-16 h-16 mb-4 rounded-full bg-primary/10 flex items-center justify-center">
-              <Icon name="Package" size={32} className="text-primary/50" />
-            </div>
-            <Typography variant="h4" className="mb-2">
-              Nema oglasa
-            </Typography>
-            <Typography variant="body" className="text-secondary max-w-xs">
-              {queryParams.status === "active" && "Korisnik trenutno nema aktivnih oglasa"}
-              {queryParams.status === "reserved" && "Korisnik trenutno nema rezervisanih oglasa"}
-              {queryParams.status === "sold" && "Korisnik trenutno nema prodatih oglasa"}
-              {queryParams.status === "all" && "Korisnik trenutno nema oglasa"}
-            </Typography>
-          </div>
-        ) : (
-          <div className="text-center py-12">
-            <Typography variant="body" className="text-secondary">
-              {queryParams.status === "active" && "Korisnik trenutno nema aktivnih oglasa"}
-              {queryParams.status === "reserved" && "Korisnik trenutno nema rezervisanih oglasa"}
-              {queryParams.status === "sold" && "Korisnik trenutno nema prodatih oglasa"}
-              {queryParams.status === "all" && "Korisnik trenutno nema oglasa"}
-            </Typography>
-          </div>
-        )
-      ) : (
-        <>
-          <div className="flex flex-col gap-4">
-            {allProducts.map((product) => (
-              <ProductListItem key={product.id} product={product} />
-            ))}
-          </div>
+      <UserProductsList
+        products={allProducts}
+        isLoading={isInitialLoading || isLoading}
+        isOwnProducts={isOwnProducts}
+        status={queryParams.status}
+        onDelete={handleDeleteClick}
+        onStatusChange={handleStatusChange}
+        inline={inline}
+        hasNextPage={hasNextPage}
+        isFetchingNextPage={isFetchingNextPage}
+        onFetchNextPage={fetchNextPage}
+        loadMoreRef={loadMoreRef}
+      />
 
-          {/* Infinite Scroll Trigger & Load More Button */}
-          {hasNextPage && (
-            <div ref={loadMoreRef} className={cn(inline ? "flex justify-center pt-4" : "mt-8 flex justify-center")}>
-              {isFetchingNextPage ? (
-                <div className="flex items-center gap-2 text-secondary">
-                  <Loader className={cn(inline ? "h-5 w-5 animate-spin" : "h-6 w-6 animate-spin")} />
-                  <Typography variant={inline ? "bodySmall" : "body"}>
-                    Učitavanje...
-                  </Typography>
-                </div>
-              ) : (
-                <Button
-                  variant={inline ? "ghost" : "secondary"}
-                  size={inline ? "sm" : undefined}
-                  onClick={() => fetchNextPage()}
-                >
-                  {inline ? "Učitaj još oglasa" : "Učitaj još"}
-                </Button>
-              )}
-            </div>
-          )}
-        </>
-      )}
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Brisanje oglasa</AlertDialogTitle>
+            <AlertDialogDescription>
+              Da li ste sigurni da želite da obrišete ovaj oglas? Ova akcija se ne može poništiti.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel asChild>
+              <Button variant="secondary" disabled={deleteProduct.isPending}>
+                Otkaži
+              </Button>
+            </AlertDialogCancel>
+            <AlertDialogAction asChild>
+              <Button
+                variant="primary"
+                onClick={handleDeleteConfirm}
+                disabled={deleteProduct.isPending}
+                className="bg-red-600 hover:bg-red-700 focus:ring-red-600"
+              >
+                {deleteProduct.isPending ? "Brisanje..." : "Obriši"}
+              </Button>
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </ContentWrapper>
   );
 }

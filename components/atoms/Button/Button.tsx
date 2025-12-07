@@ -7,38 +7,35 @@ import { Button as ShadcnButton } from "@/components/ui/button";
  * Extended button variants for KrpoProdaja marketplace
  * Extends shadcn/ui Button with custom variants and features
  */
-const buttonVariants = cva(
-  "touch-target shadow-low hover:shadow-medium",
-  {
-    variants: {
-      variant: {
-        primary:
-          "bg-primary text-white dark:text-white hover:bg-primary-dark active:bg-primary-dark",
-        secondary:
-          "border-2 border-primary text-primary bg-surface hover:bg-primary/10 active:bg-primary/20",
-        ghost:
-          "text-foreground-muted hover:bg-background active:bg-border/20 shadow-none hover:shadow-none",
-        danger:
-          "bg-semantic-error text-white dark:text-white hover:bg-semantic-error/90 active:bg-semantic-error/80",
-        success:
-          "bg-semantic-success text-white dark:text-white hover:bg-semantic-success/90 active:bg-semantic-success/80",
-      },
-      size: {
-        sm: "h-9 px-3 text-sm",
-        md: "h-11 px-4 text-base",
-        lg: "h-12 px-6 text-lg",
-        icon: "h-11 w-11",
-      },
-      fullWidth: {
-        true: "w-full",
-      },
+const buttonVariants = cva("touch-target shadow-low hover:shadow-medium", {
+  variants: {
+    variant: {
+      primary:
+        "bg-primary !text-white dark:text-white hover:bg-primary-dark active:bg-primary-dark",
+      secondary:
+        "border-2 border-primary text-charcoal-100 bg-surface hover:bg-primary/10 active:bg-primary/20",
+      ghost:
+        "text-foreground-muted hover:bg-background active:bg-border/20 shadow-none hover:shadow-none",
+      danger:
+        "bg-semantic-error text-white dark:text-white hover:bg-semantic-error/90 active:bg-semantic-error/80",
+      success:
+        "bg-semantic-success text-white dark:text-white hover:bg-semantic-success/90 active:bg-semantic-success/80",
     },
-    defaultVariants: {
-      variant: "primary",
-      size: "md",
+    size: {
+      sm: "h-9 px-3 text-sm",
+      md: "h-11 px-4 text-base",
+      lg: "h-12 px-6 text-lg",
+      icon: "h-11 w-11",
     },
-  }
-);
+    fullWidth: {
+      true: "w-full",
+    },
+  },
+  defaultVariants: {
+    variant: "primary",
+    size: "md",
+  },
+});
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
@@ -63,7 +60,20 @@ export interface ButtonProps
  * ```
  */
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, fullWidth, loading, children, disabled, asChild, ...props }, ref) => {
+  (
+    {
+      className,
+      variant,
+      size,
+      fullWidth,
+      loading,
+      children,
+      disabled,
+      asChild,
+      ...props
+    },
+    ref
+  ) => {
     return (
       <ShadcnButton
         className={cn(buttonVariants({ variant, size, fullWidth, className }))}

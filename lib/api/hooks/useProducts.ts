@@ -7,6 +7,7 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { productsService } from '../services/products';
+import { invalidateProductQueries } from '../utils/cache';
 import type {
   CreateProductRequest,
   UpdateProductRequest,
@@ -35,7 +36,8 @@ export function useCreateProduct() {
   return useMutation({
     mutationFn: (data: CreateProductRequest) => productsService.createProduct(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['products'] });
+      // Invalidate all product-related queries including user products
+      invalidateProductQueries(queryClient);
     },
   });
 }
@@ -47,7 +49,9 @@ export function useUpdateProduct() {
     mutationFn: ({ id, data }: { id: string; data: UpdateProductRequest }) =>
       productsService.updateProduct(id, data),
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['products'] });
+      // Invalidate all product-related queries including user products
+      invalidateProductQueries(queryClient);
+      // Also invalidate the specific product
       queryClient.invalidateQueries({ queryKey: ['products', variables.id] });
     },
   });
@@ -59,7 +63,8 @@ export function useDeleteProduct() {
   return useMutation({
     mutationFn: (id: string) => productsService.deleteProduct(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['products'] });
+      // Invalidate all product-related queries including user products
+      invalidateProductQueries(queryClient);
     },
   });
 }
@@ -71,7 +76,9 @@ export function useUpdateProductStatus() {
     mutationFn: ({ id, data }: { id: string; data: UpdateProductStatusRequest }) =>
       productsService.updateProductStatus(id, data),
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['products'] });
+      // Invalidate all product-related queries including user products
+      invalidateProductQueries(queryClient);
+      // Also invalidate the specific product
       queryClient.invalidateQueries({ queryKey: ['products', variables.id] });
     },
   });

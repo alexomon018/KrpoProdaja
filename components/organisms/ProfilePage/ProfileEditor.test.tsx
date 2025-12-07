@@ -33,7 +33,7 @@ let mockCurrentUser: any = {
   verifiedSeller: false,
 };
 
-jest.mock('@/lib/auth/AuthProvider', () => ({
+jest.mock('@/providers/AuthProvider', () => ({
   useAuth: () => ({
     user: mockCurrentUser,
     refreshUser: mockRefreshUser,
@@ -423,7 +423,7 @@ describe('ProfileEditor', () => {
 
   describe('loading states', () => {
     it('shows loading state from auth context', () => {
-      jest.mock('@/lib/auth/AuthProvider', () => ({
+      jest.mock('@/providers/AuthProvider', () => ({
         useAuth: () => ({
           user: null,
           refreshUser: mockRefreshUser,

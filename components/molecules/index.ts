@@ -11,9 +11,6 @@ export type { ProductCardProps } from "./ProductCard/ProductCard";
 export { ProductListItem, ProductListItemSkeleton } from "./ProductListItem";
 export type { ProductListItemProps } from "./ProductListItem";
 
-export { ProductListItem } from "./ProductListItem";
-export type { ProductListItemProps } from "./ProductListItem";
-
 export { SearchBar } from "./SearchBar/SearchBar";
 export type { SearchBarProps } from "./SearchBar/SearchBar";
 
@@ -34,3 +31,9 @@ export type { SellerInfoProps } from "./SellerInfo/SellerInfo";
 
 export { ImageUpload } from "./ImageUpload/ImageUpload";
 export type { ImageUploadProps } from "./ImageUpload/ImageUpload";
+
+export { UserProductsFilters } from "./UserProductsFilters";
+export type { UserProductsFiltersProps } from "./UserProductsFilters";
+
+export { UserProductsList } from "./UserProductsList";
+export type { UserProductsListProps } from "./UserProductsList";

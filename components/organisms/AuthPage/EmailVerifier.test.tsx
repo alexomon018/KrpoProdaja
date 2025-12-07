@@ -12,7 +12,7 @@ jest.mock('@/lib/auth/actions', () => ({
 const mockSetUser = jest.fn();
 const mockPush = jest.fn();
 
-jest.mock('@/lib/auth/AuthProvider', () => ({
+jest.mock('@/providers/AuthProvider', () => ({
   useAuth: () => ({
     setUser: mockSetUser,
     user: null,

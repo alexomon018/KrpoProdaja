@@ -18,7 +18,6 @@ export function UserProfile({ userId }: UserProfileProps) {
   const router = useRouter();
   const { user: currentUser, logout, isLoading: authLoading } = useAuth();
 
-  // Fetch user profile if userId is provided
   const {
     data: profileData,
     isLoading: profileLoading,
@@ -34,9 +33,8 @@ export function UserProfile({ userId }: UserProfileProps) {
     }
   };
 
-  // Determine which user data to display
   const user = userId && profileData ? profileData.user : currentUser;
-  const isOwnProfile = !userId || (currentUser?.id === userId) || false;
+  const isOwnProfile = !userId || currentUser?.id === userId || false;
   const isLoading = userId ? profileLoading : authLoading;
 
   if (isLoading) {
@@ -53,9 +51,7 @@ export function UserProfile({ userId }: UserProfileProps) {
     return (
       <Container className="py-8">
         <div className="text-center">
-          <p className="text-secondary">
-            Nije moguće učitati profil korisnika
-          </p>
+          <p className="text-secondary">Nije moguće učitati profil korisnika</p>
         </div>
       </Container>
     );
@@ -66,7 +62,9 @@ export function UserProfile({ userId }: UserProfileProps) {
       <Container className="py-8">
         <div className="text-center">
           <p className="text-secondary">
-            {userId ? "Korisnik nije pronađen" : "Morate biti prijavljeni da vidite profil"}
+            {userId
+              ? "Korisnik nije pronađen"
+              : "Morate biti prijavljeni da vidite profil"}
           </p>
         </div>
       </Container>
