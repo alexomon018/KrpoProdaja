@@ -15,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/atoms";
-import { ProductListItem } from "@/components/molecules";
+import { ProductListItem, ProductListItemSkeleton } from "@/components/molecules";
 import { useUserProducts, useUserProfile } from "@/lib/api/hooks/useUsers";
 import type { ApiProduct, UserProductFilters } from "@/lib/api/types";
 
@@ -92,15 +92,8 @@ export function UserProductsContent({
     router.back();
   };
 
-  if (isLoading && !data) {
-    return (
-      <Container className="py-8">
-        <div className="flex justify-center items-center min-h-[400px]">
-          <Loader className="h-12 w-12 animate-spin text-primary" />
-        </div>
-      </Container>
-    );
-  }
+  // Only show full-page loader on initial load (no data at all)
+  const isInitialLoading = isLoading && !data;
 
   const user = profileData?.user;
   const allProducts: ApiProduct[] = data?.pages.flatMap((page) => page.data) || [];
@@ -230,7 +223,14 @@ export function UserProductsContent({
       </div>
 
       {/* Products List */}
-      {allProducts.length === 0 ? (
+      {isInitialLoading || isLoading ? (
+        // Show skeleton while loading (initial load or when switching tabs)
+        <div className="flex flex-col gap-4">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <ProductListItemSkeleton key={i} />
+          ))}
+        </div>
+      ) : allProducts.length === 0 ? (
         inline ? (
           <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
             <div className="w-16 h-16 mb-4 rounded-full bg-primary/10 flex items-center justify-center">

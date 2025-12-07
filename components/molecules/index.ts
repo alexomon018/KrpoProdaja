@@ -8,6 +8,9 @@
 export { ProductCard } from "./ProductCard/ProductCard";
 export type { ProductCardProps } from "./ProductCard/ProductCard";
 
+export { ProductListItem, ProductListItemSkeleton } from "./ProductListItem";
+export type { ProductListItemProps } from "./ProductListItem";
+
 export { ProductListItem } from "./ProductListItem";
 export type { ProductListItemProps } from "./ProductListItem";
 
