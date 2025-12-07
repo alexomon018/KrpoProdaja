@@ -5,9 +5,11 @@ import React from 'react';
 jest.mock('next/image', () => ({
   __esModule: true,
   default: (props: any) => {
-    const { src, alt, ...rest } = props;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { src, alt, width, height, priority, className, ...rest } = props;
+    // Only pass valid HTML attributes, filter out Next.js-specific props
     // eslint-disable-next-line jsx-a11y/alt-text, @next/next/no-img-element
-    return React.createElement('img', { src, alt, ...rest });
+    return React.createElement('img', { src, alt, width, height, className });
   },
 }));
 

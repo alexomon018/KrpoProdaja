@@ -12,7 +12,6 @@ describe('BottomNavigation', () => {
   it('renders all navigation items', () => {
     render(<BottomNavigation />);
     expect(screen.getByText('Početna')).toBeInTheDocument();
-    expect(screen.getByText('Pretraga')).toBeInTheDocument();
     expect(screen.getByText('Prodaj')).toBeInTheDocument();
     expect(screen.getByText('Poruke')).toBeInTheDocument();
     expect(screen.getByText('Profil')).toBeInTheDocument();
@@ -21,13 +20,13 @@ describe('BottomNavigation', () => {
   it('renders navigation links', () => {
     render(<BottomNavigation />);
     const links = screen.getAllByRole('link');
-    expect(links).toHaveLength(5);
+    expect(links).toHaveLength(4);
   });
 
   it('highlights active route', () => {
-    (usePathname as jest.Mock).mockReturnValue('/search');
+    (usePathname as jest.Mock).mockReturnValue('/sell');
     render(<BottomNavigation />);
-    expect(screen.getByText('Pretraga')).toBeInTheDocument();
+    expect(screen.getByText('Prodaj')).toBeInTheDocument();
   });
 
   it('shows message count badge', () => {
@@ -49,7 +48,6 @@ describe('BottomNavigation', () => {
   it('contains correct navigation paths', () => {
     render(<BottomNavigation />);
     expect(screen.getByRole('link', { name: /početna/i })).toHaveAttribute('href', '/');
-    expect(screen.getByRole('link', { name: /pretraga/i })).toHaveAttribute('href', '/search');
     expect(screen.getByRole('link', { name: /prodaj/i })).toHaveAttribute('href', '/sell');
     expect(screen.getByRole('link', { name: /poruke/i })).toHaveAttribute('href', '/messages');
     expect(screen.getByRole('link', { name: /profil/i })).toHaveAttribute('href', '/profile');

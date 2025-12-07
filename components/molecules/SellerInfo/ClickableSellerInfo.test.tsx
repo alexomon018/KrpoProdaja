@@ -11,7 +11,7 @@ jest.mock('next/navigation', () => ({
   }),
 }));
 
-jest.mock('@/lib/auth/AuthProvider', () => ({
+jest.mock('@/providers/AuthProvider', () => ({
   useRequireAuth: () => ({
     requireAuth: mockRequireAuth,
   }),

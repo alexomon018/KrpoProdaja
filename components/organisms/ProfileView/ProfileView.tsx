@@ -205,71 +205,69 @@ export function ProfileView({
         </div>
       )}
 
-      {/* Actions for other users */}
-      {!isOwnProfile && (
-        <div className="flex gap-4">
+      {/* Actions */}
+      <div className="flex gap-4">
+        {!isOwnProfile && (
           <Button variant="primary" fullWidth>
             <Icon name="MessageCircle" size={20} />
             Pošalji poruku
           </Button>
-          <Button
-            variant="secondary"
-            fullWidth
-            onClick={handleToggleProducts}
-            aria-expanded={showProducts}
-            aria-controls="user-products-section"
-            className={cn(
-              "transition-all duration-300 shadow-low hover:shadow-medium",
-              showProducts && "bg-primary/5 border-primary"
-            )}
-          >
-            <Icon
-              name={showProducts ? "ChevronUp" : "Eye"}
-              size={20}
-              className="transition-transform duration-300"
-            />
-            {showProducts ? "Sakrij oglase" : "Vidi oglase"}
-            {!showProducts &&
-              profile.activeListing &&
-              profile.activeListing > 0 && (
-                <span className="ml-2 px-2 py-0.5 rounded-full bg-primary text-white text-xs font-medium">
-                  {profile.activeListing}
-                </span>
-              )}
-          </Button>
-        </div>
-      )}
-
-      {/* Expandable Products Section */}
-      {!isOwnProfile && (
-        <div
-          ref={productsRef}
-          id="user-products-section"
-          role="region"
-          aria-label="Korisnički oglasi"
+        )}
+        <Button
+          variant="secondary"
+          fullWidth
+          onClick={handleToggleProducts}
+          aria-expanded={showProducts}
+          aria-controls="user-products-section"
           className={cn(
-            "grid transition-all duration-500 ease-in-out",
-            showProducts ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+            "transition-all duration-300 shadow-low hover:shadow-medium",
+            showProducts && "bg-primary/5 border-primary"
           )}
         >
-          <div className="overflow-hidden">
-            <div
-              className={cn(
-                "transition-opacity duration-300 delay-100",
-                showProducts ? "opacity-100" : "opacity-0"
-              )}
-            >
-              {showProducts && (
-                <UserProductsContent
-                  userId={profile.id}
-                  showHeader={false}
-                  inline={true}
-                />
-              )}
-            </div>
+          <Icon
+            name={showProducts ? "ChevronUp" : "Eye"}
+            size={20}
+            className="transition-transform duration-300"
+          />
+          {showProducts ? "Sakrij oglase" : isOwnProfile ? "Moji oglasi" : "Vidi oglase"}
+          {!showProducts &&
+            profile.activeListing &&
+            profile.activeListing > 0 && (
+              <span className="ml-2 px-2 py-0.5 rounded-full bg-primary text-white text-xs font-medium">
+                {profile.activeListing}
+              </span>
+            )}
+        </Button>
+      </div>
+
+      {/* Expandable Products Section */}
+      <div
+        ref={productsRef}
+        id="user-products-section"
+        role="region"
+        aria-label="Korisnički oglasi"
+        className={cn(
+          "grid transition-all duration-500 ease-in-out",
+          showProducts ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+        )}
+      >
+        <div className="overflow-hidden">
+          <div
+            className={cn(
+              "transition-opacity duration-300 delay-100",
+              showProducts ? "opacity-100" : "opacity-0"
+            )}
+          >
+            {showProducts && (
+              <UserProductsContent
+                userId={profile.id}
+                showHeader={false}
+                inline={true}
+              />
+            )}
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }

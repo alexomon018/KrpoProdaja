@@ -5,7 +5,9 @@ import { Header } from './Header';
 describe('Header', () => {
   it('renders logo/brand', () => {
     render(<Header />);
-    expect(screen.getByText('KP')).toBeInTheDocument();
+    // The header renders two logo images (desktop and mobile), so we check for at least one
+    const logos = screen.getAllByAltText('Krpo Prodaja');
+    expect(logos.length).toBeGreaterThanOrEqual(1);
   });
 
   it('renders search bar when showSearch is true', () => {

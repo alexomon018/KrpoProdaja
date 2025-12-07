@@ -252,6 +252,7 @@ import cn from "@/lib/utils";
 - Test files: Co-located with components as `*.test.tsx`
 - Run with `yarn test` or `yarn run test:watch`
 - Mock utilities: Available in `__tests__/` directories
+- Wrtite tests next to the component itself always after you create a component you look to test it or after you finish the work you do the tests.
 
 ### E2E Tests (Playwright)
 
