@@ -38,4 +38,15 @@ export type { ContainerProps } from "./Container/Container";
 export { RatingMetric } from "./RatingMetric/RatingMetric";
 export type { RatingMetricProps } from "./RatingMetric/RatingMetric";
 
+export {
+  Select,
+  SelectGroup,
+  SelectValue,
+  SelectTrigger,
+  SelectContent,
+  SelectLabel,
+  SelectItem,
+  SelectSeparator,
+} from "./Select/Select";
+
 export * from "./Icon/Icon";

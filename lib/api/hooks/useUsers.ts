@@ -5,14 +5,14 @@
 
 "use client";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
 import { usersService } from "../services/users";
 import type {
   UpdateUserRequest,
   ChangePasswordRequest,
-  PaginationParams,
   SendPhoneVerificationRequest,
   VerifyPhoneRequest,
+  UserProductFilters,
 } from "../types";
 
 export function useUpdateCurrentUser() {
@@ -35,11 +35,22 @@ export function useUserProfile(userId: string) {
   });
 }
 
-export function useUserProducts(userId: string, params?: PaginationParams) {
-  return useQuery({
-    queryKey: ["users", userId, "products", params],
-    queryFn: () => usersService.getUserProducts(userId, params),
+export function useUserProducts(
+  userId: string,
+  filters?: Omit<UserProductFilters, 'page' | 'limit'>,
+  limit: number = 20
+) {
+  return useInfiniteQuery({
+    queryKey: ["users", userId, "products", filters],
+    queryFn: ({ pageParam = 1 }) =>
+      usersService.getUserProducts(userId, { ...filters, page: pageParam, limit }),
     enabled: !!userId,
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => {
+      if (!lastPage.pagination) return undefined;
+      const { currentPage, totalPages } = lastPage.pagination;
+      return currentPage < totalPages ? currentPage + 1 : undefined;
+    },
   });
 }
 

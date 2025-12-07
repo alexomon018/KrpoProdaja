@@ -8,6 +8,7 @@ import {
 import { Container } from "@/components/atoms/Container/Container";
 import { useAuth } from "@/providers/AuthProvider";
 import { useUserProfile } from "@/lib/api/hooks/useUsers";
+import { Loader } from "@atoms/Icon/Icon";
 
 interface UserProfileProps {
   userId?: string;
@@ -35,33 +36,14 @@ export function UserProfile({ userId }: UserProfileProps) {
 
   // Determine which user data to display
   const user = userId && profileData ? profileData.user : currentUser;
-  const isOwnProfile = !userId || (currentUser && currentUser.id === userId);
+  const isOwnProfile = !userId || (currentUser?.id === userId) || false;
   const isLoading = userId ? profileLoading : authLoading;
 
   if (isLoading) {
     return (
       <Container className="py-8">
         <div className="flex justify-center items-center min-h-[400px]">
-          <svg
-            className="animate-spin h-12 w-12 text-primary"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            />
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-            />
-          </svg>
+          <Loader className="h-12 w-12 animate-spin text-primary" />
         </div>
       </Container>
     );
@@ -104,16 +86,16 @@ export function UserProfile({ userId }: UserProfileProps) {
     location: user.location,
     memberSince: user.createdAt,
     verified: user?.verifiedSeller ?? false,
-    rating: 0, // TODO: Add rating to user API
-    totalSales: 0, // TODO: Add stats to user API
-    activeListing: 0, // TODO: Add stats to user API
+    rating: 0, // TODO: Add rating to user API when available
+    totalSales: user.soldItems ?? 0,
+    activeListing: user.activeListings ?? 0,
   };
 
   return (
     <Container className="py-8">
       <ProfileView
         profile={profile}
-        isOwnProfile={true}
+        isOwnProfile={isOwnProfile}
         onLogout={handleLogout}
       />
     </Container>
