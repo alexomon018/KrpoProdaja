@@ -28,10 +28,10 @@ export interface ConditionBadgeProps
 const ConditionBadge = forwardRef<HTMLSpanElement, ConditionBadgeProps>(
   ({ className, condition, ...props }, ref) => {
     const conditionLabels = {
-      new: 'New',
-      'very-good': 'Very Good',
-      good: 'Good',
-      satisfactory: 'Satisfactory',
+      new: 'Novo',
+      'very-good': 'Veoma dobro',
+      good: 'Dobro',
+      satisfactory: 'Zadovoljavajuće',
     };
 
     return (

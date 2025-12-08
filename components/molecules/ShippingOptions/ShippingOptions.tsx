@@ -34,7 +34,7 @@ const ShippingOptions = forwardRef<HTMLDivElement, ShippingOptionsProps>(
       <div ref={ref} className={cn('space-y-4', className)} {...props}>
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-            Shipping Options
+            Opcije dostave
           </h2>
           {location && (
             <div className="flex items-center gap-1 text-sm text-gray-600 dark:text-gray-400">
@@ -57,11 +57,11 @@ const ShippingOptions = forwardRef<HTMLDivElement, ShippingOptionsProps>(
                     {option.name}
                   </h3>
                   <span className="text-sm font-semibold text-gray-900 dark:text-white whitespace-nowrap">
-                    {option.price === 0 ? 'Free' : formatPrice(option.price)}
+                    {option.price === 0 ? 'Besplatno' : formatPrice(option.price)}
                   </span>
                 </div>
                 <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                  Estimated delivery: {option.estimatedDays}
+                  Očekivana dostava: {option.estimatedDays}
                 </p>
               </div>
             </div>
@@ -71,7 +71,7 @@ const ShippingOptions = forwardRef<HTMLDivElement, ShippingOptionsProps>(
         {options.length === 0 && (
           <div className="text-center py-8 text-gray-500 dark:text-gray-400">
             <Package className="h-12 w-12 mx-auto mb-2 opacity-50" />
-            <p className="text-sm">No shipping options available</p>
+            <p className="text-sm">Nema dostupnih opcija dostave</p>
           </div>
         )}
       </div>

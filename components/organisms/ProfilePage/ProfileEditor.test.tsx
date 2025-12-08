@@ -1,19 +1,39 @@
-import { render, screen, waitFor } from '@/__tests__/utils/test-utils';
+import { render, screen } from '@/__tests__/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { ProfileEditor } from './ProfileEditor';
 
-// Mock the API hooks
-const mockMutate = jest.fn();
-const mockUpdateProfileMutation = {
-  mutate: mockMutate,
-  isPending: false,
-  isSuccess: false,
-  isError: false,
-  error: null,
+// Mock handlers
+const mockHandleSubmit = jest.fn();
+const mockHandleAvatarUpload = jest.fn();
+const mockHandleAvatarRemove = jest.fn();
+const mockHandlePhoneVerified = jest.fn();
+const mockSetShowPhoneVerification = jest.fn();
+
+// Mock the useProfileEditor hook
+let mockUseProfileEditor: any = {
+  initialData: {
+    name: 'John Doe',
+    email: 'user@example.com',
+    phone: '+381641234567',
+    bio: 'Test bio',
+    location: 'Belgrade',
+  },
+  avatarUrl: undefined,
+  isPhoneVerified: false,
+  loading: false,
+  success: false,
+  error: undefined,
+  handleSubmit: mockHandleSubmit,
+  handleAvatarUpload: mockHandleAvatarUpload,
+  handleAvatarRemove: mockHandleAvatarRemove,
+  handlePhoneVerified: mockHandlePhoneVerified,
+  showPhoneVerification: false,
+  setShowPhoneVerification: mockSetShowPhoneVerification,
+  pendingPhoneNumber: '',
 };
 
-jest.mock('@/lib/api/hooks', () => ({
-  useUpdateCurrentUser: () => mockUpdateProfileMutation,
+jest.mock('@/lib/api/hooks/useProfileEditor', () => ({
+  useProfileEditor: jest.fn(() => mockUseProfileEditor),
 }));
 
 // Mock the auth context
@@ -146,10 +166,10 @@ describe('ProfileEditor', () => {
       verifiedSeller: false,
     };
 
-    mockUpdateProfileMutation.isPending = false;
-    mockUpdateProfileMutation.isSuccess = false;
-    mockUpdateProfileMutation.isError = false;
-    mockUpdateProfileMutation.error = null;
+    mockUseProfileEditor.loading = false;
+    mockUseProfileEditor.success = false;
+    mockUseProfileEditor.error = undefined;
+    mockUseProfileEditor.showPhoneVerification = false;
   });
 
   afterEach(() => {
@@ -178,29 +198,29 @@ describe('ProfileEditor', () => {
       expect(screen.getByTestId('initial-phone')).toHaveTextContent('+381641234567');
     });
 
-    it('passes phone verified state from user context', () => {
-      mockCurrentUser.verifiedSeller = true;
+    it('passes phone verified state from hook', () => {
+      mockUseProfileEditor.isPhoneVerified = true;
       render(<ProfileEditor />);
 
       expect(screen.getByTestId('verified-state')).toHaveTextContent('true');
     });
 
     it('passes loading state to form', () => {
-      mockUpdateProfileMutation.isPending = true;
+      mockUseProfileEditor.loading = true;
       render(<ProfileEditor />);
 
       expect(screen.getByTestId('loading-state')).toHaveTextContent('true');
     });
 
     it('passes success state to form', () => {
-      mockUpdateProfileMutation.isSuccess = true;
+      mockUseProfileEditor.success = true;
       render(<ProfileEditor />);
 
       expect(screen.getByTestId('success-state')).toHaveTextContent('true');
     });
 
     it('passes error state to form', () => {
-      mockUpdateProfileMutation.error = { message: 'Update failed' } as any;
+      mockUseProfileEditor.error = 'Update failed';
       render(<ProfileEditor />);
 
       expect(screen.getByTestId('error-state')).toHaveTextContent('Update failed');
@@ -208,25 +228,19 @@ describe('ProfileEditor', () => {
   });
 
   describe('form submission', () => {
-    it('calls mutation on form submit', async () => {
+    it('calls handleSubmit on form submit', async () => {
       jest.useRealTimers();
       const user = userEvent.setup();
-
-      mockMutate.mockImplementation((data, options) => {
-        options?.onSuccess?.();
-      });
 
       render(<ProfileEditor />);
 
       await user.click(screen.getByTestId('submit-form'));
 
-      expect(mockMutate).toHaveBeenCalledWith(
+      expect(mockHandleSubmit).toHaveBeenCalledWith(
         expect.objectContaining({
           email: 'user@example.com',
-          firstName: 'John',
-          lastName: 'Doe',
-        }),
-        expect.any(Object)
+          name: 'John Doe',
+        })
       );
     });
 
@@ -234,118 +248,56 @@ describe('ProfileEditor', () => {
       jest.useRealTimers();
       const user = userEvent.setup();
 
-      mockMutate.mockImplementation((data, options) => {
-        options?.onSuccess?.();
-      });
-
       render(<ProfileEditor />);
 
       await user.click(screen.getByTestId('submit-form'));
 
-      expect(mockMutate).toHaveBeenCalledWith(
+      expect(mockHandleSubmit).toHaveBeenCalledWith(
         expect.objectContaining({
-          firstName: 'John',
-          lastName: 'Doe',
+          name: 'John Doe',
           bio: 'Updated bio',
           location: 'Belgrade',
-          phoneNumber: '+381641234567',
-        }),
-        expect.any(Object)
+          phone: '+381641234567',
+        })
       );
-    });
-
-    it('redirects to profile page after successful update', async () => {
-      jest.useRealTimers();
-      const user = userEvent.setup();
-
-      mockMutate.mockImplementation((data, options) => {
-        options?.onSuccess?.();
-      });
-
-      render(<ProfileEditor />);
-
-      await user.click(screen.getByTestId('submit-form'));
-
-      // Wait for the timeout to complete
-      await waitFor(() => {
-        expect(mockPush).toHaveBeenCalledWith('/profile');
-      }, { timeout: 2000 });
     });
   });
 
   describe('phone verification', () => {
-    it('shows phone verification modal when phone number changes', async () => {
-      jest.useRealTimers();
-      const user = userEvent.setup();
-
-      mockMutate.mockImplementation((data, options) => {
-        options?.onSuccess?.();
-      });
+    it('shows phone verification modal when showPhoneVerification is true', async () => {
+      mockUseProfileEditor.showPhoneVerification = true;
+      mockUseProfileEditor.pendingPhoneNumber = '+381649999999';
 
       render(<ProfileEditor />);
 
-      await user.click(screen.getByTestId('submit-new-phone'));
-
-      await waitFor(() => {
-        expect(screen.getByTestId('phone-verification-modal')).toBeInTheDocument();
-      });
+      expect(screen.getByTestId('phone-verification-modal')).toBeInTheDocument();
     });
 
     it('passes new phone number to verification modal', async () => {
-      jest.useRealTimers();
-      const user = userEvent.setup();
-
-      mockMutate.mockImplementation((data, options) => {
-        options?.onSuccess?.();
-      });
+      mockUseProfileEditor.showPhoneVerification = true;
+      mockUseProfileEditor.pendingPhoneNumber = '+381649999999';
 
       render(<ProfileEditor />);
 
-      await user.click(screen.getByTestId('submit-new-phone'));
-
-      await waitFor(() => {
-        expect(screen.getByTestId('verification-phone')).toHaveTextContent('+381649999999');
-      });
+      expect(screen.getByTestId('verification-phone')).toHaveTextContent('+381649999999');
     });
 
-    it('refreshes user and redirects after phone verification', async () => {
+    it('calls handlePhoneVerified when phone is verified', async () => {
       jest.useRealTimers();
       const user = userEvent.setup();
 
-      mockMutate.mockImplementation((data, options) => {
-        options?.onSuccess?.();
-      });
+      mockUseProfileEditor.showPhoneVerification = true;
+      mockUseProfileEditor.pendingPhoneNumber = '+381649999999';
 
       render(<ProfileEditor />);
-
-      await user.click(screen.getByTestId('submit-new-phone'));
-
-      await waitFor(() => {
-        expect(screen.getByTestId('phone-verification-modal')).toBeInTheDocument();
-      });
 
       await user.click(screen.getByTestId('verify-phone'));
 
-      await waitFor(() => {
-        expect(mockRefreshUser).toHaveBeenCalled();
-      });
-
-      await waitFor(() => {
-        expect(mockPush).toHaveBeenCalledWith('/profile');
-      }, { timeout: 2000 });
+      expect(mockHandlePhoneVerified).toHaveBeenCalled();
     });
 
-    it('does not show verification modal when phone unchanged', async () => {
-      jest.useRealTimers();
-      const user = userEvent.setup();
-
-      mockMutate.mockImplementation((data, options) => {
-        options?.onSuccess?.();
-      });
-
+    it('does not show verification modal by default', async () => {
       render(<ProfileEditor />);
-
-      await user.click(screen.getByTestId('submit-form'));
 
       expect(screen.queryByTestId('phone-verification-modal')).not.toBeInTheDocument();
     });
@@ -355,45 +307,31 @@ describe('ProfileEditor', () => {
     it('handles avatar upload', async () => {
       jest.useRealTimers();
       const user = userEvent.setup();
-      const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
 
       render(<ProfileEditor />);
 
       await user.click(screen.getByTestId('upload-avatar'));
 
-      // The uploadAvatar function logs a message
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Avatar upload - TODO: Implement when backend supports it',
-        expect.any(File)
-      );
-
-      consoleSpy.mockRestore();
+      expect(mockHandleAvatarUpload).toHaveBeenCalledWith(expect.any(File));
     });
 
     it('handles avatar removal', async () => {
       jest.useRealTimers();
       const user = userEvent.setup();
-      const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
 
       render(<ProfileEditor />);
 
       await user.click(screen.getByTestId('remove-avatar'));
 
-      // The removeAvatar function logs a message
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Avatar removal - TODO: Implement when backend supports it'
-      );
-
-      consoleSpy.mockRestore();
+      expect(mockHandleAvatarRemove).toHaveBeenCalled();
     });
   });
 
   describe('user data handling', () => {
     it('handles user with phoneNumber field instead of phone', () => {
-      mockCurrentUser = {
-        ...mockCurrentUser,
-        phone: undefined,
-        phoneNumber: '+381647777777',
+      mockUseProfileEditor.initialData = {
+        ...mockUseProfileEditor.initialData,
+        phone: '+381647777777',
       };
 
       render(<ProfileEditor />);
@@ -422,18 +360,8 @@ describe('ProfileEditor', () => {
   });
 
   describe('loading states', () => {
-    it('shows loading state from auth context', () => {
-      jest.mock('@/providers/AuthProvider', () => ({
-        useAuth: () => ({
-          user: null,
-          refreshUser: mockRefreshUser,
-          isLoading: true,
-        }),
-      }));
-
-      // Note: This would need a proper re-render with updated context
-      // For now, we test via the mutation loading state
-      mockUpdateProfileMutation.isPending = true;
+    it('shows loading state from hook', () => {
+      mockUseProfileEditor.loading = true;
       render(<ProfileEditor />);
 
       expect(screen.getByTestId('loading-state')).toHaveTextContent('true');

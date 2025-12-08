@@ -9,12 +9,12 @@ describe('ProductDescription', () => {
 
   it('renders Description heading', () => {
     render(<ProductDescription description="Test description" />);
-    expect(screen.getByRole('heading', { name: /description/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /opis/i })).toBeInTheDocument();
   });
 
   it('does not render Item Details section when no details provided', () => {
     render(<ProductDescription description="Test" />);
-    expect(screen.queryByRole('heading', { name: /item details/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: /detalji/i })).not.toBeInTheDocument();
   });
 
   it('renders Item Details section when details are provided', () => {
@@ -24,7 +24,7 @@ describe('ProductDescription', () => {
     ];
     render(<ProductDescription description="Test" details={details} />);
 
-    expect(screen.getByRole('heading', { name: /item details/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /detalji/i })).toBeInTheDocument();
     expect(screen.getByText('Brand')).toBeInTheDocument();
     expect(screen.getByText('Nike')).toBeInTheDocument();
     expect(screen.getByText('Size')).toBeInTheDocument();
@@ -33,7 +33,7 @@ describe('ProductDescription', () => {
 
   it('renders empty details array without Item Details section', () => {
     render(<ProductDescription description="Test" details={[]} />);
-    expect(screen.queryByRole('heading', { name: /item details/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: /detalji/i })).not.toBeInTheDocument();
   });
 
   it('applies custom className', () => {
